@@ -2,14 +2,16 @@ import numpy as np
 
 class basic_extractor:
     def __init__(self):
-        self.feature_num = 18 * 9  
+        self.feature_num = 18 * 9 + 1
 
     def info(self):
         return "simply use all information without transoformation"
     
     def __call__(self, data):
-        f = data.reshape(-1,)
-        return f
+        feature = np.empty(self.feature_num,)
+        feature[0] = 1
+        feature[1:] = data.reshape(-1,)
+        return feature
 
 
 if __name__ == '__main__':

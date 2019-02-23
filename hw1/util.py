@@ -42,16 +42,47 @@ def get_split_data(data, feature_extractor, validation_rate= 0.2):
     valid_y = data_y[:valid_num,]
 
     return train_x, train_y, valid_x, valid_y
+
+def get_test_data():
+    csv = pd.read_csv('data/test.csv') # 4320 * 11
+    data = np.empty((240, 18, 9))
+    data_raw = np.empty((4320, 9))
+
+    keys = ['21', '21.1', '20', '20.1', '19', '19.1', '19.2', '18', '17'] # should be hard-coded
+    data_raw[0] = keys
+
+    for i in range(len(keys)):
+        column = csv[keys[i]]
+        column[column == 'NR'] = 0
+        data_raw[1:, i] = column
+
+    for i in range(240):
+        data_block = data_raw[18*i : 18*(i+1),:]
+        data[i] = data_block
+    print(csv)
+
+    return data #(240, 18, 9)
+
+def get_mse_error(x, y):
+    # get mean square error
+    num = x.shape[0]
+    mse = np.sum((x - y) ** 2)/num
+    return mse
  
 def test():
     data = get_aligned_train_data()
     extractor = basic_extractor()
-    train_x, train_y, valid_x, valid_y = get_split_data(data, extractor, 0.2)
+    train_x, train_y, valid_x, valid_y = get_split_data(data, extractor, 0)
     print(train_x.shape)
     print(train_y.shape)
     print(valid_x.shape)
     print(valid_y.shape)
     print(valid_y)
 
+def test2():
+    x = np.ones((10,)) * 2
+    y = np.zeros((10,))
+    print(get_mse_error(x,y))
+
 if __name__ == '__main__':
-    test()
+    test2()
