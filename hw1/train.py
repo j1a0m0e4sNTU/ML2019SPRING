@@ -4,11 +4,11 @@ from feature_extract import *
 from util import *
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-step', help='Training steps', type= int, default= 1e5)
+parser.add_argument('-step', help='Training steps', type= int, default= 100000)
 parser.add_argument('-validation', help='Validation rate', type= float, default= 0.2)
 parser.add_argument('-lr', help= 'Learning rate', type= float, default= 1e-2)
 parser.add_argument('-save', help= 'Weight name to be saved', default= None)
-parser.add_argument('-check', help='Steps number to check performance', type= int, default= 100)
+parser.add_argument('-check', help='Steps number to check performance', type= int, default= 1000)
 parser.add_argument('-regularize', help= 'Regularization rate', type= float, default= 1e-4)
 args = parser.parse_args()
 
