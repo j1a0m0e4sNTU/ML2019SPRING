@@ -62,12 +62,13 @@ def get_test_data():
 
     return data #(240, 18, 9)
 
-def get_mse_error(x, y):
-    # get mean square error
-    num = x.shape[0]
-    mse = np.sum(np.square(x - y))/num
-    return mse
- 
+def get_test_feature(data, feature_extractor):
+    feature = np.empty((240, feature_extractor.feature_num))
+    for i in range(240):
+        data_block = data[i]
+        feature[i] = feature_extractor(data_block)
+    return feature
+
 def test():
     data = get_aligned_train_data()
     extractor = basic_extractor()
@@ -79,9 +80,11 @@ def test():
     print(valid_y)
 
 def test2():
-    x = np.ones((10,)) * 2
-    y = np.zeros((10,))
-    print(get_mse_error(x,y))
+    data = get_test_data()
+    extractor = basic_extractor()
+    feature = get_test_feature(data, extractor)
+    print(feature)
+    print(feature.shape)
 
 if __name__ == '__main__':
     test2()
