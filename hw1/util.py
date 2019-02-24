@@ -69,6 +69,14 @@ def get_test_feature(data, feature_extractor):
         feature[i] = feature_extractor(data_block)
     return feature
 
+
+def get_mse_error(x, y):
+    # get mean square error
+    num = x.shape[0]
+    mse = np.sum(np.square(x - y))/num
+    return mse
+
+
 def test():
     data = get_aligned_train_data()
     extractor = basic_extractor()

@@ -12,12 +12,6 @@ parser.add_argument('-check', help='Steps number to check performance', type= in
 parser.add_argument('-regularize', help= 'Regularization rate', type= float, default= 1e-4)
 args = parser.parse_args()
 
-def get_mse_error(x, y):
-    # get mean square error
-    num = x.shape[0]
-    mse = np.sum(np.square(x - y))/num
-    return mse
-
 def train():
     train_data = get_aligned_train_data()
     extractor = basic_extractor()
