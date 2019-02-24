@@ -59,14 +59,13 @@ def get_test_data():
     for i in range(240):
         data_block = data_raw[18*i : 18*(i+1),:]
         data[i] = data_block
-    print(csv)
 
     return data #(240, 18, 9)
 
 def get_mse_error(x, y):
     # get mean square error
     num = x.shape[0]
-    mse = np.sum((x - y) ** 2)/num
+    mse = np.sum(np.square(x - y))/num
     return mse
  
 def test():
