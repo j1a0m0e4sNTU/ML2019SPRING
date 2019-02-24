@@ -20,13 +20,21 @@ import numpy as np
 # 16 WIND_SPEED
 # 17 WS_HR
 #################
+class extractor_0():
+    'template'
+    def __init__(self):
+        self.feature_num = 0 + 1
+
+    def __call__(self, data):
+        feature = np.empty(self.feature_num)
+        feature[0] = 1
+
+        return feature
 
 class basic_extractor:
+    "simply use all information without transoformation"
     def __init__(self):
         self.feature_num = 18 * 9 + 1
-
-    def info(self):
-        return "simply use all information without transoformation"
     
     def __call__(self, data):
         feature = np.empty(self.feature_num,)
@@ -34,9 +42,31 @@ class basic_extractor:
         feature[1:] = data.reshape(-1,)
         return feature
 
+class simple_extractor():
+    'use PM2.5 data only'
+    def __init__(self):
+        self.feature_num = 9 + 1
+
+    def __call__(self, data):
+        feature = np.empty(self.feature_num)
+        feature[0] = 1
+        feature[1:] = data[9]
+        return feature
+
+class extractor_1():
+    'use PM10 & PM2.5'
+    def __init__(self):
+        self.feature_num = 18 + 1
+
+    def __call__(self, data):
+        feature = np.empty(self.feature_num)
+        feature[0] = 1
+        feature[1:10] = data[8]
+        feature[10:] = data[9]
+        return feature
 
 if __name__ == '__main__':
     data = np.zeros((18, 9))
-    extractor = basic_extractor()
+    extractor = extractor_1()
     features = extractor(data)
     print(features.shape)
