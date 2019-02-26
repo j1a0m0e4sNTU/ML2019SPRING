@@ -10,7 +10,7 @@ parser.add_argument('-save', help= 'Weight name to be saved', default= None)
 args = parser.parse_args()
 
 def main():
-    extractor = extractor_use_feature([2,3,6,7,8,9,11,12,13])
+    extractor = extractor_nonlinear_5()
     train_data = get_aligned_train_data()
     train_x, train_y, valid_x, valid_y = get_split_data(train_data, extractor, args.validation)
 

@@ -116,7 +116,7 @@ class extractor_4(): # training err: 37.0350 | validation err: 44.4270
         feature[10:]  = data[9] ** 2
         return feature
 
-class extractor_5(): # training err: 31.5337 | validation err: 39.9919
+class extractor_nonlinear_1(): # training err: 31.5337 | validation err: 39.9919
     'Use all data and quadratic term of last day'
     def __init__(self):
         self.feature_num = 18*10 + 1
@@ -128,7 +128,7 @@ class extractor_5(): # training err: 31.5337 | validation err: 39.9919
         feature[163:]  = data[:,-1] ** 2 
         return feature
 
-class extractor_6(): # training err: 31.2301 | validation err: 39.9164
+class extractor_nonlinear_2(): # training err: 31.2301 | validation err: 39.9164
     'Use all data and quadratic term of last 2 day'
     def __init__(self):
         self.feature_num = 18*11 + 1
@@ -141,7 +141,7 @@ class extractor_6(): # training err: 31.2301 | validation err: 39.9164
         feature[181:] = data[:,-2] ** 2 
         return feature
 
-class extractor_7(): # training err: 31.0540 | validation err: 40.3549
+class extractor_nonlinear_3(): # training err: 31.0540 | validation err: 40.3549
     'Use all data and quadratic term of last 3 day'
     def __init__(self):
         self.feature_num = 18*12 + 1
@@ -153,6 +153,34 @@ class extractor_7(): # training err: 31.0540 | validation err: 40.3549
         feature[163:181]  = data[:,-1] ** 2
         feature[181:199] = data[:,-2] ** 2
         feature[199:] = data[:,-3] ** 2
+        return feature
+
+class extractor_nonlinear_4(): # training err: 30.8839 | validation err: 40.3470
+    'Use all data and quadratic term of last 2 day and their product'
+    def __init__(self):
+        self.feature_num = 18*12 + 1
+
+    def __call__(self, data):
+        feature = np.empty(self.feature_num)
+        feature[0] = 1
+        feature[1:163] = data.reshape(-1)
+        feature[163:181]  = data[:,-1] ** 2
+        feature[181:199] = data[:,-2] ** 2
+        feature[199:] = data[:,-1] * data[:,-2] 
+        return feature
+
+class extractor_nonlinear_5(): # training err: 30.7675 | validation err: 42.5676
+    'Use all data and quadratic term of last 2 day and cubic term for the last day'
+    def __init__(self):
+        self.feature_num = 18*12 + 1
+
+    def __call__(self, data):
+        feature = np.empty(self.feature_num)
+        feature[0] = 1
+        feature[1:163] = data.reshape(-1)
+        feature[163:181]  = data[:,-1] ** 2
+        feature[181:199] = data[:,-2] ** 2
+        feature[199:] = data[:,-1] ** 3
         return feature
 
 class extractor_start_day(): 
@@ -200,6 +228,6 @@ class extractor_use_feature():
 
 if __name__ == '__main__':
     data = np.zeros((18, 9))
-    extractor = extractor_use_feature([9])
+    extractor = extractor_nonlinear_4()
     features = extractor(data)
     print(features.shape)
