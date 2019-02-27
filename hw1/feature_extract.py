@@ -226,8 +226,26 @@ class extractor_use_feature():
     # [5,8,9,12] 
     # | training err: 34.6737 | validation err: 40.0748 
 
+class extractor_final(): # training err: 32.5636 | validation err: 38.8559
+    'Use all tricks'
+    def __init__(self):
+        self.start_day = 1
+        self.feature_ids = [2,3,6,7,8,9,11,12,13]
+        self.nonlinear_term = 2
+        self.feature_num = (9 - self.start_day + self.nonlinear_term) * len(self.feature_ids) + 1
+
+    def __call__(self, data):
+        feature = np.empty(self.feature_num)
+        data_selected = data[self.feature_ids, self.start_day:]
+        feature[0] = 1
+        linear_len = (9 - self.start_day) * len(self.feature_ids)
+        feature[1 : 1+linear_len] = data_selected.reshape(-1)
+        feature[1+linear_len: 1+linear_len+len(self.feature_ids)] =  data_selected[:, -1] **2
+        feature[1+linear_len+len(self.feature_ids): ] = data_selected[:, -2] ** 2
+        return feature
+
 if __name__ == '__main__':
     data = np.zeros((18, 9))
-    extractor = extractor_nonlinear_4()
+    extractor = extractor_final()
     features = extractor(data)
     print(features.shape)

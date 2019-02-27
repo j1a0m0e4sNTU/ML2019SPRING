@@ -10,7 +10,7 @@ args = parser.parse_args()
 
 def predict():
     test_data = get_test_data()
-    extractor = basic_extractor()
+    extractor = extractor_final()
     test_feature = get_test_feature(test_data, extractor)
     weight = np.load(args.load)
     test_ans = test_feature @ weight
