@@ -13,8 +13,11 @@ parser.add_argument('-regularize', help= 'Regularization rate', type= float, def
 args = parser.parse_args()
 
 def train():
-    train_data = get_aligned_train_data()
     extractor = basic_extractor()
+    train_data = get_aligned_train_data()
+    mean = np.mean(train_data, axis= 1)
+    std  = np.std(train_data, axis=1)
+    train_data = normalize(train_data, mean, std)
     train_x, train_y, valid_x, valid_y = get_split_data(train_data, extractor, args.validation)
 
     train_x_T, valid_x_T = train_x.T, valid_x.T

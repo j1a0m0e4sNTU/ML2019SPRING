@@ -10,8 +10,12 @@ parser.add_argument('-save', help= 'Weight name to be saved', default= None)
 args = parser.parse_args()
 
 def main():
-    extractor = extractor_final()
+    extractor = basic_extractor()
+
     train_data = get_aligned_train_data()
+    mean = np.mean(train_data, axis= 1)
+    std  = np.std(train_data, axis=1)
+    train_data = normalize(train_data, mean, std)
     train_x, train_y, valid_x, valid_y = get_split_data(train_data, extractor, args.validation)
 
     pseudo_inverse = np.linalg.inv(train_x.T @ train_x + np.identity(extractor.feature_num) * args.regularize) @ (train_x.T)

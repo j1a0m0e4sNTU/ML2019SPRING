@@ -9,17 +9,22 @@ parser.add_argument('-submit', help= 'Submission file name', default= 'submissio
 args = parser.parse_args()
 
 def predict():
-    test_data = get_test_data()
-    extractor = extractor_final()
-    test_feature = get_test_feature(test_data, extractor)
-    weight = np.load(args.load)
-    test_ans = test_feature @ weight
+    extractor = basic_extractor()
+    data_train = get_aligned_train_data()
+    mean = np.mean(data_train, 1)
+    std  = np.std(data_train, 1)
+    predict_data = get_predict_data(mean, std)
+    predict_feature = get_predict_feature(predict_data, extractor)
     
+    weight = np.load(args.load)
+    predict_ans = predict_feature @ weight
+    predict_ans = (predict_ans * std[9]) + mean[9]
+
     file = open(args.submit, 'w')
     file.write('id,value\n')
     for i in range(240):
-        file.write('id_'+str(i)+','+str(test_ans[i])+'\n')
-    
+        file.write('id_'+str(i)+','+str(predict_ans[i])+'\n')
+
     print('Predictoin compelte !')
 
 if __name__ == '__main__':
