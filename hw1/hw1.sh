@@ -1,0 +1,1 @@
+python3 predict.py -mode train -source $1 -load result/w_train.npy -submit $2

@@ -50,8 +50,8 @@ def get_split_data(data, feature_extractor, validation_rate= 0.2):
 
     return train_x, train_y, valid_x, valid_y
 
-def get_predict_data(mean, std):
-    csv = pd.read_csv('data/test.csv') # 4320 * 11
+def get_predict_data(mean, std, test_csv):
+    csv = pd.read_csv(test_csv) # 4320 * 11
     data_raw = np.empty((240 * 18, 9))
     keys = ['21', '21.1', '20', '20.1', '19', '19.1', '19.2', '18', '17'] # should be hard-coded
     data_raw[0] = keys
