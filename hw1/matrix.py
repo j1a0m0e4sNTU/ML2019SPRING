@@ -10,7 +10,7 @@ parser.add_argument('-save', help= 'Weight name to be saved', default= None)
 args = parser.parse_args()
 
 def main():
-    extractor = basic_extractor()
+    extractor = extractor_final()
 
     train_data = get_aligned_train_data()
     mean = np.mean(train_data, axis= 1)

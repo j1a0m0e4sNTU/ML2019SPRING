@@ -15,8 +15,8 @@ def get_aligned_train_data():
         column[column == 'NR'] = 0
         data_csv[:, i] = column
     
-    data = np.empty((18, 12 * 20 * 24), dtype = np.float)
-    for i in range(12 * 20):
+    data = np.empty((18, 24 * 20 * 12), dtype = np.float)
+    for i in range(20 * 12):
         data[:, i * 24: (i + 1) * 24] = data_csv[i * 18: (i + 1) * 18, :]
     
     return data #(18, 24 * 20 * 12)
@@ -28,7 +28,7 @@ def normalize(data, mean, std):
     return data_normal
 
 def get_split_data(data, feature_extractor, validation_rate= 0.2):
-    # input: aligned data (18, 24 * 20 * 12)
+    # input: normalized data (18, 24 * 20 * 12)
     # feature_extractor: used to exctract or transform features from data block with size(18, 9)
     # validation rate determines how many data are reserved for validation
     num_per_month = 24 * 20 - 9
@@ -51,8 +51,6 @@ def get_split_data(data, feature_extractor, validation_rate= 0.2):
     return train_x, train_y, valid_x, valid_y
 
 def get_predict_data(mean, std):
-    mean, std = mean.reshape(-1, 1), std.reshape(-1, 1)
-
     csv = pd.read_csv('data/test.csv') # 4320 * 11
     data_raw = np.empty((240 * 18, 9))
     keys = ['21', '21.1', '20', '20.1', '19', '19.1', '19.2', '18', '17'] # should be hard-coded
@@ -65,8 +63,8 @@ def get_predict_data(mean, std):
     data_aligned = np.empty((18, 240 * 9), dtype= np.float)
     for i in range(240):
         data_aligned[:, i * 9:(i+1) * 9] = data_raw[i * 18:(i+1) * 18, :]
-     
-    data_normal = (data_aligned - mean) / std
+
+    data_normal = normalize(data_aligned, mean, std)
 
     data = np.empty((240, 18, 9), dtype= np.float)
     for i in range(240):
@@ -93,7 +91,7 @@ def test_train():
     mean = np.mean(data_train, 1)
     std  = np.std(data_train, 1)
     data_train = normalize(data_train, mean, std)
-    
+   
     extractor = basic_extractor()
     train_x, train_y, valid_x, valid_y = get_split_data(data_train, extractor)
     print(train_x.shape)
@@ -113,4 +111,4 @@ def test_predict():
     print(predict_feature)
 
 if __name__ == '__main__':
-    test_predict()
+    test_train()

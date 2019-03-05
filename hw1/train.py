@@ -13,7 +13,7 @@ parser.add_argument('-regularize', help= 'Regularization rate', type= float, def
 args = parser.parse_args()
 
 def train():
-    extractor = basic_extractor()
+    extractor = extractor_final()
     train_data = get_aligned_train_data()
     mean = np.mean(train_data, axis= 1)
     std  = np.std(train_data, axis=1)

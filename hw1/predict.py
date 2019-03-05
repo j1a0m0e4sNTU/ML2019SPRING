@@ -9,7 +9,7 @@ parser.add_argument('-submit', help= 'Submission file name', default= 'submissio
 args = parser.parse_args()
 
 def predict():
-    extractor = basic_extractor()
+    extractor = extractor_final()
     data_train = get_aligned_train_data()
     mean = np.mean(data_train, 1)
     std  = np.std(data_train, 1)
