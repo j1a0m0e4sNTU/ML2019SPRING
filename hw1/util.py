@@ -111,4 +111,4 @@ def test_predict():
     print(predict_feature)
 
 if __name__ == '__main__':
-    test_train()
+    test_predict()
