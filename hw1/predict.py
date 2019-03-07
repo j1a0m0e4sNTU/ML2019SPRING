@@ -16,10 +16,10 @@ def predict():
         extractor = basic_extractor()
     else:
         extractor = extractor_final()
+
+    mean = np.load('result/mean.npy')
+    std  = np.load('result/std.npy')
     
-    data_train = get_aligned_train_data()
-    mean = np.mean(data_train, 1)
-    std  = np.std(data_train, 1)
     predict_data = get_predict_data(mean, std, args.source)
     predict_feature = get_predict_feature(predict_data, extractor)
     
