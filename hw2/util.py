@@ -22,11 +22,7 @@ def test():
     total_x = get_raw_data('data/X_train')
     total_y = get_raw_data('data/Y_train')
     train_x, train_y, valid_x, valid_y = get_train_valid_data(total_x, total_y, fold= 0)
-    print(total_x.shape[0])
-    print(train_x.shape)
-    print(train_y.shape)
-    print(valid_x.shape)
-    print(valid_y.shape)
+    print(type(total_x))
 
 if __name__ == '__main__':
     test()
