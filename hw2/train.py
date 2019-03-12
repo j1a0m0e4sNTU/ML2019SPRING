@@ -10,7 +10,7 @@ parser.add_argument('-y', default= 'data/Y_train', help= 'Path to Y_train')
 parser.add_argument('-steps', type= int, default= 5000, help= 'Training step number')
 parser.add_argument('-lr', type= float, default= 1e-4, help= 'Learning rate')
 parser.add_argument('-check', type= int, default= 100, help= 'epoch number to check performance')
-parser.add_argument('-validate', type= bool, default= True, help= 'Validate or not')
+parser.add_argument('-validate', type= int, default= 1, help= 'Validate or not')
 parser.add_argument('-save', default= None, help= 'Weights name')
 args = parser.parse_args()
 
