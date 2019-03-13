@@ -8,10 +8,11 @@ parser.add_argument('-mode', choices= ['logistic', 'generative'], default= 'logi
 parser.add_argument('-csv', default= 'data/train.csv', help= 'path to train.csv')
 parser.add_argument('-x', default= 'data/X_train', help= 'Path to X_train')
 parser.add_argument('-y', default= 'data/Y_train', help= 'Path to Y_train')
-parser.add_argument('-steps', type= int, default= 5000, help= 'Training step number')
-parser.add_argument('-lr', type= float, default= 1e-4, help= 'Learning rate')
+parser.add_argument('-steps', type= int, default= 500, help= 'Training step number')
+parser.add_argument('-lr', type= float, default= 1e-1, help= 'Learning rate')
 parser.add_argument('-check', type= int, default= 100, help= 'epoch number to check performance')
 parser.add_argument('-th', type= float, default= 0.5, help= 'Threshold to determine 0/1')
+parser.add_argument('-regularize', type= float, default= 0, help= 'Regularization weight')
 parser.add_argument('-validate', type= int, default= 1, help= 'Validate or not')
 parser.add_argument('-save', default= None, help= 'Weights name')
 args = parser.parse_args()
@@ -31,11 +32,20 @@ def main():
         train = train_generative
     
     if args.validate:
-        train_x, train_y, valid_x, valid_y = get_train_valid_data(total_x, total_y, 0)
+        train_acc, valid_acc = 0, 0
+
+        for fold in range(5):
+            print('=======',fold, '======')
+            train_x, train_y, valid_x, valid_y = get_train_valid_data(total_x, total_y, fold)
+            t_acc, v_acc = train(train_x, train_y, valid_x, valid_y)
+            train_acc += t_acc
+            valid_acc += v_acc
+        print(' ---------------------------------')
+        print('Training Acc: ', train_acc/5, 'Validation Acc: ', valid_acc/5)
+
     else:
         train_x, train_y, valid_x, valid_y = total_x, total_y, None, None
-    
-    train(train_x, train_y, valid_x, valid_y)
+        train(total_x, total_y, None, None)
 
 def train_logistic(train_x, train_y, valid_x, valid_y):
     dim = train_x.shape[1]
@@ -43,16 +53,16 @@ def train_logistic(train_x, train_y, valid_x, valid_y):
     learning_rate = args.lr
     train_x_T = train_x.T
     grad_prev = 0
-
+    train_acc, valid_acc = 0, 0
+    
     for step in range(args.steps):
        
         gradient_weight = (-1) * (train_y - sigmoid(train_x @ weight))
-        gradient = train_x_T @ gradient_weight
+        gradient = train_x_T @ gradient_weight + args.regularize * weight
         grad_prev += gradient ** 2
-        ada = np.sqrt(grad_prev)
+        ada = np.sqrt(grad_prev) + 1e-5
         weight -= learning_rate * (gradient / ada) 
         
-
         if (step + 1) % args.check == 0:
             train_pred = sigmoid(train_x @ weight)
             train_acc = compute_acc(train_pred, train_y)
@@ -66,6 +76,7 @@ def train_logistic(train_x, train_y, valid_x, valid_y):
     if args.save:
         np.save(args.save, weight)
 
+    return train_acc, valid_acc
 
 def train_generative(train_x, train_y, valid_x, valid_y):
     pass
