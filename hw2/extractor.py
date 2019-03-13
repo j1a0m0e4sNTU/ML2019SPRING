@@ -2,7 +2,7 @@ import numpy as np
 
 class extractor_basic():
     def __init__(self):
-        self.dim = 1 + 106
+        self.dim = 1 + 107
     
     def __call__(self, inputs):
         num, _ = inputs.shape
