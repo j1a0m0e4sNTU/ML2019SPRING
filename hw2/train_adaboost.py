@@ -49,6 +49,7 @@ class Trainer():
         if self.validate: 
             data_num -= data_num // 5
         self.data_weight = np.ones((data_num), dtype= np.float) / data_num
+        
 
     def train(self):
         if self.validate:
@@ -58,12 +59,16 @@ class Trainer():
                 train_acc, valid_acc = self.train_on_dataset(train_x, train_y, valid_x, valid_y)
                 train_acc_total += train_acc
                 valid_acc_total += valid_acc
-                print('Fold ', fold + 1, 'Train Acc:', train_acc, 'Validation Acc:', valid_acc)
+                print('Fold ', fold + 1, 'Train Acc:', train_acc, 'Validation Acc:', valid_acc, '\n')
+
                 self.data_weight[:] = 1 / (self.data_weight.shape[0])
+                self.models = []
+                self.alphas = []
 
             print('---------------------------------------------')
             print('Average Train Acc:', train_acc_total/5)
             print('Average Valid Acc:', valid_acc_total/5)
+
         else:
             train_acc, _ =self.train_on_dataset(self.total_x, self.total_y)
             print('Training Acc:', train_acc)
@@ -74,11 +79,10 @@ class Trainer():
             train_correct = self.get_correct_id(weight, train_x, train_y)
             correct_rate = np.sum(self.data_weight * train_correct) / np.sum(self.data_weight)
             alpha = (1/2) * np.log(correct_rate / (1 - correct_rate))
-
+            
             print('Modle ', i + 1, end= ' ')
-            print('Training acc :', correct_rate)
+            print('Training acc :', np.sum(train_correct)/train_x.shape[0])
 
-            # if alpha < 0: continue
             self.update_data_weight(alpha, train_correct)
             self.models.append(weight)
             self.alphas.append(alpha)
