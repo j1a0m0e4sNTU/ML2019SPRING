@@ -3,10 +3,10 @@ import numpy as np
 from util import *
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-train_csv', default= 'data/train.csv', help= 'path to train.csv')
-parser.add_argument('-train_f', default= 'data/X_train', help= 'path to X_train')
-parser.add_argument('-test_csv', default= 'data/test.csv', help= 'path to test.csv')
-parser.add_argument('-test_f', default= 'data/X_test', help= 'path to X_test')
+parser.add_argument('-train_csv', default= '../data/hw2/train.csv', help= 'path to train.csv')
+parser.add_argument('-train_f', default= '../data/hw2/X_train', help= 'path to X_train')
+parser.add_argument('-test_csv', default= '../data/hw2/test.csv', help= 'path to test.csv')
+parser.add_argument('-test_f', default= '../data/hw2/X_test', help= 'path to X_test')
 parser.add_argument('-load', default= None, help= 'Weight.npy')
 parser.add_argument('-save', default= None, help= 'prediction.csv')
 parser.add_argument('-th', type= float, default= 0.5, help= 'threshold to determine 0/1')

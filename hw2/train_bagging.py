@@ -6,9 +6,9 @@ from util import *
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-mode', default= 'train', choices= ['train', 'predict'])
-parser.add_argument('-csv', default= 'data/train.csv', help= 'path to train.csv')
-parser.add_argument('-x', default= 'data/X_train', help= 'Path to X_train')
-parser.add_argument('-y', default= 'data/Y_train', help= 'Path to Y_train')
+parser.add_argument('-csv', default= '../data/hw2/train.csv', help= 'path to train.csv')
+parser.add_argument('-x', default= '../data/hw2/X_train', help= 'Path to X_train')
+parser.add_argument('-y', default= '../data/hw2/Y_train', help= 'Path to Y_train')
 parser.add_argument('-n', type= int, default= 10, help= 'Number of models')
 parser.add_argument('-steps', type= int, default= 500, help= 'Training step number (per model)')
 parser.add_argument('-lr', type= float, default= 1e-1, help= 'Learning rate')

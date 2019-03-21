@@ -3,9 +3,9 @@ import numpy as np
 from util import *
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-csv', default= 'data/train.csv', help= 'path to train.csv')
-parser.add_argument('-x', default= 'data/X_train', help= 'Path to X_train')
-parser.add_argument('-y', default= 'data/Y_train', help= 'Path to Y_train')
+parser.add_argument('-csv', default= '../data/hw2/train.csv', help= 'path to train.csv')
+parser.add_argument('-x', default= '../data/hw2/X_train', help= 'Path to X_train')
+parser.add_argument('-y', default= '../data/hw2/Y_train', help= 'Path to Y_train')
 parser.add_argument('-steps', type= int, default= 500, help= 'Training step number')
 parser.add_argument('-lr', type= float, default= 1e-1, help= 'Learning rate')
 parser.add_argument('-check', type= int, default= 100, help= 'epoch number to check performance')

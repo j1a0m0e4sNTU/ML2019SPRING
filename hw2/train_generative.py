@@ -3,11 +3,11 @@ import numpy as np
 from util import *
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-train_csv', default= 'data/train.csv', help= 'path to train.csv')
-parser.add_argument('-train_x', default= 'data/X_train', help= 'Path to X_train')
-parser.add_argument('-train_y', default= 'data/Y_train', help= 'Path to Y_train')
-parser.add_argument('-test_csv', default= 'data/test.csv', help= 'path to test.csv')
-parser.add_argument('-test_x', default= 'data/X_test', help= 'Path to X_test')
+parser.add_argument('-train_csv', default= '../data/hw2/train.csv', help= 'path to train.csv')
+parser.add_argument('-train_x', default= '../data/hw2/X_train', help= 'Path to X_train')
+parser.add_argument('-train_y', default= '../data/hw2/Y_train', help= 'Path to Y_train')
+parser.add_argument('-test_csv', default= '../data/hw2/test.csv', help= 'path to test.csv')
+parser.add_argument('-test_x', default= '../data/hw2/X_test', help= 'Path to X_test')
 parser.add_argument('-validate', type= int, default= 1, help= 'Validate or not')
 parser.add_argument('-save', default= None, help= 'Path to prediction csv')
 args = parser.parse_args()
