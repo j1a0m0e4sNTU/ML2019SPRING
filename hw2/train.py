@@ -22,9 +22,10 @@ def main():
     mean = np.mean(total_x, 0)
     std = np.std(total_x, 0)
     total_x = normalize_feature(total_x, mean, std)
+    total_x = discretalize_all(total_x)
+    total_x = add_constant_column(total_x)
     total_y = get_raw_data(args.y)
-    extractor = extractor_basic()
-    total_x = extractor(total_x)
+    
 
     if args.mode == 'logistic':
         train = train_logistic

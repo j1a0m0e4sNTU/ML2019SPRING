@@ -28,6 +28,44 @@ def normalize_feature(feature, mean, std):
     normalized = (feature - mean) / std
     return normalized
 
+def normalize_min_max(feature):
+    f_min = np.min(feature, axis= 0)
+    f_max = np.max(feature, axis= 0)
+    normalized = (feature - f_min)/ (f_max - f_min)
+    return normalized
+
+def discretalize(feature, idx):
+    # the input feature is already normalized
+    data_num, f_num = feature.shape
+    feature_new = np.zeros((data_num, f_num + 6), dtype= np.float)
+    f_discrete = np.zeros((data_num, 6))
+    f_origin = feature[:, idx]
+
+    f_discrete[:, :] = [1, 0, 0, 0, 0, 0]
+    f_discrete[f_origin > -2] = [0, 1, 0, 0, 0, 0]
+    f_discrete[f_origin > -1] = [0, 0, 1, 0, 0, 0]
+    f_discrete[f_origin > 0]  = [0, 0, 0, 1, 0, 0]
+    f_discrete[f_origin > 1]  = [0, 0, 0, 0, 1, 0]
+    f_discrete[f_origin > 2]  = [0, 0, 0, 0, 0, 1]
+
+    feature_new[:, : f_num] = feature
+    feature_new[:, f_num : f_num + 6] = f_discrete
+    
+    return feature_new
+
+def discretalize_all(feature):
+    continuous_id = [0, 1, 2, 4, 5, 6]
+    for i in continuous_id:
+        feature = discretalize(feature, i)
+    
+    return feature
+
+def add_constant_column(feature):
+    h, w = feature.shape
+    feature_new = np.ones((h, w + 1))
+    feature_new[:, 1:] = feature
+    return feature_new
+
 def get_train_valid_data(total_x, total_y, fold= 0):
     fold = fold % 5
     total_size = total_x.shape[0]
@@ -51,9 +89,9 @@ def test2():
     x = get_total_feature('data/train.csv', 'data/X_train')
     m = np.mean(x, 0)
     s = np.std(x, 0)
-    n = normalize_feature(x, m ,s)
-    print(n[:10])
-    print(n.shape)
+    x = normalize_feature(x, m ,s)
+    x = discretalize_all(x)
+    print(x.shape)
 
 
 def get_objs(array):

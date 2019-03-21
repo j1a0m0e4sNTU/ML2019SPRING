@@ -14,14 +14,15 @@ parser.add_argument('-th', type= float, default= 0.5, help= 'threshold to determ
 args = parser.parse_args()
 
 def main():
-    extractor = extractor_basic()
+   
     train_total = get_total_feature(args.train_csv, args.train_f)
     mean = np.mean(train_total, 0)
     std = np.std(train_total, 0)
-    test_total = get_total_feature(args.test_csv, args.test_f)
+    test_total = get_total_feature(args.test_csv, args.test_f)    
     test_x = normalize_feature(test_total, mean, std)
+    test_x = discretalize_all(test_x)
 
-    test_x = extractor(test_x)
+    test_x = add_constant_column(test_x)
     weight = np.load(args.load)
 
     prediction = sigmoid(test_x @ weight)
