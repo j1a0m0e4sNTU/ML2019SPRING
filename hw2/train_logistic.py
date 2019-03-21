@@ -4,7 +4,6 @@ from util import *
 from extractor import *
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-mode', choices= ['logistic', 'generative'], default= 'logistic', help= 'training mode')
 parser.add_argument('-csv', default= 'data/train.csv', help= 'path to train.csv')
 parser.add_argument('-x', default= 'data/X_train', help= 'Path to X_train')
 parser.add_argument('-y', default= 'data/Y_train', help= 'Path to Y_train')
@@ -26,19 +25,13 @@ def main():
     total_x = add_constant_column(total_x)
     total_y = get_raw_data(args.y)
     
-
-    if args.mode == 'logistic':
-        train = train_logistic
-    else:
-        train = train_generative
-    
     if args.validate:
         train_acc, valid_acc = 0, 0
 
         for fold in range(5):
             print('=======',fold, '======')
             train_x, train_y, valid_x, valid_y = get_train_valid_data(total_x, total_y, fold)
-            t_acc, v_acc = train(train_x, train_y, valid_x, valid_y)
+            t_acc, v_acc = train_logistic(train_x, train_y, valid_x, valid_y)
             train_acc += t_acc
             valid_acc += v_acc
         print(' ---------------------------------')
@@ -79,8 +72,6 @@ def train_logistic(train_x, train_y, valid_x, valid_y):
 
     return train_acc, valid_acc
 
-def train_generative(train_x, train_y, valid_x, valid_y):
-    pass
 
 def compute_acc(pred, target):
     pred[pred > args.th] = 1
@@ -90,8 +81,6 @@ def compute_acc(pred, target):
     correct = np.sum(pred == target)
     return correct / total
 
-def test():
-    pass
 
 if __name__ == '__main__':
     main()
