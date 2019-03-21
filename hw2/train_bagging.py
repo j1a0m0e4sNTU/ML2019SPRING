@@ -3,7 +3,6 @@ import os
 import numpy as np
 import numpy.random as random
 from util import *
-from extractor import *
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-mode', default= 'train', choices= ['train', 'predict'])
@@ -26,8 +25,7 @@ def get_total_data():
     std = np.std(total_x, 0)
     total_x = normalize_feature(total_x, mean, std)
     total_y = get_raw_data(args.y)
-    extractor = extractor_basic()
-    total_x = extractor(total_x)
+    total_x = add_constant_column(total_x)
     return total_x, total_y
  
 class Trainer():

@@ -1,7 +1,6 @@
 import argparse
 import numpy as np
 from util import *
-from extractor import *
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-csv', default= 'data/train.csv', help= 'path to train.csv')

@@ -1,0 +1,1 @@
+python3 predict.py -train_csv $1 -train_f $3 -test_csv $2 -test_f $5 -load result/logistic.npy -save $6
