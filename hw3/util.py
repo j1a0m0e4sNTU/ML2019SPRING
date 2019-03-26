@@ -9,16 +9,21 @@ class TrainDataset(Dataset):
         data_num = len(file)
         
         self.normalize = normalize
-        self.label = file['label']
-        self.feature = file['feature']
+        label = []
+        for i in file['label']:
+            label.append(i)
+        feature = []
+        for i in file['feature']:
+            feature.append(i)
 
         train_num = int(0.8 * data_num)
         if mode == 'train':
-            self.label = self.label[:train_num]
-            self.feature = self.feature[:train_num]
+            self.label = label[:train_num]
+            self.feature = feature[:train_num]
         elif mode == 'valid':
-            self.label = self.label[train_num:]
-            self.feature = self.feature[train_num:]
+            self.label = label[train_num:]
+            self.feature = feature[train_num:]
+
 
     def __getitem__(self, index):
         label = torch.tensor(self.label[index], dtype= torch.long)
@@ -39,7 +44,9 @@ class TestDataset(Dataset):
         data_num = len(file)
         
         self.normalize = normalize
-        self.feature = file['feature']
+        self.feature = []
+        for i in file['feature']:
+            self.feature.append(i)
 
     def __getitem__(self, index):
         feature_str = self.feature[index].split(' ')
@@ -55,14 +62,21 @@ class TestDataset(Dataset):
 
 
 def test():
-    faces = TrainDataset('../../data_hw3/train.csv', mode='valid')
+    faces = TrainDataset('../../data_hw3/train.csv', mode='train')
     data = DataLoader(faces, batch_size= 8)
     print(len(faces))
     for pair in data:
         label, imgs = pair
         print(imgs.shape)
         break
-    print(len(data))
+
+def test2():
+    faces = TestDataset('../../data_hw3/test.csv')
+    data = DataLoader(faces, 8)
+    for i in data:
+        print(i.shape)
+        break
+    
 
 if __name__ == '__main__':
-    test()
+    test2()

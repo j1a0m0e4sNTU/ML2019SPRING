@@ -28,7 +28,7 @@ class Manager():
                 loss.backward()
                 self.optimizer.step()
 
-                if (step + 1) % 10 == 0:
+                if (step + 1) % 50 == 0:
                     print('Epoch {} step {} | training loss: {}'.format(epoch, step + 1, loss.item()/self.batch_size))
             
             valid_acc = self.validate(valid_data)
@@ -37,7 +37,7 @@ class Manager():
     def validate(self, valid_data):
         correct_num = 0
         print(len(valid_data))
-        for i, data in enumerate(valid_data):
+        for data in valid_data:
             label, imgs = data
             label, imgs = label.to(self.device), imgs.to(self.device)
             out = self.model(imgs)
