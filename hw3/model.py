@@ -6,22 +6,15 @@ class Model_basic(nn.Module): # Overfitting - train acc:0.8 valid acc:0.5
     def __init__(self, class_num= 6):
         super().__init__()
         
-        # self.conv_block = nn.Sequential(
-        #     nn.Conv2d(1, 16, kernel_size= 3, stride= 1, padding= 1),
-        #     nn.ReLU(inplace= True),
-        #     nn.Conv2d(16, 64, kernel_size= 4, stride= 2, padding= 1),
-        #     nn.ReLU(inplace= True),
-        #     nn.Conv2d(64, 128, kernel_size= 4, stride= 2, padding= 1),
-        #     nn.ReLU(inplace= True),
-        #     nn.Conv2d(128, 128, kernel_size= 4, stride= 2, padding= 1),
-        #     nn.ReLU(inplace= True)
-        # )
-
         self.conv_block = nn.Sequential(
-            ResidualBlock(1, 16, 3, 1, 1),
-            ResidualBlock(16, 64, 4, 2, 1),
-            ResidualBlock(64, 128, 4, 2, 1),
-            ResidualBlock(128, 128, 4, 2, 1),
+            nn.Conv2d(1, 16, kernel_size= 3, stride= 1, padding= 1),
+            nn.ReLU(inplace= True),
+            nn.Conv2d(16, 64, kernel_size= 4, stride= 2, padding= 1),
+            nn.ReLU(inplace= True),
+            nn.Conv2d(64, 128, kernel_size= 4, stride= 2, padding= 1),
+            nn.ReLU(inplace= True),
+            nn.Conv2d(128, 128, kernel_size= 4, stride= 2, padding= 1),
+            nn.ReLU(inplace= True)
         )
 
         self.fc1 = nn.Linear(128*6*6, 256)
@@ -39,13 +32,11 @@ class Model_1(nn.Module):
     def __init__(self, class_num= 6):
         super().__init__()
         self.conv_block = nn.Sequential(
-            ResidualBlock(1, 16, kernel_size= 3, stride= 1, padding= 1),
+            ResidualBlock(1, 16, kernel_size= 4, stride= 2, padding= 1),
             ResidualBlock(16, 64, kernel_size= 4, stride= 2, padding= 1),
-            ResidualBlock(64, 128, kernel_size= 4, stride= 2, padding= 1),
-            ResidualBlock(128, 128, kernel_size= 4, stride= 2, padding= 1)
         )
 
-        self.fc1 = nn.Linear(128 * 6 * 6, 128)
+        self.fc1 = nn.Linear(64 * 12 * 12, 128)
         self.fc2 = nn.Linear(128, 32)
         self.fc3 = nn.Linear(32, class_num)
 
