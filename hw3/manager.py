@@ -36,6 +36,7 @@ class Manager():
 
     def validate(self, valid_data):
         correct_num = 0
+        total_num = 0
         print(len(valid_data))
         for data in valid_data:
             label, imgs = data
@@ -44,8 +45,9 @@ class Manager():
             pred = torch.max(out, 1)[1]
             same = (pred == label)
             correct_num += torch.sum(same).item()
+            total_num += pred.size(0)
 
-        acc = correct_num / len(valid_data)
+        acc = correct_num / total_num
         return acc
 
     def predict(self, test_data):
