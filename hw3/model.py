@@ -45,6 +45,22 @@ class Model_1(nn.Module):
         x = self.fc2(x)
         return x
 
+class Model_2(nn.Module):
+    def __init__(self, class_num= 7):
+        super().__init__()
+        self.conv_block = nn.Sequential(
+            ResidualBlock(1, 16, kernel_size= 4, stride= 2, padding= 1),
+            ResidualBlock(16, 64, kernel_size= 4, stride= 2, padding= 1),
+            ResidualBlock(64, 64, kernel_size= 4, stride= 2, padding= 1)
+        )
+        self.fc = nn.Linear(64*6*6, class_num)
+
+    def forward(self, inputs):
+        x = self.conv_block(inputs)
+        x = x.view(x.size(0), -1)
+        x = self.fc(x)
+        return x
+
 class ResidualBlock(nn.Module):
     def __init__(self, in_c, out_c, kernel_size= 3, stride =1, padding= 1):
         super().__init__()
@@ -84,7 +100,7 @@ def parameter_number(model):
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
 
 def test():
-    model = Model_1()
+    model = Model_2()
     imgs = torch.zeros(4, 1, 48, 48)
     out = model(imgs)
     
