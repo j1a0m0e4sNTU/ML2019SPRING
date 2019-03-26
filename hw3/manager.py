@@ -24,8 +24,6 @@ class Manager():
               
                 out = self.model(imgs)
                 self.optimizer.zero_grad()
-                print(out.size())
-                print(label.size())
                 loss = self.metric(out, label)
                 loss.backward()
                 self.optimizer.step()
@@ -38,8 +36,8 @@ class Manager():
 
     def validate(self, valid_data):
         correct_num = 0
-
-        for data in valid_data:
+        print(len(valid_data))
+        for i, data in enumerate(valid_data):
             label, imgs = data
             label, imgs = label.to(self.device), imgs.to(self.device)
             out = self.model(imgs)
