@@ -33,13 +33,9 @@ class Model_1(nn.Module):
         super().__init__()
         self.conv_block = nn.Sequential(
             ResidualBlock(1, 16, kernel_size= 3, stride= 1, padding= 1),
-            nn.ReLU(inplace= True),
             ResidualBlock(16, 64, kernel_size= 4, stride= 2, padding= 1),
-            nn.ReLU(inplace= True),
             ResidualBlock(64, 128, kernel_size= 4, stride= 2, padding= 1),
-            nn.ReLU(inplace= True),
-            ResidualBlock(128, 128, kernel_size= 4, stride= 2, padding= 1),
-            nn.ReLU(inplace= True)
+            ResidualBlock(128, 128, kernel_size= 4, stride= 2, padding= 1)
         )
 
         self.fc1 = nn.Linear(128 * 6 * 6, 128)
@@ -70,8 +66,8 @@ class ResidualBlock(nn.Module):
         if self.downSample:
             inputs = self.downSample(inputs)
         res = self.residual(inputs)
-        out = inputs + res
-        return out
+        x = F.relu(inputs + res)
+        return x
 
 class Conv2dBlock(nn.Module):
     def __init__(self, in_c, out_c, kernel_size, stride, padding, use_relu= True):
@@ -83,10 +79,10 @@ class Conv2dBlock(nn.Module):
         self.use_relu = use_relu
 
     def forward(self, inputs):
-        out = self.block(inputs)
+        x = self.block(inputs)
         if self.use_relu:
-            out = F.relu(out)
-        return out
+            x = F.relu(x)
+        return x
 
 
 def parameter_number(model):
