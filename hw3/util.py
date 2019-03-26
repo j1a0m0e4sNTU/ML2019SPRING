@@ -55,7 +55,7 @@ class TestDataset(Dataset):
 
 
 def test():
-    faces = TrainDataset('../data/hw3/train.csv')
+    faces = TrainDataset('../../data_hw3/train.csv')
     data = DataLoader(faces, batch_size= 8)
     for pair in data:
         label, imgs = pair
