@@ -1,15 +1,15 @@
 import argparse
 import torch
 from torch.utils.data import DataLoader
-import util
-import manager
+from util import *
+from manager import Manager
 from model import *
 
 parser = argparse.ArgumentParser()
 parser.add_argument('mode', help= 'Task: train/predict', choices=['train', 'predict'])
 parser.add_argument('-dataset', help= 'Path to dataset', default= '../../data_hw3/train.csv')
 parser.add_argument('-normal', help= 'Normalize data or not', type= bool, default= True)
-parser.add_argument('-bs', hekp= 'batch size', type= int, default= 64)
+parser.add_argument('-bs', help= 'batch size', type= int, default= 64)
 parser.add_argument('-lr', help= 'learnig rate', type= float, default= 1e-3)
 parser.add_argument('-epoch', help= 'Epoch number', type= int, default= 20)
 parser.add_argument('-save', help= 'Path to save model')
@@ -36,3 +36,6 @@ def main():
 
         manager = Manager(model, args)
         manager.predict(args.predict)
+
+if __name__ == '__main__':
+    main()
