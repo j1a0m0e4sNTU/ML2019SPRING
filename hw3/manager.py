@@ -32,12 +32,11 @@ class Manager():
                     print('Epoch {} step {} | training loss: {}'.format(epoch, step + 1, loss.item()/self.batch_size))
             
             valid_acc = self.validate(valid_data)
-            print('\033[1;33m Validation Acc for epoch {}:{}\033[0;37m'.format(epoch,valid_acc))
+            print('\033[1;33m Validation Acc for epoch {}: {}\033[0;37m'.format(epoch,valid_acc))
 
     def validate(self, valid_data):
         correct_num = 0
         total_num = 0
-        print(len(valid_data))
         for data in valid_data:
             label, imgs = data
             label, imgs = label.to(self.device), imgs.to(self.device)
