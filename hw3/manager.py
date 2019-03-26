@@ -39,7 +39,7 @@ class Manager():
                     print('Epoch {} step {} | training loss: {}'.format(epoch, step + 1, loss.item()/self.batch_size))
             
             valid_acc = self.validate(valid_data)
-            print('\033[1;33m Average Training Acc for epoch {}: {}\033[0;37m'.format(epoch,train_correct/train_total))
+            print('\033[1;33m Training Acc for epoch {}:   {}\033[0;37m'.format(epoch,train_correct/train_total))
             print('\033[1;33m Validation Acc for epoch {}: {}\033[0;37m'.format(epoch,valid_acc))
 
     def validate(self, valid_data):
