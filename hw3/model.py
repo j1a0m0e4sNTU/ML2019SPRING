@@ -6,11 +6,20 @@ class Model_basic(nn.Module): # Overfitting - train acc:0.8 valid acc:0.5
     def __init__(self, class_num= 6):
         super().__init__()
         
+        # self.conv_block = nn.Sequential(
+        #     nn.Conv2d(1, 16, kernel_size= 3, stride= 1, padding= 1),
+        #     nn.ReLU(inplace= True),
+        #     nn.Conv2d(16, 64, kernel_size= 4, stride= 2, padding= 1),
+        #     nn.ReLU(inplace= True),
+        #     nn.Conv2d(64, 128, kernel_size= 4, stride= 2, padding= 1),
+        #     nn.ReLU(inplace= True),
+        #     nn.Conv2d(128, 128, kernel_size= 4, stride= 2, padding= 1),
+        #     nn.ReLU(inplace= True)
+        # )
+
         self.conv_block = nn.Sequential(
-            nn.Conv2d(1, 16, kernel_size= 3, stride= 1, padding= 1),
-            nn.ReLU(inplace= True),
-            nn.Conv2d(16, 64, kernel_size= 4, stride= 2, padding= 1),
-            nn.ReLU(inplace= True),
+            ResidualBlock(1, 16, 3, 1, 1),
+            ResidualBlock(16, 64, 4, 2, 1),
             nn.Conv2d(64, 128, kernel_size= 4, stride= 2, padding= 1),
             nn.ReLU(inplace= True),
             nn.Conv2d(128, 128, kernel_size= 4, stride= 2, padding= 1),
