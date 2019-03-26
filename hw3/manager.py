@@ -10,6 +10,7 @@ class Manager():
             model.load_state_dict(torch.load(args.load))
         self.model = model.to(self.device)
         self.optimizer = optim.Adam(self.model.parameters(), lr= args.lr)
+        self.metric = nn.CrossEntropyLoss()
         self.epoch_num = args.epoch
         self.batch_size = args.bs
         self.save = args.save
@@ -25,7 +26,7 @@ class Manager():
                 self.optimizer.zero_grad()
                 print(out.size())
                 print(label.size())
-                loss = F.nll_loss(out, label)
+                loss = self.metric(out, label)
                 loss.backward()
                 self.optimizer.step()
 

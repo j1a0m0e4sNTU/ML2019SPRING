@@ -26,7 +26,6 @@ class Model_basic(nn.Module):
         x = x.view(x.size(0), -1)
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
-        x = F.softmax(self.fc3(x), 1)
         return x
 
 
