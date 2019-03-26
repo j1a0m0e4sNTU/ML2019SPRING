@@ -47,11 +47,12 @@ class Model_1(nn.Module):
         self.fc3 = nn.Linear(32, class_num)
 
     def forward(self, inputs):
-        out = self.conv_block(inputs)
-        out = F.relu(self.fc1(out))
-        out = F.relu(self.fc2(out))
-        out = self.fc3(out)
-        return out
+        x = self.conv_block(inputs)
+        x = x.view(x.size(0), -1)
+        x = F.relu(self.fc1(x))
+        x = F.relu(self.fc2(x))
+        x = self.fc3(x)
+        return x
 
 class ResidualBlock(nn.Module):
     def __init__(self, in_c, out_c, kernel_size= 3, stride =1, padding= 1):
