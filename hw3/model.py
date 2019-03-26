@@ -20,10 +20,8 @@ class Model_basic(nn.Module): # Overfitting - train acc:0.8 valid acc:0.5
         self.conv_block = nn.Sequential(
             ResidualBlock(1, 16, 3, 1, 1),
             ResidualBlock(16, 64, 4, 2, 1),
-            nn.Conv2d(64, 128, kernel_size= 4, stride= 2, padding= 1),
-            nn.ReLU(inplace= True),
-            nn.Conv2d(128, 128, kernel_size= 4, stride= 2, padding= 1),
-            nn.ReLU(inplace= True)
+            ResidualBlock(64, 128, 4, 2, 1),
+            ResidualBlock(128, 128, 4, 2, 1),
         )
 
         self.fc1 = nn.Linear(128*6*6, 256)
