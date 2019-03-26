@@ -21,15 +21,14 @@ class Model_basic(nn.Module): # Overfitting - train acc:0.8 valid acc:0.5
             ResidualBlock(16, 64, kernel_size= 4, stride= 2, padding= 1),
         )
 
-        self.fc1 = nn.Linear(128*12*12, 128)
-        self.fc2 = nn.Linear(128, 64)
-        self.fc3 = nn.Linear(64, class_num)
+        self.fc1 = nn.Linear(64*12*12, 128)
+        self.fc2 = nn.Linear(128, class_num)
 
     def forward(self, inputs):
         x = self.conv_block(inputs)
         x = x.view(x.size(0), -1)
         x = F.relu(self.fc1(x))
-        x = F.relu(self.fc2(x))
+        x = self.fc2(x)
         return x
 
 class Model_1(nn.Module):
@@ -41,15 +40,13 @@ class Model_1(nn.Module):
         )
 
         self.fc1 = nn.Linear(64 * 12 * 12, 128)
-        self.fc2 = nn.Linear(128, 32)
-        self.fc3 = nn.Linear(32, class_num)
+        self.fc2 = nn.Linear(128, class_num)
 
     def forward(self, inputs):
         x = self.conv_block(inputs)
         x = x.view(x.size(0), -1)
         x = F.relu(self.fc1(x))
-        x = F.relu(self.fc2(x))
-        x = self.fc3(x)
+        x = self.fc2(x)
         return x
 
 class ResidualBlock(nn.Module):
@@ -91,7 +88,7 @@ def parameter_number(model):
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
 
 def test():
-    model = Model_1()
+    model = Model_basic()
     imgs = torch.zeros(4, 1, 48, 48)
     out = model(imgs)
     
