@@ -20,8 +20,11 @@ class Manager():
             for step, data in enumerate(train_data):
                 label, imgs = data
                 label, imgs = label.to(self.device), imgs.to(self.device)
-                self.model.zero_grad()
+              
                 out = self.model(imgs)
+                self.optimizer.zero_grad()
+                print(out.size())
+                print(label.size())
                 loss = F.nll_loss(out, label)
                 loss.backward()
                 self.optimizer.step()
