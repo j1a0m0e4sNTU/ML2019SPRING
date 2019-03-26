@@ -25,7 +25,7 @@ class TrainDataset(Dataset):
         feature_str = self.feature[index].split(' ')
         feature_f = [float(i) for i in feature_str]
         feature = torch.tensor(feature_f, dtype= torch.float)
-        feature = feature.view(48, 48)
+        feature = feature.view(1, 48, 48)
         if self.normalize:
             feature = (feature - 128) / 128
         return label, feature
@@ -45,7 +45,7 @@ class TestDataset(Dataset):
         feature_str = self.feature[index].split(' ')
         feature_f = [float(i) for i in feature_str]
         feature = torch.tensor(feature_f, dtype= torch.float)
-        feature = feature.view(48, 48)
+        feature = feature.view(1, 48, 48)
         if self.normalize:
             feature = (feature - 128) / 128
         return feature
@@ -59,7 +59,7 @@ def test():
     data = DataLoader(faces, batch_size= 8)
     for pair in data:
         label, imgs = pair
-        print(label.shape)
+        print(imgs.shape)
         break
     print(len(data))
 
