@@ -21,10 +21,8 @@ class Manager():
             train_correct = 0
             train_total = 0
             for step, data in enumerate(train_data):
-                print('step', step)
                 label, imgs = data
                 label, imgs = label.to(self.device), imgs.to(self.device)
-                print(label)
                 out = self.model(imgs)
                 self.optimizer.zero_grad()
                 loss = self.metric(out, label)
