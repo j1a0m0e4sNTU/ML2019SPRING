@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-class Model_basic(nn.Module): # Overfitting - train acc:0.8 valid acc:0.5
+class Model_basic(nn.Module): # after 20, train acc:0.90 valid acc:0.48
     def __init__(self, class_num= 7):
         super().__init__()
         
@@ -27,7 +27,7 @@ class Model_basic(nn.Module): # Overfitting - train acc:0.8 valid acc:0.5
         x = self.fc2(x)
         return x
 
-class Model_0(nn.Module):
+class Model_0(nn.Module): # after 20: train 0.92 valid 0.45
     def __init__(self, class_num= 7):
         super().__init__()
         self.block = nn.Sequential(
@@ -53,8 +53,8 @@ class Model_1(nn.Module):
             ResidualBlock(16, 64, kernel_size= 4, stride= 2, padding= 1),
         )
 
-        self.fc1 = nn.Linear(64 * 12 * 12, 128)
-        self.fc2 = nn.Linear(128, class_num)
+        self.fc1 = nn.Linear(64 * 12 * 12, 16)
+        self.fc2 = nn.Linear(16, class_num)
 
     def forward(self, inputs):
         x = self.conv_block(inputs)
@@ -63,7 +63,7 @@ class Model_1(nn.Module):
         x = self.fc2(x)
         return x
 
-class Model_2(nn.Module):
+class Model_2(nn.Module): # after 20 train: 0.99 valid: 0.48
     def __init__(self, class_num= 7):
         super().__init__()
         self.conv_block = nn.Sequential(
