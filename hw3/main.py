@@ -1,6 +1,7 @@
 import argparse
 import torch
 from torch.utils.data import DataLoader
+from torchvision.transforms import *
 from util import *
 from manager import Manager
 from model import *

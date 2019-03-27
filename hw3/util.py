@@ -2,11 +2,11 @@ import numpy as np
 import pandas as pd
 import torch
 from torch.utils.data import Dataset, DataLoader
+import  torchvision.transforms as transforms
 
 class TrainDataset(Dataset):
-    def __init__(self, path, mode= None, normalize= True):
-        self.normalize = normalize
-
+    def __init__(self, path, mode= None, transform= None):
+        self.transform = transform
         file = pd.read_csv(path)
         
         label = []
@@ -34,21 +34,22 @@ class TrainDataset(Dataset):
         label = torch.tensor(self.label[index], dtype= torch.long)
         feature_str = self.feature[index].split(' ')
         feature_f = [float(i) for i in feature_str]
-        feature = torch.tensor(feature_f, dtype= torch.float)
+        feature = torch.tensor(feature_f)
         feature = feature.view(1, 48, 48)
-        if self.normalize:
-            feature = (feature - 128) / 128
+        if self.transform:
+            feature = self.transform(feature)
+    
         return label, feature
     
     def __len__(self):
         return len(self.label)
 
 class TestDataset(Dataset):
-    def __init__(self, path, mode= None, normalize= True):
+    def __init__(self, path, mode= None, transform= None):
+        self.transform = transform
         file = pd.read_csv(path)
         data_num = len(file)
-        
-        self.normalize = normalize
+   
         self.feature = []
         for i in file['feature']:
             self.feature.append(i)
@@ -56,10 +57,11 @@ class TestDataset(Dataset):
     def __getitem__(self, index):
         feature_str = self.feature[index].split(' ')
         feature_f = [float(i) for i in feature_str]
-        feature = torch.tensor(feature_f, dtype= torch.float)
+        feature = torch.tensor(feature_f)
         feature = feature.view(1, 48, 48)
-        if self.normalize:
-            feature = (feature - 128) / 128
+        if self.transform:
+            feature = self.transform(feature)
+
         return feature
     
     def __len__(self):
@@ -67,13 +69,27 @@ class TestDataset(Dataset):
 
 
 def test():
-    faces = TrainDataset('../../data_hw3/train.csv', mode='train', normalize= 1)
+    transform = transforms.Compose([
+        transforms.ToPILImage(),
+        transforms.RandomHorizontalFlip(),
+        transforms.RandomVerticalFlip(),
+        transforms.RandomRotation(45),
+        transforms.ToTensor()
+    ])
+
+    faces = TestDataset('../../data_hw3/train.csv', transform= transform)
     data = DataLoader(faces, batch_size= 8)
     print(len(faces))
-    for pair in data:
-        label, imgs = pair
-        print(label)        
+    # for pair in data:
+    #     label, imgs = pair
+    #     print(label)        
+    #     print(imgs.size())
+    #     break
+    for imgs in data:
         print(imgs)
+        print(imgs.size())
+        for i in range(8):
+            print(torch.sum(imgs[i]))
         break
 
 def test2():
