@@ -67,7 +67,7 @@ class TestDataset(Dataset):
 
 
 def test():
-    faces = TrainDataset('../../data_hw3/train.csv', mode='train')
+    faces = TrainDataset('../../data_hw3/train.csv', mode='train', normalize= 1)
     data = DataLoader(faces, batch_size= 8)
     print(len(faces))
     for pair in data:
@@ -87,4 +87,4 @@ def test2():
     
 
 if __name__ == '__main__':
-    test2()
+    test()
