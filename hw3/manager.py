@@ -53,7 +53,7 @@ class Manager():
         for i in range(7):
             gt = (label == i)
             pr = (pred == i)
-            same = (gt == pr)
+            same = ((gt + pr) == 2)
             acc_dict[i][0] += torch.sum(same).item()
             acc_dict[i][1] += torch.sum(gt).item()
 
@@ -71,10 +71,10 @@ class Manager():
         return acc_dict
 
     def get_acc_message(self, acc_dict):
-        message = 'Total acc: ' + str(acc_dict['total'][0] / acc_dict['total'][1]) 
+        message = 'Total acc: {:.5f}'.format(acc_dict['total'][0] / acc_dict['total'][1])
         message += ' | acc per class: ['
         for i in range(7):
-            message += '({}):{} '.format(i, acc_dict[i][0]/acc_dict[i][1])
+            message += '({}):{:.3f} '.format(i, acc_dict[i][0]/acc_dict[i][1])
         message += ']'
         return message
 
