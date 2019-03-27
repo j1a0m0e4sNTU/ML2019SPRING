@@ -14,7 +14,7 @@ class Manager():
         self.epoch_num = args.epoch
         self.batch_size = args.bs
         self.save = args.save
-        self.csv = args.predict
+        self.csv = args.csv
 
     def train(self, train_data, valid_data):
         for epoch in range(self.epoch_num):
@@ -97,6 +97,6 @@ class Manager():
             line = '{},{}\n'.format(i, pred)
             file.write(line)
 
-        print('Finish prediction at', self.predict) 
+        print('Finish prediction at', self.csv) 
             
 
