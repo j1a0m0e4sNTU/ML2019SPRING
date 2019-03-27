@@ -1,7 +1,7 @@
 import argparse
 import torch
 from torch.utils.data import DataLoader
-from torchvision.transforms import *
+import torchvision.transforms as transforms
 from util import *
 from manager import Manager
 from model import *
@@ -22,8 +22,19 @@ def main():
     model = Model_1()
     if args.mode == 'train':
         print('Training ...')
-        train_set = TrainDataset(args.dataset, mode= 'train', normalize= args.normal)
-        valid_set = TrainDataset(args.dataset, mode= 'valid', normalize= args.normal)
+        train_transform = transforms.Compose([
+            transforms.ToPILImage(),
+            transforms.RandomHorizontalFlip(),
+            transforms.RandomVerticalFlip(),
+            transforms.RandomRotation(10),
+            transforms.ToTensor()
+        ])
+        valid_transform = transforms.Compose([
+            transforms.ToPILImage(),
+            transforms.ToTensor()
+        ])
+        train_set = TrainDataset(args.dataset, mode= 'train', transform= train_transform)
+        valid_set = TrainDataset(args.dataset, mode= 'valid', transform= valid_transform)
         train_data = DataLoader(dataset= train_set, batch_size= args.bs, shuffle= True)
         valid_data = DataLoader(dataset= valid_set, batch_size= args.bs)
 
@@ -32,7 +43,11 @@ def main():
 
     else:
         print('Predicting ...')
-        test_set = TestDataset(args.dataset, normalize= args.normal)
+        test_transform = transforms.Compose([
+            transforms.ToPILImage(),
+            transforms.ToTensor()
+        ])
+        test_set = TestDataset(args.dataset, transform= test_transform)
         test_data = DataLoader(dataset= test_set, batch_size= 1)
 
         manager = Manager(model, args)

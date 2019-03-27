@@ -60,14 +60,12 @@ class Model_1(nn.Module):
         )
 
         self.fc1 = nn.Linear(64 * 12 * 12, 16)
-        self.drop1 = nn.Dropout()
         self.fc2 = nn.Linear(16, class_num)
 
     def forward(self, inputs):
         x = self.conv_block(inputs)
         x = x.view(x.size(0), -1)
         x = F.relu(self.fc1(x))
-        x = self.drop1(x)
         x = self.fc2(x)
         return x
 

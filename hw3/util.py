@@ -5,7 +5,7 @@ from torch.utils.data import Dataset, DataLoader
 import  torchvision.transforms as transforms
 
 class TrainDataset(Dataset):
-    def __init__(self, path, mode= None, transform= None):
+    def __init__(self, path, mode, transform= None):
         self.transform = transform
         file = pd.read_csv(path)
         
@@ -73,24 +73,19 @@ def test():
         transforms.ToPILImage(),
         transforms.RandomHorizontalFlip(),
         transforms.RandomVerticalFlip(),
-        transforms.RandomRotation(45),
+        transforms.RandomRotation(10),
         transforms.ToTensor()
     ])
 
-    faces = TestDataset('../../data_hw3/train.csv', transform= transform)
+    faces = TrainDataset('../../data_hw3/train.csv', mode= 'train', transform= transform)
     data = DataLoader(faces, batch_size= 8)
     print(len(faces))
-    # for pair in data:
-    #     label, imgs = pair
-    #     print(label)        
-    #     print(imgs.size())
-    #     break
-    for imgs in data:
-        print(imgs)
+    for pair in data:
+        label, imgs = pair
+        print(label)        
         print(imgs.size())
-        for i in range(8):
-            print(torch.sum(imgs[i]))
         break
+   
 
 def test2():
     file = pd.read_csv('../../data_hw3/train.csv')
