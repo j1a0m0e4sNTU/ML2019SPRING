@@ -15,8 +15,8 @@ class TrainDataset(Dataset):
         for i in range(len(file)):
             l = int(file['label'][i])
             f = str(file['feature'][i])
-            if l == 6:
-                continue
+            # if l == 6:
+            #     continue
             label.append(l)
             feature.append(f)
             count += 1
