@@ -27,6 +27,24 @@ class Model_basic(nn.Module): # Overfitting - train acc:0.8 valid acc:0.5
         x = self.fc2(x)
         return x
 
+class Model_0(nn.Module):
+    def __init__(self, class_num= 7):
+        super().__init__()
+        self.block = nn.Sequential(
+            Conv2dBlock(1, 16, 4, 2, 1), 
+            Conv2dBlock(16, 64, 4, 2, 1),
+            Conv2dBlock(64, 128, 4, 2, 1)
+        )
+        self.fc1 = nn.Linear(128*6*6, 32)
+        self.fc2 = nn.Linear(32, class_num)
+
+    def forward(self, inputs):
+        x = self.block(inputs)
+        x = x.view(x.size(0), -1)
+        x = F.relu(self.fc1(x))
+        x = F.relu(self.fc2(x))
+        return x
+
 class Model_1(nn.Module):
     def __init__(self, class_num= 7):
         super().__init__()
@@ -100,7 +118,7 @@ def parameter_number(model):
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
 
 def test():
-    model = Model_2()
+    model = Model_0()
     imgs = torch.zeros(4, 1, 48, 48)
     out = model(imgs)
     
