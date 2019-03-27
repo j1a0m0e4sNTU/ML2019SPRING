@@ -1,0 +1,1 @@
+python3 main.py train -epoch 50 -save ../../weights/01.pkl

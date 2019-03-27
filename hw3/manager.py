@@ -36,7 +36,9 @@ class Manager():
             valid_acc = self.validate(valid_data)
             print('\033[1;36m Training   for epoch {}=>\033[1;33m {}\033[0;37m'.format(epoch,self.get_acc_message(train_acc)))
             print('\033[1;36m Validation for epoch {}=>\033[1;33m {}\033[0;37m'.format(epoch,self.get_acc_message(valid_acc)))
-
+            if self.save:
+                torch.save(self.model.state_dict(), self.save)
+    
     def validate(self, valid_data):
         self.model.eval()
         valid_dcit = self.get_acc_dict()
