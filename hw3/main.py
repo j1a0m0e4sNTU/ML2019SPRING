@@ -18,7 +18,7 @@ parser.add_argument('-predict', help= 'Path to prediction file')
 args = parser.parse_args()
 
 def main():
-    model = Model_2()
+    model = Model_basic(6)
     if args.mode == 'train':
         print('Training ...')
         train_set = TrainDataset(args.dataset, mode= 'train', normalize= args.normal)

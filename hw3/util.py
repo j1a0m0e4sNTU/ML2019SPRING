@@ -5,18 +5,23 @@ from torch.utils.data import Dataset, DataLoader
 
 class TrainDataset(Dataset):
     def __init__(self, path, mode= None, normalize= True):
-        file = pd.read_csv(path)
-        data_num = len(file)
-        
         self.normalize = normalize
-        label = []
-        for i in file['label']:
-            label.append(i)
-        feature = []
-        for i in file['feature']:
-            feature.append(i)
 
-        train_num = int(0.8 * data_num)
+        file = pd.read_csv(path)
+        
+        label = []
+        feature = []
+        count = 0
+        for i in range(len(file)):
+            l = int(file['label'][i])
+            f = str(file['feature'][i])
+            if l == 6:
+                continue
+            label.append(l)
+            feature.append(f)
+            count += 1
+
+        train_num = int(0.8 * count)
         if mode == 'train':
             self.label = label[:train_num]
             self.feature = feature[:train_num]
@@ -67,16 +72,19 @@ def test():
     print(len(faces))
     for pair in data:
         label, imgs = pair
-        print(imgs.shape)
+        print(label)        
+        print(imgs)
         break
 
 def test2():
-    faces = TestDataset('../../data_hw3/test.csv')
-    data = DataLoader(faces, 8)
-    for i in data:
-        print(i.shape)
-        break
+    file = pd.read_csv('../../data_hw3/train.csv')
+    count = np.zeros((7))
+    for i in file['label']:
+        index = int(i)
+        count[index] += 1
+
+    print(count)
     
 
 if __name__ == '__main__':
-    test2()
+    test()
