@@ -48,7 +48,7 @@ def main():
             transforms.ToTensor()
         ])
         test_set = TestDataset(args.dataset, transform= test_transform)
-        test_data = DataLoader(dataset= test_set, batch_size= 1)
+        test_data = DataLoader(dataset= test_set, batch_size= args.bs)
 
         manager = Manager(model, args)
         manager.predict(args.predict)

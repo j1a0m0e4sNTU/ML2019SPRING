@@ -85,12 +85,17 @@ class Manager():
     def predict(self, test_data):
         file = open(self.predict)
         file.write('id, label\n')
-
+        prediction = []
         for i, feature in enumerate(test_data):
             feature = feature.to(self.device)
             out = self.model(feature)
-            pred = torch.max(out, 1)[1].item()
-            file.write(i, ',', pred)
+            pred = torch.max(out, 1)[1]
+            for p in pred:
+                prediction += [p.item()]
+            
+        for i,pred in enumerate(prediction):
+            line = '{},{}\n'.format(i, pred)
+            file.write(line)
 
         print('Finish prediction at', self.predict) 
             

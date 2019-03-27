@@ -15,8 +15,6 @@ class TrainDataset(Dataset):
         for i in range(len(file)):
             l = int(file['label'][i])
             f = str(file['feature'][i])
-            # if l == 6:
-            #     continue
             label.append(l)
             feature.append(f)
             count += 1
@@ -81,7 +79,7 @@ def test():
     for pair in data:
         label, imgs = pair
         print(label)        
-        print(imgs.size())
+        print(imgs[0])
         break
    
 
@@ -96,4 +94,4 @@ def test2():
     
 
 if __name__ == '__main__':
-    test2()
+    test()
