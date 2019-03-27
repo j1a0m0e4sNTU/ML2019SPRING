@@ -8,7 +8,7 @@ from model import *
 parser = argparse.ArgumentParser()
 parser.add_argument('mode', help= 'Task: train/predict', choices=['train', 'predict'])
 parser.add_argument('-dataset', help= 'Path to dataset', default= '../../data_hw3/train.csv')
-parser.add_argument('-normal', help= 'Normalize data or not', type= bool, default= True)
+parser.add_argument('-normal', help= 'Normalize data or not', type= int, default= 1)
 parser.add_argument('-bs', help= 'batch size', type= int, default= 64)
 parser.add_argument('-lr', help= 'learnig rate', type= float, default= 1e-4)
 parser.add_argument('-epoch', help= 'Epoch number', type= int, default= 10)
