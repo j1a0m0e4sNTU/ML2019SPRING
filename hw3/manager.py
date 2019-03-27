@@ -14,7 +14,7 @@ class Manager():
         self.epoch_num = args.epoch
         self.batch_size = args.bs
         self.save = args.save
-        self.predict = args.predict
+        self.csv = args.predict
 
     def train(self, train_data, valid_data):
         for epoch in range(self.epoch_num):
@@ -83,7 +83,7 @@ class Manager():
         return message
 
     def predict(self, test_data):
-        file = open(self.predict)
+        file = open(self.csv,'w')
         file.write('id, label\n')
         prediction = []
         for i, feature in enumerate(test_data):

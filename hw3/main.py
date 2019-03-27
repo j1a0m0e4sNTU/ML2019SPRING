@@ -51,7 +51,7 @@ def main():
         test_data = DataLoader(dataset= test_set, batch_size= args.bs)
 
         manager = Manager(model, args)
-        manager.predict(args.predict)
+        manager.predict(test_data)
 
 if __name__ == '__main__':
     main()
