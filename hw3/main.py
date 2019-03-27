@@ -7,7 +7,7 @@ from manager import Manager
 from model import *
 from model_vgg import *
 
-model = get_vgg_model('A', bn= True)
+model = get_vgg_model('B', bn= True)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('mode', help= 'Task: train/predict', choices=['train', 'predict'])
