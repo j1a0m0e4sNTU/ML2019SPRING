@@ -84,7 +84,7 @@ class Manager():
 
     def predict(self, test_data):
         file = open(self.csv,'w')
-        file.write('id, label\n')
+        file.write('id,label\n')
         prediction = []
         for i, feature in enumerate(test_data):
             feature = feature.to(self.device)

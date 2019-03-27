@@ -34,13 +34,13 @@ class Model_VGG(nn.Module):
         super().__init__()
         self.feature = feature
         self.classifier = nn.Sequential(
-            nn.Linear(512*3*3, 1024),
+            nn.Linear(512*3*3, 512),
             nn.ReLU(inplace= True),
             nn.Dropout(),
-            nn.Linear(1024, 128),
+            nn.Linear(512, 64),
             nn.ReLU(inplace= True),
             nn.Dropout(),
-            nn.Linear(128, class_num)
+            nn.Linear(64, class_num)
         )
     def forward(self, inputs):
         x = self.feature(inputs)
