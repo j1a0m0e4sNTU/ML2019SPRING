@@ -71,9 +71,7 @@ class TestDataset(Dataset):
 def test():
     transform = transforms.Compose([
         transforms.ToPILImage(),
-        transforms.RandomHorizontalFlip(),
-        transforms.RandomVerticalFlip(),
-        transforms.RandomRotation(10),
+        transforms.RandomAffine(degrees= 10, translate= (0.1, 0.1), scale= (0.9, 1.1)),
         transforms.ToTensor()
     ])
 
