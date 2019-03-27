@@ -72,9 +72,9 @@ class Manager():
 
     def get_acc_message(self, acc_dict):
         message = 'Total acc: ' + str(acc_dict['total'][0] / acc_dict['total'][1]) 
-        message += '| acc per class: ['
+        message += ' | acc per class: ['
         for i in range(7):
-            message += str(acc_dict[i][0]/acc_dict[i][0])
+            message += '({}):{} '.format(i, acc_dict[i][0]/acc_dict[i][1])
         message += ']'
         return message
 
