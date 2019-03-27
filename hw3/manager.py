@@ -19,6 +19,7 @@ class Manager():
     def train(self, train_data, valid_data):
         for epoch in range(self.epoch_num):
             train_acc = self.get_acc_dict()
+            self.model.train()
             for step, data in enumerate(train_data):
                 label, imgs = data
                 label, imgs = label.to(self.device), imgs.to(self.device)
@@ -37,6 +38,7 @@ class Manager():
             print('\033[1;36m Validation for epoch {}=>\033[1;33m {}\033[0;37m'.format(epoch,self.get_acc_message(valid_acc)))
 
     def validate(self, valid_data):
+        self.model.eval()
         valid_dcit = self.get_acc_dict()
         for data in valid_data:
             label, imgs = data
