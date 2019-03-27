@@ -18,8 +18,7 @@ class Manager():
 
     def train(self, train_data, valid_data):
         for epoch in range(self.epoch_num):
-            train_correct = 0
-            train_total = 0
+            train_acc = self.get_acc_dict()
             for step, data in enumerate(train_data):
                 label, imgs = data
                 label, imgs = label.to(self.device), imgs.to(self.device)
@@ -28,33 +27,56 @@ class Manager():
                 loss = self.metric(out, label)
                 loss.backward()
                 self.optimizer.step()
-                
-                pred = torch.max(out, 1)[1]
-                same = (pred == label)
-                train_correct += torch.sum(same).item()
-                train_total += pred.size(0)
+                self.compute_acc(out, label, train_acc)
 
                 if (step + 1) % 50 == 0:
                     print('Epoch {} step {} | training loss: {}'.format(epoch, step + 1, loss.item()/self.batch_size))
             
             valid_acc = self.validate(valid_data)
-            print('\033[1;33m Training Acc for epoch {}:   {}\033[0;37m'.format(epoch,train_correct/train_total))
-            print('\033[1;33m Validation Acc for epoch {}: {}\033[0;37m'.format(epoch,valid_acc))
+            print('\033[1;36m Training   for epoch {}=>\033[1;33m {}\033[0;37m'.format(epoch,self.get_acc_message(train_acc)))
+            print('\033[1;36m Validation for epoch {}=>\033[1;33m {}\033[0;37m'.format(epoch,self.get_acc_message(valid_acc)))
 
     def validate(self, valid_data):
-        correct_num = 0
-        total_num = 0
+        valid_dcit = self.get_acc_dict()
         for data in valid_data:
             label, imgs = data
             label, imgs = label.to(self.device), imgs.to(self.device)
             out = self.model(imgs)
-            pred = torch.max(out, 1)[1]
-            same = (pred == label)
-            correct_num += torch.sum(same).item()
-            total_num += pred.size(0)
+            self.compute_acc(out, label, valid_dcit)
+        return valid_dcit
 
-        acc = correct_num / total_num
-        return acc
+    def compute_acc(self, out, label, acc_dict):
+        pred = torch.max(out, 1)[1]
+        same = (pred == label)
+        acc_dict['total'][0] += torch.sum(same).item()
+        acc_dict['total'][1] += pred.size(0)
+        for i in range(7):
+            gt = (label == i)
+            pr = (pred == i)
+            same = (gt == pr)
+            acc_dict[i][0] += torch.sum(same).item()
+            acc_dict[i][1] += torch.sum(gt).item()
+
+    def get_acc_dict(self):
+        acc_dict = {
+            'total': [0, 0],
+            0: [0, 0],
+            1: [0, 0],
+            2: [0, 0],
+            3: [0, 0],
+            4: [0, 0],
+            5: [0, 0],
+            6: [0, 0]
+        }
+        return acc_dict
+
+    def get_acc_message(self, acc_dict):
+        message = 'Total acc: ' + str(acc_dict['total'][0] / acc_dict['total'][1]) 
+        message += '| acc per class: ['
+        for i in range(7):
+            message += str(acc_dict[i][0]/acc_dict[i][0])
+        message += ']'
+        return message
 
     def predict(self, test_data):
         file = open(self.predict)
