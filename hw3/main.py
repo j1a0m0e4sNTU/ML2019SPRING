@@ -26,7 +26,7 @@ def main():
         train_transform = transforms.Compose([
             transforms.ToPILImage(),
             transforms.RandomHorizontalFlip(),
-            transforms.RandomAffine(degrees= 10),
+            transforms.RandomAffine(degrees= 10, translate= (0.1, 0.1)),
             transforms.ToTensor()
         ])
         valid_transform = transforms.Compose([
