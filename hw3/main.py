@@ -7,7 +7,7 @@ from manager import Manager
 from model import *
 from model_vgg import *
 
-model = get_vgg_model('C', bn= True)
+model = get_vgg_model('C', 'C')
 
 parser = argparse.ArgumentParser()
 parser.add_argument('mode', help= 'Task: train/predict', choices=['train', 'predict'])
@@ -19,6 +19,7 @@ parser.add_argument('-save', help= 'Path to save model')
 parser.add_argument('-load', help= 'Path to load model')
 parser.add_argument('-csv', help= 'Path to prediction file')
 parser.add_argument('-record', help= 'Path to record file')
+parser.add_argument('-tencrop', help= 'Apply TenCrop to testdata', type= int, default= 0)
 args = parser.parse_args()
 
 def main():
@@ -26,12 +27,14 @@ def main():
         print('Training ...')
         train_transform = transforms.Compose([
             transforms.ToPILImage(),
+            transforms.RandomCrop(44),
             transforms.RandomHorizontalFlip(),
-            transforms.RandomAffine(degrees= 20, translate= (0.2, 0.2), scale= (0.8, 1.2)),
+            # transforms.RandomAffine(degrees= 20, translate= (0.2, 0.2), scale= (0.8, 1.2)),
             transforms.ToTensor()
         ])
         valid_transform = transforms.Compose([
             transforms.ToPILImage(),
+            transforms.RandomCrop(44),
             transforms.ToTensor()
         ])
         train_set = TrainDataset(args.dataset, mode= 'train', transform= train_transform)
@@ -46,6 +49,7 @@ def main():
         print('Predicting ...')
         test_transform = transforms.Compose([
             transforms.ToPILImage(),
+            transforms.TenCrop(44),
             transforms.ToTensor()
         ])
         test_set = TestDataset(args.dataset, transform= test_transform)

@@ -15,6 +15,7 @@ class Manager():
         self.batch_size = args.bs
         self.save = args.save
         self.csv = args.csv
+        self.tencrop = args.tencrop
         self.best = {'epoch':0, 'acc':0}
        
         if args.record:
@@ -103,7 +104,14 @@ class Manager():
         prediction = []
         for i, feature in enumerate(test_data):
             feature = feature.to(self.device)
+            if self.tencrop:
+                bs, crop, c, h, w = feature.size()
+                feature = feature.view(-1, c, h, w)
+
             out = self.model(feature)
+            if self.tencrop:
+                out = out.view(bs, crop, -1).mean(1)
+            
             pred = torch.max(out, 1)[1]
             for p in pred:
                 prediction += [p.item()]
@@ -112,4 +120,4 @@ class Manager():
             line = '{},{}\n'.format(i, pred)
             file.write(line)
 
-        print('Finish prediction at', self.csv) 
+        print('Finish prediction at', self.csv)
