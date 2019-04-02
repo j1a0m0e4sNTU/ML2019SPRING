@@ -18,6 +18,7 @@ parser.add_argument('-epoch', help= 'Epoch number', type= int, default= 10)
 parser.add_argument('-save', help= 'Path to save model')
 parser.add_argument('-load', help= 'Path to load model')
 parser.add_argument('-csv', help= 'Path to prediction file')
+parser.add_argunent('-record', help= 'Path to record file')
 args = parser.parse_args()
 
 def main():

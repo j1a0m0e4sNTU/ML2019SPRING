@@ -17,9 +17,8 @@ class Manager():
         self.csv = args.csv
         self.best = {'epoch':0, 'acc':0}
        
-        if self.save:
-            record_name = 'results/' + self.save[:-4] + '.csv'
-            self.record = open(record_name, 'w')
+        if args.record:
+            self.record = open(args.record, 'w')
             self.record.write('epoch,train_acc,valid_acc\n')
 
     def train(self, train_data, valid_data):
