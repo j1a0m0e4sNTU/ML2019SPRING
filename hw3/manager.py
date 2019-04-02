@@ -38,7 +38,7 @@ class Manager():
             print('\033[1;36m Training   for epoch {}=>\033[1;33m {}\033[0;37m'.format(epoch,self.get_acc_message(train_acc)))
             print('\033[1;36m Validation for epoch {}=>\033[1;33m {}\033[0;37m'.format(epoch,self.get_acc_message(valid_acc)))
             
-            V_acc = valid_acc['total'][0] / valid_acc['total'][1]
+            v_acc = valid_acc['total'][0] / valid_acc['total'][1]
             if v_acc > self.best['acc']:
                 self.best['acc'] = v_acc
                 self.best['epoch'] = epoch
