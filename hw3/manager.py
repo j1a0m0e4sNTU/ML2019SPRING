@@ -16,6 +16,11 @@ class Manager():
         self.save = args.save
         self.csv = args.csv
         self.best = {'epoch':0, 'acc':0}
+       
+        if self.save:
+            record_name = 'results/' + self.save[:-4] + '.csv'
+            self.record = open(record_name, 'w')
+            self.record.write('epoch,train_acc,valid_acc\n')
 
     def train(self, train_data, valid_data):
         for epoch in range(self.epoch_num):
@@ -38,12 +43,15 @@ class Manager():
             print('\033[1;36m Training   for epoch {}=>\033[1;33m {}\033[0;37m'.format(epoch,self.get_acc_message(train_acc)))
             print('\033[1;36m Validation for epoch {}=>\033[1;33m {}\033[0;37m'.format(epoch,self.get_acc_message(valid_acc)))
             
+            t_acc = train_acc['total'][0] / train_acc['total'][1]
             v_acc = valid_acc['total'][0] / valid_acc['total'][1]
+            
             if v_acc > self.best['acc']:
                 self.best['acc'] = v_acc
                 self.best['epoch'] = epoch
                 if self.save:
                     torch.save(self.model.state_dict(), self.save)
+                    self.record.write('{},{:.5f},{:.5f}\n'.format(epoch, t_acc, v_acc))
 
             print('\033[1;33m Best result is at {} epoch with validation Acc: {}\033[0;37m'.format(self.best['epoch'], self.best['acc']))
     
@@ -106,5 +114,3 @@ class Manager():
             file.write(line)
 
         print('Finish prediction at', self.csv) 
-            
-
