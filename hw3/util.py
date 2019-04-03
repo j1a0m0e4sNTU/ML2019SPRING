@@ -66,7 +66,7 @@ class TestDataset(Dataset):
         return len(self.feature)
 
 
-def test():
+def test_traindata():
     transform = transforms.Compose([
         transforms.ToPILImage(),
         transforms.RandomAffine(degrees= 10, translate= (0.1, 0.1), scale= (0.9, 1.1)),
@@ -81,7 +81,20 @@ def test():
         print(label)        
         print(imgs[0])
         break
-   
+
+def test_testdata():
+    transform = transforms.Compose([
+        transforms.ToPILImage(),
+        transforms.TenCrop(44),
+        transforms.Lambda(lambda crops: torch.stack([transforms.ToTensor()(crop) for crop in crops]))
+    ])
+
+    faces = TestDataset('../../data_hw3/test.csv', transform = transform)
+    data = DataLoader(faces, batch_size= 8)
+    for i, feature in enumerate(data):
+        print(feature.size())
+        print(feature[0, 0, 0])
+        break
 
 def test2():
     file = pd.read_csv('../../data_hw3/train.csv')
@@ -94,4 +107,4 @@ def test2():
     
 
 if __name__ == '__main__':
-    test()
+    test_traindata()

@@ -50,7 +50,7 @@ def main():
         test_transform = transforms.Compose([
             transforms.ToPILImage(),
             transforms.TenCrop(44),
-            transforms.ToTensor()
+            transforms.Lambda(lambda crops: torch.stack([transforms.ToTensor()(crop) for crop in crops]))
         ])
         test_set = TestDataset(args.dataset, transform= test_transform)
         test_data = DataLoader(dataset= test_set, batch_size= args.bs)
