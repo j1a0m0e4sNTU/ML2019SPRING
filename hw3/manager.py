@@ -99,6 +99,7 @@ class Manager():
         return message
 
     def predict(self, test_data):
+        self.model.eval()
         file = open(self.csv,'w')
         file.write('id,label\n')
         prediction = []

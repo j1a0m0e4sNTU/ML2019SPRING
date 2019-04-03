@@ -13,4 +13,4 @@
 # python3 main.py train -epoch 60 -save ../../weights/vgg_cc_2.pkl -record results/vgg_cc_2.csv 
 # python3 main.py predict -dataset ../../data_hw3/test.csv -load ../../weights/vgg_cc_2.pkl -tencrop 1 -csv vgg_cc_2.csv
 # python3 main.py train -epoch 60 -save ../../weights/dnn.pkl -record results/dnn.csv 
-python3 main.py predict -dataset ../../data_hw3/test.csv -load ../../weights/dnn.pkl -tencrop 1 -csv predictions/dnn.csv
+# python3 main.py predict -dataset ../../data_hw3/test.csv -load ../../weights/dnn.pkl -tencrop 1 -csv predictions/dnn.csv
