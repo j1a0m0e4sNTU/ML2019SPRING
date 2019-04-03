@@ -1,0 +1,1 @@
+python3 main.py train -epoch 60 -dataset $1 -save vgg.pkl -record vgg.csv 
