@@ -7,7 +7,7 @@ from manager import Manager
 from model import *
 from model_vgg import *
 
-model = get_vgg_model('C', 'C')
+model = get_DNN('DNN')
 
 parser = argparse.ArgumentParser()
 parser.add_argument('mode', help= 'Task: train/predict', choices=['train', 'predict'])

@@ -34,7 +34,8 @@ fc_config = {
     'A': [512*3*3, 512, 64, 7],
     'B': [512*3*3, 1024, 128, 7],
     'C': [512*2*2, 512, 64, 7],
-    'D': [512*5*5, 512, 64, 7]
+    'D': [512*5*5, 512, 64, 7],
+    'DNN': [44*44,2048, 2048, 2048, 1024, 1024, 1024, 1024, 1024, 1024, 512, 512, 512, 512, 256, 256, 128, 128, 64, 64, 64, 7]
 }
 
 def make_fc(config, drop_out= True):
@@ -58,6 +59,16 @@ class Model_VGG(nn.Module):
         x = self.classifier(x)
         return x
 
+class DNN(nn.Module):
+    def __init__(self, fc_layers):
+        super().__init__()
+        self.net = fc_layers
+
+    def forward(self, inputs):
+        inputs = inputs.view(inputs.size(0), -1)
+        x = self.net(inputs)
+        return x
+
 def get_vgg_model(conv_id, fc_id, bn= True, drop_out= True):
     if (conv_id not in conv_config) or (fc_id not in fc_config):
         return None
@@ -66,15 +77,29 @@ def get_vgg_model(conv_id, fc_id, bn= True, drop_out= True):
     vgg = Model_VGG(conv_layers, fc_layers)
     return vgg
 
+def get_DNN(fc_id):
+    if fc_id not in fc_config:
+        return None
+    fc_layers = make_fc(fc_config[fc_id])
+    dnn = DNN(fc_layers)
+    return dnn
+
+def parameter_number(model):
+    return sum(p.numel() for p in model.parameters() if p.requires_grad)
+
 def test():
-    def parameter_number(model):
-        return sum(p.numel() for p in model.parameters() if p.requires_grad)
-    # model = get_vgg_model('A', 'A')
-    model = make_layers(conv_config['C'])
+    model = get_vgg_model('C', 'C')
     inputs = torch.zeros(4, 1, 44, 44)
     out = model(inputs)
     print('Output size:', out.size())
     print('Parameter number:', parameter_number(model))
 
+def test_DNN():
+    model = get_DNN('DNN')
+    inputs = torch.zeros(4, 1, 44, 44)
+    out = model(inputs)
+    print('Out shape:',out.shape)
+    print('parameter number:', parameter_number(model))
+
 if __name__ == '__main__':
-    test()
+    test_DNN()
