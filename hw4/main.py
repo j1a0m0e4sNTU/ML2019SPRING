@@ -1,14 +1,18 @@
 import numpy as np
 import torch
 import torch.nn as nn
+import torch.optim as optim 
 from matplotlib import pyplot as plt
 import argparse
 from dataset import *
 from model_vgg import *
+torch.manual_seed(19961004)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-dataset', default= '../../data_hw3/train.csv', help= 'Path to train.csv')
 parser.add_argument('-load', default= '../../vgg_cc_2.pkl', help= 'Path to pre-trained model weight')
+parser.add_argument('-step', type= int, default= 50, help= 'Step number for gradient ascent')
+parser.add_argument('-lr', type= float, default= 1e-1, help= 'Learning rate for gradient ascent')
 args = parser.parse_args()
 
 def get_model():
@@ -17,20 +21,22 @@ def get_model():
     return model
 
 def show_image(tensor, cmap= 'gray'):
-    array = tensor.squeeze().numpy()
+    array = tensor.squeeze().detach().numpy()
     plt.imshow(array, cmap= cmap)
     plt.show()
 
 def save_image(name, tensor, cmap= 'gray'):
-    array = tensor.squeeze().numpy()
+    array = tensor.squeeze().detach().numpy()
     plt.imsave(name, array, cmap= cmap)
 
 class HW4():
-    def __init__(self, model, dataset):
+    def __init__(self, model, dataset, args):
         self.model = model
         self.model.eval()
         self.dataset = dataset
         self.loss_func = nn.CrossEntropyLoss()
+        self.step = args.step
+        self.lr = args.lr
 
     def get_image_for_label(self, label, count= 0):
         c = 0
@@ -59,27 +65,78 @@ class HW4():
             salience_map = self.get_salience_map(label, image)
             save_image('fig1_{}.jpg'.format(label), salience_map, cmap= 'hot')
 
+    def get_model_part(self, conv_id):
+        conv_id = conv_id % 16
+        for i, layer in enumerate(self.model.feature):
+            if 'Conv' in layer.__str__():
+                if conv_id == 0:
+                    return self.model.feature[:i+3]
+                else:
+                    conv_id -= 1
+
+    def get_most_activate(self, model, filter_id):
+        image = torch.rand(1, 1, 44, 44)
+        image.requires_grad = True
+        optimizer = optim.Adam([image], lr= self.lr)
+
+        for _ in range(self.step):
+            optimizer.zero_grad()
+            out = model(image)
+            filter_out = out[0, filter_id]
+            loss = -torch.mean(filter_out)
+            loss.backward()
+            optimizer.step()
+        return image
+
+    def plot_activate_images(self, model, name, total_num= 25, shape= (5, 5)):
+        for filter_id in range(total_num):
+            activate_image = self.get_most_activate(model, filter_id)
+            activate_image = activate_image.squeeze().detach().numpy()
+            plt.subplot(shape[0], shape[1], filter_id + 1)
+            plt.imshow(activate_image, cmap= 'hot')
+        
+        #plt.show()
+        plt.savefig(name)
+        plt.close()
+
+    def plot_filter_output(self, model, image, name, total_num= 25, shape= (5, 5)):
+        image = image.unsqueeze(0)
+        out = model(image)
+        out = out.squeeze()
+        for filter_id in range(total_num):
+            filter_image = out[filter_id].squeeze().detach().numpy()
+            plt.subplot(shape[0], shape[1], filter_id + 1)
+            plt.imshow(filter_image, cmap= 'gray')
+
+        #plt.show()
+        plt.savefig(name)
+        plt.close()
+
+    def plot_task_2(self):
+        model = self.get_model_part(0)
+        image = self.get_image_for_label(3, 10)
+        self.plot_activate_images(model, 'fig2_1.jpg')
+        self.plot_filter_output(model, image, 'fig2_2.jpg')
+
+
+    def plot_task_3(self):
+        pass
+
     def test(self):
-        label = 3
-        image = self.get_image_for_label(label, 15)
-        show_image(image)
-        salience_map = self.get_salience_map(label, image)
-        save_image('test.png',salience_map, 'hot')
-
-
+        self.plot_task_2()
 
 def test():
     model = get_model()
     train_set = TrainDataset(args.dataset, mode= 'valid')
-    hw4 = HW4(model, train_set)
+    hw4 = HW4(model, train_set, args)
     hw4.test()
 
 def main():
     model = get_model()
     train_set = TrainDataset(args.dataset, mode= 'valid')
-    hw4 = HW4(model, train_set)
+    hw4 = HW4(model, train_set, args)
     hw4.plot_task_1()
 
 if __name__ == '__main__':
     print('- Main -')
-    main()
+    test()
