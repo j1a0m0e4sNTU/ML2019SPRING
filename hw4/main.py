@@ -4,6 +4,8 @@ import torch.nn as nn
 import torch.optim as optim 
 from matplotlib import pyplot as plt
 import argparse
+from lime import lime_image
+from skimage.segmentation import slic
 from dataset import *
 from model_vgg import *
 torch.manual_seed(19961004)
@@ -122,9 +124,31 @@ class HW4():
     def plot_task_3(self):
         pass
 
-    def test(self):
-        self.plot_task_2()
+    def plot_task_4(self):
+        pass
 
+    def test(self):
+        def predict_fn(image):
+            image = torch.from_numpy(image[:, :, :, 0]).unsqueeze(1)
+            pred = self.model(image)
+            pred = pred.squeeze().detach().numpy()
+            return pred
+        
+        def segmentation_fn(image):
+            image = image.astype(np.float64)
+            segments = slic(image, n_segments= 100, compactness= 10)
+            return segments
+
+        explainer = lime_image.LimeImageExplainer()
+        label = 3
+        image = self.get_image_for_label(label, 15)
+        image = image.squeeze().numpy()
+        explanation = explainer.explain_instance(image, classifier_fn= predict_fn, top_labels= 7, num_features= 10000, segmentation_fn= segmentation_fn)
+        image, mask = explanation.get_image_and_mask(label, positive_only= False, num_features= 3, hide_rest= False)
+
+        plt.imshow(image)
+        plt.show()
+        
 def test():
     model = get_model()
     train_set = TrainDataset(args.dataset, mode= 'valid')
@@ -136,6 +160,8 @@ def main():
     train_set = TrainDataset(args.dataset, mode= 'valid')
     hw4 = HW4(model, train_set, args)
     hw4.plot_task_1()
+    hw4.plot_task_2()
+    hw4.plot_task_3()
 
 if __name__ == '__main__':
     print('- Main -')
