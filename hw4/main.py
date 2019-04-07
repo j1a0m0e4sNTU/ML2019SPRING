@@ -122,12 +122,6 @@ class HW4():
 
 
     def plot_task_3(self):
-        pass
-
-    def plot_task_4(self):
-        pass
-
-    def test(self):
         def predict_fn(image):
             image = torch.from_numpy(image[:, :, :, 0]).unsqueeze(1)
             pred = self.model(image)
@@ -140,14 +134,23 @@ class HW4():
             return segments
 
         explainer = lime_image.LimeImageExplainer()
-        label = 3
-        image = self.get_image_for_label(label, 15)
-        image = image.squeeze().numpy()
-        explanation = explainer.explain_instance(image, classifier_fn= predict_fn, top_labels= 7, num_features= 10000, segmentation_fn= segmentation_fn)
-        image, mask = explanation.get_image_and_mask(label, positive_only= False, num_features= 3, hide_rest= False)
 
-        plt.imshow(image)
-        plt.show()
+        for label in range(7):
+            image = self.get_image_for_label(label, 0)
+            image = image.squeeze().numpy()
+            explanation = explainer.explain_instance(image, classifier_fn= predict_fn, top_labels= 7, num_features= 10000, segmentation_fn= segmentation_fn)
+            image, mask = explanation.get_image_and_mask(label, positive_only= False, num_features= 3, hide_rest= False)
+
+            plt.imshow(image)
+            #plt.show()
+            plt.savefig('fig3_{}.jpg'.format(label))
+            plt.close()
+
+    def plot_task_4(self):
+        pass
+
+    def test(self):
+        pass
         
 def test():
     model = get_model()
