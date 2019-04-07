@@ -45,7 +45,6 @@ class HW4():
         for l, image in self.dataset:
             if l == label:
                 if c == count:
-                    image = image[:, 2:46, 2:46]
                     return image
                 else:
                     c += 1
@@ -63,7 +62,7 @@ class HW4():
     def plot_task_1(self):
         for label in range(7):
             image = self.get_image_for_label(label, 15)
-            #save_image('{}.jpg'.format(label), image)
+            #save_image('fig1_{}_original.jpg'.format(label), image)
             salience_map = self.get_salience_map(label, image)
             save_image('fig1_{}.jpg'.format(label), salience_map, cmap= 'hot')
 
@@ -139,7 +138,7 @@ class HW4():
             image = self.get_image_for_label(label, 0)
             image = image.squeeze().numpy()
             explanation = explainer.explain_instance(image, classifier_fn= predict_fn, top_labels= 7, num_features= 10000, segmentation_fn= segmentation_fn)
-            image, mask = explanation.get_image_and_mask(label, positive_only= False, num_features= 3, hide_rest= False)
+            image, mask = explanation.get_image_and_mask(label, positive_only= False, num_features= 5, hide_rest= False)
 
             plt.imshow(image)
             #plt.show()
@@ -147,20 +146,47 @@ class HW4():
             plt.close()
 
     def plot_task_4(self):
-        pass
+        loss_func = nn.CrossEntropyLoss()
+
+        for label in range(7):
+            target = torch.LongTensor([label])
+            image = torch.rand(1, 1, 44, 44)
+            image.requires_grad = True
+            optimizer = optim.Adam([image], lr= self.lr)
+
+            for _ in range(self.step):
+                optimizer.zero_grad()
+                out = self.model(image)
+                loss = loss_func(out, target)
+                loss.backward()
+                optimizer.step()
+            
+            save_image('fig4_{}.jpg'.format(label), image)
 
     def test(self):
-        pass
+        self.plot_task_4()
         
 def test():
     model = get_model()
-    train_set = TrainDataset(args.dataset, mode= 'valid')
+    transform = transforms.Compose([
+        transforms.ToPILImage(),
+        transforms.RandomCrop(44),
+        transforms.ToTensor()
+    ])
+    train_set = TrainDataset(args.dataset, mode= 'valid', transform= transform)
+    
     hw4 = HW4(model, train_set, args)
     hw4.test()
 
 def main():
     model = get_model()
-    train_set = TrainDataset(args.dataset, mode= 'valid')
+    transform = transforms.Compose([
+        transforms.ToPILImage(),
+        transforms.RandomCrop(44),
+        transforms.ToTensor()
+    ])
+    train_set = TrainDataset(args.dataset, mode= 'valid', transform= transform)
+
     hw4 = HW4(model, train_set, args)
     hw4.plot_task_1()
     hw4.plot_task_2()
@@ -168,4 +194,4 @@ def main():
 
 if __name__ == '__main__':
     print('- Main -')
-    test()
+    main()
