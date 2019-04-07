@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import torch
 import torch.nn as nn
@@ -9,12 +10,14 @@ from skimage.segmentation import slic
 from dataset import *
 from model_vgg import *
 torch.manual_seed(19961004)
+np.random.seed(19961004)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-dataset', default= '../../data_hw3/train.csv', help= 'Path to train.csv')
 parser.add_argument('-load', default= '../../vgg_cc_2.pkl', help= 'Path to pre-trained model weight')
 parser.add_argument('-step', type= int, default= 50, help= 'Step number for gradient ascent')
 parser.add_argument('-lr', type= float, default= 1e-1, help= 'Learning rate for gradient ascent')
+parser.add_argument('-output', default= '.', help= 'Path for output images')
 args = parser.parse_args()
 
 def get_model():
@@ -39,6 +42,7 @@ class HW4():
         self.loss_func = nn.CrossEntropyLoss()
         self.step = args.step
         self.lr = args.lr
+        self.output = args.output
 
     def get_image_for_label(self, label, count= 0):
         c = 0
@@ -64,7 +68,7 @@ class HW4():
             image = self.get_image_for_label(label, 15)
             #save_image('fig1_{}_original.jpg'.format(label), image)
             salience_map = self.get_salience_map(label, image)
-            save_image('fig1_{}.jpg'.format(label), salience_map, cmap= 'hot')
+            save_image(os.path.join(self.output, 'fig1_{}.jpg'.format(label)), salience_map, cmap= 'hot')
 
     def get_model_part(self, conv_id):
         conv_id = conv_id % 16
@@ -116,8 +120,8 @@ class HW4():
     def plot_task_2(self):
         model = self.get_model_part(0)
         image = self.get_image_for_label(3, 10)
-        self.plot_activate_images(model, 'fig2_1.jpg')
-        self.plot_filter_output(model, image, 'fig2_2.jpg')
+        self.plot_activate_images(model, os.path.join(self.output, 'fig2_1.jpg'))
+        self.plot_filter_output(model, image, os.path.join(self.output, 'fig2_2.jpg'))
 
 
     def plot_task_3(self):
@@ -137,12 +141,12 @@ class HW4():
         for label in range(7):
             image = self.get_image_for_label(label, 0)
             image = image.squeeze().numpy()
-            explanation = explainer.explain_instance(image, classifier_fn= predict_fn, top_labels= 7, num_features= 10000, segmentation_fn= segmentation_fn)
+            explanation = explainer.explain_instance(image, classifier_fn= predict_fn, top_labels= 7, num_features= 10000, segmentation_fn= segmentation_fn, random_seed= 19961004)
             image, mask = explanation.get_image_and_mask(label, positive_only= False, num_features= 5, hide_rest= False)
 
             plt.imshow(image)
             #plt.show()
-            plt.savefig('fig3_{}.jpg'.format(label))
+            plt.savefig(os.path.join(self.output, 'fig3_{}.jpg'.format(label)))
             plt.close()
 
     def plot_task_4(self):
@@ -161,7 +165,7 @@ class HW4():
                 loss.backward()
                 optimizer.step()
             
-            save_image('fig4_{}.jpg'.format(label), image)
+            save_image(os.path.join(self.output, 'fig4_{}.jpg'.format(label)), image)
 
     def test(self):
         self.plot_task_4()
