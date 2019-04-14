@@ -2,6 +2,7 @@ import argparse
 import torch
 import  torchvision.transforms as transforms
 from torchvision.models import vgg11
+from dataset import *
 
 parser = argparse.ArgumentParser()
 
