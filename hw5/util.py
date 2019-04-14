@@ -1,4 +1,5 @@
 import os
+import numpy as np
 import torch
 from torch.utils.data import Dataset, DataLoader
 import torchvision.transforms as transforms
@@ -7,9 +8,11 @@ from matplotlib import pyplot as plt
 class MyDataset(Dataset):
     def __init__(self, path):
         super().__init__()
-        self.transform = transforms.Compose([transforms.ToTensor(),
-                                            transforms.Normalize(mean= [0.485, 0.456, 0.406], 
-                                                                std= [0.229, 0.224, 0.225])])
+
+        self.mean = [0.485, 0.456, 0.406]
+        self.std  = [0.229, 0.224, 0.225]
+        self.toTensor = transforms.ToTensor()
+        self.normalize = transforms.Normalize(mean= self.mean, std= self.std)
 
         imgs_dir = os.path.join(path, 'images')
         self.imgs_path = [os.path.join(imgs_dir, name) for name in os.listdir(imgs_dir) if name.endswith('.png')]
@@ -18,15 +21,28 @@ class MyDataset(Dataset):
     def __len__(self):
         return len(self.imgs_path)
 
-    def __getitem__(self, index):
+    def get_img_tensor(self, index):
         img = plt.imread(self.imgs_path[index])
-        img = self.transform(img)
-        return img
+        img_tensor = self.toTensor(img)
+        return img_tensor
 
-    def get_original(self, index):
-        img_origin = plt.imread(self.imgs_path[index])
-        img_transform = self.transform(img_origin)
-        return img_origin, img_transform
+    def __getitem__(self, index):
+        img_tensor = self.get_img_tensor(index)
+        img_normalize = self.normalize(img_tensor)
+        return img_normalize
+    
+    def toNumpy(self, tensor, normalized= True):
+        if normalized:
+            for i in range(3):
+                tensor[i] = (tensor[i] * self.std[i]) + self.mean[i]
+        
+        array = tensor.permute(1, 2, 0).detach().numpy()
+        return array
+
 
 if __name__ == '__main__':
     dataset = MyDataset('../../data_hw5')
+    img_tensor = dataset[2]
+    img = dataset.toNumpy(img_tensor, True)
+    plt.imshow(img)
+    plt.show()
