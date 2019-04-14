@@ -22,6 +22,9 @@ class MyDataset(Dataset):
         category_csv = pd.read_csv(os.path.join(path, 'categories.csv'))
         self.category = np.array(category_csv['CategoryName'])
 
+        label_csv = pd.read_csv('label.csv')
+        self.label = torch.LongTensor(label_csv['label'])
+
     def __len__(self):
         return len(self.imgs_path)
 
@@ -33,7 +36,8 @@ class MyDataset(Dataset):
     def __getitem__(self, index):
         img_tensor = self.get_img_tensor(index)
         img_normalize = self.normalize(img_tensor)
-        return img_normalize
+        label = torch.LongTensor([self.label[index]])
+        return img_normalize, label
     
     def toNumpy(self, tensor, normalized= True):
         tensor = tensor.squeeze()
@@ -47,9 +51,19 @@ class MyDataset(Dataset):
     def get_category_name(self, index):
         return self.category[index]
 
-if __name__ == '__main__':
+def test():
     dataset = MyDataset('../../data_hw5')
     img_tensor = dataset[2]
     img = dataset.toNumpy(img_tensor, True)
     plt.imshow(img)
     plt.show()
+
+def test2():
+    dataset = MyDataset('../../data_hw5')
+    for i in range(len(dataset)):
+        img, label = dataset[i]
+        category = dataset.get_category_name(label.item())
+        print('{}, {}'.format(i, category))
+
+if __name__ == '__main__':
+    test2()
