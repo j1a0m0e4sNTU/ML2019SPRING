@@ -43,6 +43,7 @@ def generate_label():
 def main():
     print('- main -')
     model = get_model()
+    model.eval()
     img_data = MyDataset(args.input)
     loss_fn = nn.CrossEntropyLoss()    
     if not os.path.isdir(args.output):
@@ -76,12 +77,13 @@ def main():
         if new_label != origin_label:
             attack_num += 1
         print('---- {}/{} -----'.format(attack_num, i + 1))
-        
+
     print('attact number: {}'.format(attack_num))
 
 def test():
     print('- test -')
     model = get_model()
+    model.eval()
     img_data = MyDataset(args.input)
     attack_num = 0
     for i in range(len(img_data)):

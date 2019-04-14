@@ -73,4 +73,4 @@ def test2():
     print(torch.sum((a-b).abs()))
 
 if __name__ == '__main__':
-    test2()
+    test()
