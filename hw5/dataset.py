@@ -1,5 +1,6 @@
 import os
 import numpy as np
+import pandas as pd
 import torch
 from torch.utils.data import Dataset, DataLoader
 import torchvision.transforms as transforms
@@ -18,6 +19,9 @@ class MyDataset(Dataset):
         self.imgs_path = [os.path.join(imgs_dir, name) for name in os.listdir(imgs_dir) if name.endswith('.png')]
         self.imgs_path.sort()
 
+        category_csv = pd.read_csv(os.path.join(path, 'categories.csv'))
+        self.category = np.array(category_csv['CategoryName'])
+
     def __len__(self):
         return len(self.imgs_path)
 
@@ -32,6 +36,7 @@ class MyDataset(Dataset):
         return img_normalize
     
     def toNumpy(self, tensor, normalized= True):
+        tensor = tensor.squeeze()
         if normalized:
             for i in range(3):
                 tensor[i] = (tensor[i] * self.std[i]) + self.mean[i]
@@ -39,6 +44,8 @@ class MyDataset(Dataset):
         array = tensor.permute(1, 2, 0).detach().numpy()
         return array
 
+    def get_category_name(self, index):
+        return self.category[index]
 
 if __name__ == '__main__':
     dataset = MyDataset('../../data_hw5')
