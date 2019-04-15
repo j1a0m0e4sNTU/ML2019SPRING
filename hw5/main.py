@@ -11,7 +11,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('-e', type= float, default= 1e-8)
 parser.add_argument('-m', default= 'vgg16', choices=['vgg16', 'vgg19', 'resnet50', 'resnet101', 'densenet121', 'densenet169'])
 parser.add_argument('-input', default= '../../data_hw5', help= 'Input image folder')
-parser.add_argument('-output', default= '../../result', help= 'Output folder')
+parser.add_argument('-output', default= '../../result/images', help= 'Output folder')
 args = parser.parse_args()
 
 def get_model():
@@ -98,4 +98,4 @@ def test():
     print('attack num: {}'.format(attack_num))
     
 if __name__ == '__main__':
-    main()
+    test()
