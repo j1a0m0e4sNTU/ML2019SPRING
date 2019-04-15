@@ -8,7 +8,8 @@ from torchvision.models import vgg16, vgg19, resnet50, resnet101, densenet121, d
 from dataset import *
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-e', type= float, default= 1e-8)
+parser.add_argument('-mode', choices=['main', 'test'], default= 'main')
+parser.add_argument('-e', type= float, default= 1e-1)
 parser.add_argument('-m', default= 'vgg16', choices=['vgg16', 'vgg19', 'resnet50', 'resnet101', 'densenet121', 'densenet169'])
 parser.add_argument('-input', default= '../../data_hw5', help= 'Input image folder')
 parser.add_argument('-output', default= '../../result/images', help= 'Output folder')
@@ -84,18 +85,26 @@ def test():
     print('- test -')
     model = get_model()
     model.eval()
-    img_data = MyDataset(args.input)
+    img_data = MyDataset('../../result')
+    
     attack_num = 0
     for i in range(len(img_data)):
         img, gt = img_data[i]
         img = img.unsqueeze(0)
         out = model(img)
         label = out.max(1)[1].item()
-        category = img_data.get_category_name(label)
-        print('{}, label {} category {}'.format(i, label, category))
+        
         if gt != label:
             attack_num += 1
+            category_gt = img_data.get_category_name(gt)
+            category_pred = img_data.get_category_name(label)
+            print('{:0>3d}/{:0>3d} | {:0>3d}.png | original: {} | predicted: {}'.format(attack_num, i+1, i, category_gt, category_pred))
+
+    print('---------------')
     print('attack num: {}'.format(attack_num))
     
 if __name__ == '__main__':
-    test()
+    if args.mode == 'main':
+        main()
+    else:
+        test()
