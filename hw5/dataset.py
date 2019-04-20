@@ -49,6 +49,11 @@ class MyDataset(Dataset):
         image = self.toPIL(image)
         return image
 
+    def transform(self, image):
+        # Input: numpy array or PIL image
+        img_tensor = self.toTensor(image)
+        img_normal = self.normalize(img_tensor)
+        return img_normal
 
 class Category():
     def __init__(self, path= '../../data_hw5/categories.csv'):

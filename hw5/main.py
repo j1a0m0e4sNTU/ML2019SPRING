@@ -1,6 +1,7 @@
 import os
 import argparse
 from PIL import Image
+import numpy as np
 import torch
 import torch.nn as nn
 import  torchvision.transforms as transforms
@@ -8,8 +9,8 @@ from torchvision.models import vgg16, vgg19, resnet50, resnet101, densenet121, d
 from dataset import *
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-mode', choices=['main', 'test'], default= 'main')
-parser.add_argument('-e', type= float, default= 1e-1)
+parser.add_argument('-mode', choices=['main', 'test', 'best'], default= 'main')
+parser.add_argument('-e', type= float, default= 1e-2)
 parser.add_argument('-m', default= 'resnet50', choices=['vgg16', 'vgg19', 'resnet50', 'resnet101', 'densenet121', 'densenet169'])
 parser.add_argument('-input', default= '../../data_hw5/images', help= 'Input image folder')
 parser.add_argument('-output', default= '../../result/images', help= 'Output folder')
@@ -48,28 +49,59 @@ def generate_label():
 def main():
     print('- main -')
     model = get_model()
-    img_data = MyDataset(args.input)
+    dataset = MyDataset(args.input)
     loss_fn = nn.CrossEntropyLoss()    
     if not os.path.isdir(args.output):
         os.mkdir(args.output)
     
-    total_num = len(img_data)
+    total_num = len(dataset)
     for i in range(total_num):
-        img, label = img_data[i]
+        img, label = dataset[i]
         img = img.unsqueeze(0)
         img.requires_grad = True
-        label = torch.LongTensor([label])
 
         out = model(img)
         loss = loss_fn(out, label)
         loss.backward()
-        noise = img.grad.data
+        noise = torch.sign(img.grad.data)
         img_noise = img.detach() + args.e * noise
 
         path = os.path.join(args.output, '{:0>3d}.png'.format(i))
-        img = img_data.toImage(img_noise)
+        img = dataset.toImage(img_noise)
         img.save(path)
         
+        if (i+1) %10 == 0:
+            print('finished: {}/{}'.format(i+1, total_num))
+
+def best():
+    print('- best -')
+    model = get_model()
+    dataset = MyDataset(args.input)
+    loss_fn = nn.CrossEntropyLoss()    
+    if not os.path.isdir(args.output):
+        os.mkdir(args.output)
+
+    total_num = len(dataset)
+    for i in range(total_num):
+        img, label = dataset[i]
+        img = img.unsqueeze(0)
+        img.requires_grad = True
+
+        out = model(img)
+        loss = loss_fn(out, label)
+        loss.backward()
+        noise = torch.sign(img.grad.data)
+        
+        image_origin = dataset.get_img_data(i).numpy().astype(np.int)
+        noise = noise.detach().squeeze().permute(1, 2, 0).numpy().astype(np.int)
+        image = image_origin + noise * 3
+        image[image > 255] = 255
+        image[image < 0] = 0
+        image = image.astype(np.uint8)
+        image = Image.fromarray(image)
+        path = os.path.join(args.output, '{:0>3d}.png'.format(i))
+        image.save(path)
+
         if (i+1) %10 == 0:
             print('finished: {}/{}'.format(i+1, total_num))
 
@@ -106,5 +138,7 @@ def test():
 if __name__ == '__main__':
     if args.mode == 'main':
         main()
+    elif args.mode == 'best':
+        best()
     elif args.mode == 'test':
         test()
