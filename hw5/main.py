@@ -10,24 +10,28 @@ from dataset import *
 parser = argparse.ArgumentParser()
 parser.add_argument('-mode', choices=['main', 'test'], default= 'main')
 parser.add_argument('-e', type= float, default= 1e-1)
-parser.add_argument('-m', default= 'vgg16', choices=['vgg16', 'vgg19', 'resnet50', 'resnet101', 'densenet121', 'densenet169'])
-parser.add_argument('-input', default= '../../data_hw5', help= 'Input image folder')
+parser.add_argument('-m', default= 'resnet50', choices=['vgg16', 'vgg19', 'resnet50', 'resnet101', 'densenet121', 'densenet169'])
+parser.add_argument('-input', default= '../../data_hw5/images', help= 'Input image folder')
 parser.add_argument('-output', default= '../../result/images', help= 'Output folder')
 args = parser.parse_args()
 
 def get_model():
+    model = None
     if args.m == 'vgg16':
-        return vgg16(pretrained= True)
+        model = vgg16(pretrained= True)
     elif args.m == 'vgg19':
-        return vgg19(pretrained= True)
+        model = vgg19(pretrained= True)
     elif args.m == 'resnet50':
-        return resnet50(pretrained= True)
+        model = resnet50(pretrained= True)
     elif args.m == 'resnet101':
-        return resnet101(pretrained= True)
+        model = resnet101(pretrained= True)
     elif args.m == 'densenet121':
-        return densenet121(pretrained= True)
+        model = densenet121(pretrained= True)
     else:
-        return densenet169(pretrained= True)        
+        model = densenet169(pretrained= True) 
+
+    model.eval()
+    return model       
 
 def generate_label():
     model = get_model()
@@ -44,14 +48,13 @@ def generate_label():
 def main():
     print('- main -')
     model = get_model()
-    model.eval()
     img_data = MyDataset(args.input)
     loss_fn = nn.CrossEntropyLoss()    
     if not os.path.isdir(args.output):
         os.mkdir(args.output)
     
-    attack_num = 0
-    for i in range(len(img_data)):
+    total_num = len(img_data)
+    for i in range(total_num):
         img, label = img_data[i]
         img = img.unsqueeze(0)
         img.requires_grad = True
@@ -60,51 +63,48 @@ def main():
         out = model(img)
         loss = loss_fn(out, label)
         loss.backward()
-        noise = img.grad
+        noise = img.grad.data
         img_noise = img.detach() + args.e * noise
 
         path = os.path.join(args.output, '{:0>3d}.png'.format(i))
         img = img_data.toImage(img_noise)
         img.save(path)
-
-        out = model(img_noise)
-        new_label = out.max(1)[1].item()
-        new_category = img_data.get_category_name(new_label)
-        origin_label = label.item()
-        origin_category = img_data.get_category_name(origin_label)
         
-        print('Origin label, category: ({}, {})'.format(origin_label, origin_category))
-        print('New label, category:    ({}, {})'.format(new_label, new_category))
-        if new_label != origin_label:
-            attack_num += 1
-        print('---- {}/{} -----'.format(attack_num, i + 1))
-
-    print('attact number: {}'.format(attack_num))
+        if (i+1) %10 == 0:
+            print('finished: {}/{}'.format(i+1, total_num))
 
 def test():
     print('- test -')
     model = get_model()
-    model.eval()
-    img_data = MyDataset('../../result')
-    
+    img_data = MyDataset('../../result/images')
+    img_data_origin = MyDataset('../../data_hw5/images')
+    category = Category()
+
     attack_num = 0
+    L_infinity = 0
     for i in range(len(img_data)):
         img, gt = img_data[i]
-        img = img.unsqueeze(0)
-        out = model(img)
+        gt = gt.item()
+        img_input = img.unsqueeze(0)
+        out = model(img_input)
         label = out.max(1)[1].item()
         
         if gt != label:
             attack_num += 1
-            category_gt = img_data.get_category_name(gt)
-            category_pred = img_data.get_category_name(label)
-            print('{:0>3d}/{:0>3d} | {:0>3d}.png | original: {} | predicted: {}'.format(attack_num, i+1, i, category_gt, category_pred))
+            print('{:0>3d}/{:0>3d} | {:0>3d}.png | original: {} | predicted: {}'.format(attack_num, i+1, i, category[gt], category[label]))
+
+        img_origin = img_data_origin.get_img_data(i)
+        img_new = img_data.get_img_data(i)
+        differnce = torch.abs(img_origin - img_new)
+        L_infinity += torch.max(differnce).item()
 
     print('---------------')
-    print('attack num: {}'.format(attack_num))
-    
+    print('Attack num : {}'.format(attack_num))
+    print('Attack rate: {}'.format(attack_num / len(img_data)))
+    print('L infinity : {}'.format(L_infinity / len(img_data)))
+
 if __name__ == '__main__':
     if args.mode == 'main':
         main()
-    else:
+    elif args.mode == 'test':
         test()

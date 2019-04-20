@@ -16,12 +16,8 @@ class MyDataset(Dataset):
         self.normalize = transforms.Normalize(mean= self.mean, std= self.std)
         self.toPIL = transforms.ToPILImage()
 
-        imgs_dir = os.path.join(path, 'images')
-        self.imgs_path = [os.path.join(imgs_dir, name) for name in os.listdir(imgs_dir) if name.endswith('.png')]
+        self.imgs_path = [os.path.join(path, name) for name in os.listdir(path) if name.endswith('.png')]
         self.imgs_path.sort()
-
-        category_csv = pd.read_csv(os.path.join(path, 'categories.csv'))
-        self.category = np.array(category_csv['CategoryName'])
 
         label_csv = pd.read_csv('label.csv')
         self.label = torch.LongTensor(label_csv['label'])
@@ -29,13 +25,16 @@ class MyDataset(Dataset):
     def __len__(self):
         return len(self.imgs_path)
 
-    def get_img_tensor(self, index):
+
+    def get_img_data(self, index):
         img = Image.open(self.imgs_path[index])
-        img_tensor = self.toTensor(img)
-        return img_tensor
+        img_array = np.array(img)
+        img_data = torch.from_numpy(img_array).type(torch.float)
+        return img_data
 
     def __getitem__(self, index):
-        img_tensor = self.get_img_tensor(index)
+        img = Image.open(self.imgs_path[index])
+        img_tensor = self.toTensor(img)
         img_normalize = self.normalize(img_tensor)
         label = torch.LongTensor([self.label[index]])
         return img_normalize, label
@@ -50,27 +49,42 @@ class MyDataset(Dataset):
         image = self.toPIL(image)
         return image
 
-    def get_category_name(self, index):
+
+class Category():
+    def __init__(self, path= '../../data_hw5/categories.csv'):
+        category_csv = pd.read_csv(path)
+        self.category = np.array(category_csv['CategoryName'])
+
+    def __getitem__(self, index):
         return self.category[index]
 
 def test():
-    toTensor = transforms.ToTensor()
-    toImage = transforms.ToPILImage()
-    dataset = MyDataset('../../data_hw5')
-    img_norm, _ = dataset[2]
-    img_tensor = dataset.get_img_tensor(2)
-    img = dataset.toImage(img_norm)
-    img = toTensor(img)
-    print(torch.sum(img - img_tensor))
-    img_new = toTensor(toImage(img))
-    print(torch.sum(img_new - img_tensor))
+    dataset = MyDataset('../../data_hw5/images')
+    for i in range(10):
+        tensor, label = dataset[i]
+        print(tensor.size(), label)
 
-def test2():
-    toTensor = transforms.ToTensor()
-    toImage = transforms.ToPILImage()
-    a = toTensor(Image.open('002.png'))
-    b = toTensor(toImage(toTensor(Image.open('002.png'))))
-    print(torch.sum((a-b).abs()))
+def test3():
+    csv_pred = pd.read_csv('label.csv')
+    label_pred = np.array(csv_pred['label'])
+    csv_gt = pd.read_csv('../../data_hw5/labels.csv')
+    label_gt = np.array(csv_gt['TrueLabel'])
+
+    dataset = MyDataset('../../data_hw5/images')
+    count = 0
+    for i in range(200):
+        if label_pred[i] != label_gt[i]:
+            count += 1
+            cate_pred = dataset.get_category_name(label_pred[i])
+            cate_gt = dataset.get_category_name(label_gt[i])
+            print('{:0>3d}.png | ground truth: {} prediction: {}'.format(i, cate_gt, cate_pred))
+
+    print('Total difference count: {}'.format(count))
+
+def test4():
+    dataset = MyDataset('../../data_hw5/images')
+    img = dataset.get_img_data(0)
+    print(img)
 
 if __name__ == '__main__':
-    test()
+    test4()
