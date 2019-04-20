@@ -49,8 +49,9 @@ class MyDataset(Dataset):
         image = self.toPIL(image)
         return image
 
-    def transform(self, image):
-        # Input: numpy array or PIL image
+    def transform(self, array):
+        # Input: numpy array of an image
+        image = Image.fromarray(array.astype(np.uint8))
         img_tensor = self.toTensor(image)
         img_normal = self.normalize(img_tensor)
         return img_normal

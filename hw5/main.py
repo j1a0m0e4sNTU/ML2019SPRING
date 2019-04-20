@@ -82,6 +82,7 @@ def best():
         os.mkdir(args.output)
 
     total_num = len(dataset)
+    count = torch.zeros(total_num)    
     for i in range(total_num):
         img, label = dataset[i]
         img = img.unsqueeze(0)
@@ -94,9 +95,20 @@ def best():
         
         image_origin = dataset.get_img_data(i).numpy().astype(np.int)
         noise = noise.detach().squeeze().permute(1, 2, 0).numpy().astype(np.int)
-        image = image_origin + noise * 3
-        image[image > 255] = 255
-        image[image < 0] = 0
+        image = image_origin.copy()
+        while True:
+            image += noise
+            image[image > 255] = 255
+            image[image < 0] = 0
+            count[i] += 1
+            
+            img_tensor = dataset.transform(image).unsqueeze(0)
+            out = model(img_tensor)
+            pred = out.max(1)[1].item()
+        
+            if pred != label.item():
+                break
+        
         image = image.astype(np.uint8)
         image = Image.fromarray(image)
         path = os.path.join(args.output, '{:0>3d}.png'.format(i))
@@ -104,6 +116,9 @@ def best():
 
         if (i+1) %10 == 0:
             print('finished: {}/{}'.format(i+1, total_num))
+    
+    for i, c in enumerate(count):
+        print('{}: {}'.format(i, c))
 
 def test():
     print('- test -')
