@@ -85,29 +85,28 @@ def best():
     count = torch.zeros(total_num)    
     for i in range(total_num):
         img, label = dataset[i]
-        img = img.unsqueeze(0)
-        img.requires_grad = True
+        img = img.unsqueeze(0) #tensor after normalized
+        image = dataset.get_img_data(i).numpy().astype(np.int) #numpy row data in (3, 224, 224)
 
-        out = model(img)
-        loss = loss_fn(out, label)
-        loss.backward()
-        noise = torch.sign(img.grad.data)
-        
-        image_origin = dataset.get_img_data(i).numpy().astype(np.int)
-        noise = noise.detach().squeeze().permute(1, 2, 0).numpy().astype(np.int)
-        image = image_origin.copy()
-        while True:
-            image += noise
+        while True:    
+            img.requires_grad = True
+            out = model(img)
+            pred = out.max(1)[1].item()
+            if pred != label:
+                break
+            temp = out.clone().detach()
+            temp[0, pred] = -99
+            target = torch.LongTensor([temp.max(1)[1].item()])
+            loss = loss_fn(out, target)
+            loss.backward()
+            noise = torch.sign(img.grad.data)
+            noise = noise.detach().squeeze().permute(1, 2, 0).numpy().astype(np.int)
+            image -= noise
             image[image > 255] = 255
             image[image < 0] = 0
+            img = dataset.transform(image).unsqueeze(0)
+
             count[i] += 1
-            
-            img_tensor = dataset.transform(image).unsqueeze(0)
-            out = model(img_tensor)
-            pred = out.max(1)[1].item()
-        
-            if pred != label.item():
-                break
         
         image = image.astype(np.uint8)
         image = Image.fromarray(image)
