@@ -81,8 +81,7 @@ def best():
     if not os.path.isdir(args.output):
         os.mkdir(args.output)
 
-    total_num = len(dataset)
-    count = torch.zeros(total_num)    
+    total_num = len(dataset)   
     for i in range(total_num):
         img, label = dataset[i]
         img = img.unsqueeze(0) #tensor after normalized
@@ -105,8 +104,6 @@ def best():
             image[image > 255] = 255
             image[image < 0] = 0
             img = dataset.transform(image).unsqueeze(0)
-
-            count[i] += 1
         
         image = image.astype(np.uint8)
         image = Image.fromarray(image)
@@ -115,9 +112,6 @@ def best():
 
         if (i+1) %10 == 0:
             print('finished: {}/{}'.format(i+1, total_num))
-    
-    for i, c in enumerate(count):
-        print('{}: {}'.format(i, c))
 
 def test():
     print('- test -')
@@ -148,6 +142,62 @@ def test():
     print('Attack num : {}'.format(attack_num))
     print('Attack rate: {}'.format(attack_num / len(img_data)))
     print('L infinity : {}'.format(L_infinity / len(img_data)))
+
+def plotAll():
+    from matplotlib import pyplot as plt
+    dataset_before = MyDataset('../../data_hw5/images')
+    dataset_after  = MyDataset('../../result/images')
+    model = get_model()
+    categoty = Category()
+
+    def plot(index):
+        datasets = [dataset_before, dataset_after]
+        for dataset_id in range(2):
+            top3_category = []
+            top3_rate = []
+            top3_id = []
+            img, _ = datasets[dataset_id][index]
+            img = img.unsqueeze(0)
+            out = model(img).squeeze()
+            for _ in range(3):
+                rate, top_id = out.max(0)
+                cat = categoty[top_id]
+                top3_rate.append(rate.item())
+                top3_id.append(str(top_id.item()))
+                top3_category.append(categoty[top_id.item()])
+                out[top_id] = -99
+            plt.subplot(1, 4, dataset_id * 2 + 1)
+            image = plt.imread(dataset_before.get_img_path(index))
+            plt.xticks([], [])
+            plt.yticks([], [])
+            plt.imshow(image)
+            plt.subplot(1, 4, dataset_id * 2 + 2)
+            plt.bar(top3_id, top3_rate)
+            plt.xlabel('category index')
+            plt.title('Top 3 score')
+            print(top3_category)
+            print(top3_rate)
+        print('---------------------')    
+        plt.savefig('{:0>3d}'.format(index))
+        plt.close()
+
+    plot_list = [1, 2, 3, 4]
+    for i in plot_list:
+        plot(i)
+
+def make_all_gussian():
+    from scipy.ndimage import gaussian_filter
+    dataset_origin = MyDataset('../../result/images')
+    target_dir = '../../result/gaussian'
+    if not os.path.isdir(target_dir):
+        os.mkdir(target_dir)
+    
+    for i in range(len(dataset_origin)):
+        img_array = dataset_origin.get_img_data(i).numpy()
+        img_filtered = gaussian_filter(img_array, sigma= 1).astype(np.uint8)
+        image = Image.fromarray(img_filtered)
+        path = os.path.join(target_dir, '{:0>3d}.png'.format(i))
+        image.save(path)
 
 if __name__ == '__main__':
     if args.mode == 'main':

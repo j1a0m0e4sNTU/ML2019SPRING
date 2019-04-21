@@ -9,7 +9,7 @@ from PIL import Image
 class MyDataset(Dataset):
     def __init__(self, path):
         super().__init__()
-
+        self.path = path
         self.mean = [0.485, 0.456, 0.406]
         self.std  = [0.229, 0.224, 0.225]
         self.toTensor = transforms.ToTensor()
@@ -25,12 +25,15 @@ class MyDataset(Dataset):
     def __len__(self):
         return len(self.imgs_path)
 
-
     def get_img_data(self, index):
         img = Image.open(self.imgs_path[index])
         img_array = np.array(img)
         img_data = torch.from_numpy(img_array).type(torch.float)
         return img_data
+
+    def get_img_path(self, index):
+        path = os.path.join(self.path, self.imgs_path[index])
+        return path
 
     def __getitem__(self, index):
         img = Image.open(self.imgs_path[index])

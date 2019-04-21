@@ -1,0 +1,1 @@
+python3 main.py -mode best -input $1 -output $2
