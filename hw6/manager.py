@@ -87,7 +87,7 @@ class Manager():
             pred_list = [i for i in self.get_prediction(out)]
             predictions += pred_list
         
-        file = open(predict_file, 'w')
+        file = open(predict_path, 'w')
         file.write('id,label\n')
         for i, pred in enumerate(predictions):
             file.write('{},{}\n'.format(i, pred))

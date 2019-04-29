@@ -20,7 +20,7 @@ parser.add_argument('-seq_len', type= int, help= 'Sequence length for each data'
 parser.add_argument('-save', help= 'Path to save model')
 parser.add_argument('-load', help= 'Path to load model')
 parser.add_argument('-record', help= 'Path to file for recording result')
-parser.add_argument('-predcit', help= 'Path to prediction file')
+parser.add_argument('-predict', help= 'Path to prediction file')
 args = parser.parse_args()
 
 if __name__ == '__main__':
