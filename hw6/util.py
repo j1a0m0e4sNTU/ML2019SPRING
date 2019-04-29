@@ -3,7 +3,7 @@ import numpy as np
 import jieba
 from gensim.models import Word2Vec
 import torch
-from torch.utils.data import Dataset
+from torch.utils.data import Dataset, DataLoader
 
 dict_path = '../../data_hw6/dict.txt.big'
 x_train_path = '../../data_hw6/train_x.csv'
@@ -31,7 +31,7 @@ def save_word2vec():
     model.save(word2vec_model_path)    
 
 class WordsData(Dataset):
-    def __init__(self, mode= 'train', x_path= x_train_path, y_path= y_train_path, model_path= word2vec_model_path, dict_path= dict_path):
+    def __init__(self, mode= 'train', x_path= x_train_path, y_path= y_train_path, model_path= word2vec_model_path, dict_path= dict_path, seq_len= 30):
         super().__init__()
         self.mode = mode
         x_csv = pd.read_csv(x_path)
@@ -50,13 +50,25 @@ class WordsData(Dataset):
     
         self.model = Word2Vec.load(model_path)
         jieba.set_dictionary(dict_path)
+        self.seq_len = seq_len
 
     def __len__(self):
         return len(self.x_data)
 
     def __getitem__(self, index):
         sentence = self.x_data[index]
-        words = list(jieba.cut(sentence))
+        words_origin = list(jieba.cut(sentence))
+        words_length = len(words_origin)
+        words = []
+        remain = self.seq_len
+        while remain > 0:
+            if remain > words_length:
+                words += words_origin
+                remain -= words_length
+            else: 
+                words += words_origin[:remain]
+                remain = 0
+        
         vectors = []
         for word in words:
             vector = None
@@ -65,9 +77,8 @@ class WordsData(Dataset):
             except:
                 vector = self.model[' ']
             vectors.append(vector)
-
         vectors = torch.from_numpy(np.array(vectors))
-
+        
         if self.mode in ['train', 'valid']:
             label = torch.Tensor([self.y_data[index]])
             return vectors, label
@@ -78,15 +89,12 @@ class WordsData(Dataset):
 
 def test():
     print('test')
-    dataset = WordsData(mode= 'valid')
-    for i in range(10):
-        vectors, label = dataset[i]
-        print("vector size: {} | label: {}".format(vectors.size(), label))
-    
-    # dataset = WordsData(mode= 'test')
-    # for i in range(10):
-    #     vectors = dataset[i]
-    #     print("vector size: {}".format(vectors.size()))
+    words = WordsData('train')
+    data = DataLoader(words, batch_size= 4)
+    for i, (vector, label) in enumerate(data):
+        print(vector.size(), label.size())
+        if i == 10:
+            break
 
 if __name__ == '__main__':
     test()

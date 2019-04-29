@@ -1,0 +1,1 @@
+python3 main.py train simple -epoch_num 30 -record records/test.txt
