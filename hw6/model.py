@@ -23,11 +23,13 @@ class RNN(nn.Module):
         self.classifier = nn.Sequential(*fc_layers)
 
     def forward(self, inputs):
+        # inputs size: (sequence_len, batch_size, feature_number)
+        # output size of LSTM: (sequence_len, batch_size, hidden_size)
         states = (torch.zeros(self.state_shape), torch.zeros(self.state_shape))
         r_out, new_states = self.lstm(inputs, states)
         last_out = r_out[-1, :, :]
         out = self.classifier(last_out)
-        return out
+        return out.view(-1)
 
 def get_rnn_model(name):
     model = RNN(configs[name])
