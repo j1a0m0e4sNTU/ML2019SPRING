@@ -35,7 +35,8 @@ class Manager():
             train_correct = 0
             train_loss    = 0
             for i, (vectors, labels) in enumerate(train_data):
-                
+                vectors = vectors.to(self.device)
+                labels = labels.to(self.device) 
                 labels = labels.squeeze(1)
                 out = self.model(vectors)
                 self.optimizer.zero_grad()
@@ -49,6 +50,8 @@ class Manager():
             self.model.eval()
             valid_correct = 0
             for i, (vectors, labels) in enumerate(valid_data):
+                vectors = vectors.to(self.device)
+                labels = labels.to(self.device)
                 labels = labels.squeeze(1)
                 out = self.model(vectors)
                 valid_correct += self.get_correct_num(out, labels)
@@ -56,7 +59,7 @@ class Manager():
             train_loss = train_loss / train_size
             train_acc  = train_correct / train_size
             valid_acc  = valid_correct / valid_size
-            self.record('Epoch {}| Train Loss: {} | Train Acc: {} | Valid Acc: {}'.format(train_loss, train_acc, valid_acc))
+            self.record('Epoch {}| Train Loss: {} | Train Acc: {} | Valid Acc: {}'.format(epoch, train_loss, train_acc, valid_acc))
             if self.save:
                 torch.save(self.model.state_dict(), self.save)
 
