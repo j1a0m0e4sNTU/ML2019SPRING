@@ -14,12 +14,12 @@ class Manager():
         self.epoch_num = args.epoch
         self.batch_size = args.batch_size
         self.save = args.save
-        self.best = {}
+        self.best = {'epoch': 0, 'acc': 0}
         self.record_file = None
         if args.record:
             self.record_file = open(args.record, 'w')
-            self.record_file.write(self.model.__str__())
-            self.record_file.write('--------------------')
+            self.record(self.model.__str__())
+            self.record('--------------------')
 
     def record(self, info):
         print(info)
@@ -59,17 +59,36 @@ class Manager():
             train_loss = train_loss / train_size
             train_acc  = train_correct / train_size
             valid_acc  = valid_correct / valid_size
-            self.record('Epoch {}| Train Loss: {} | Train Acc: {} | Valid Acc: {}'.format(epoch, train_loss, train_acc, valid_acc))
-            if self.save:
-                torch.save(self.model.state_dict(), self.save)
+            self.record('Epoch {}| Train Loss: {:.5f} | Train Acc: {:.5f} | Valid Acc: {:.5f}'.format(epoch, train_loss, train_acc, valid_acc))
+            
+            if valid_acc > self.best['acc']:
+                self.record('* BEST SAVED *')
+                self.best['epoch'] = epoch
+                self.best['acc'] = valid_acc
+                if self.save:
+                    torch.save(self.model.state_dict(), self.save)
 
 
     def get_correct_num(self, out, labels):
-        pred = (torch.sign(out) == 1)
+        pred = self.get_prediction(out)
         labels = labels.type(torch.uint8)
         correct = torch.sum(pred == labels).item() 
         return correct 
 
+    def get_prediction(self, out):
+        pred = (torch.sign(out) == 1)
+        return pred
 
     def predict(self, test_data, predict_path):
-        pass
+        predictions = []
+        for i, vectors in enumerate(test_data):
+            vectors = vectors.to(self.device)
+            out = self.model(vectors)
+            pred_list = [i for i in self.get_prediction(out)]
+            predictions += pred_list
+        
+        file = open(predict_file, 'w')
+        file.write('id,label\n')
+        for i, pred in enumerate(predictions):
+            file.write('{},{}\n'.format(i, pred))
+        print('Finish prediction @ {}'.format(predict_path))

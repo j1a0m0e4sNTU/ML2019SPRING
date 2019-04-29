@@ -8,6 +8,7 @@ configs = {
 class RNN(nn.Module):
     def __init__(self, config, batch_size):
         super().__init__()
+        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.lstm = nn.LSTM(
             input_size = config['LSTM']['input'],
             hidden_size = config['LSTM']['hidden'],
@@ -26,7 +27,7 @@ class RNN(nn.Module):
     def forward(self, inputs):
         # inputs size: (batch_size, sequence_len, feature_number)
         # output size of LSTM: (batch_size, sequence_len,, hidden_size)
-        states = (torch.zeros(self.state_shape).cuda(), torch.zeros(self.state_shape).cuda())
+        states = (torch.zeros(self.state_shape).to(self.device), torch.zeros(self.state_shape).to(self.device))
         r_out, new_states = self.lstm(inputs, states)
         last_out = r_out[:, -1, :].squeeze(1)
         out = self.classifier(last_out)
