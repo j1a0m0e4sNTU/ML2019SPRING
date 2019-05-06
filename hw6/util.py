@@ -99,12 +99,11 @@ class WordsData(Dataset):
         
         vectors = []
         for word in words:
-            vector = None
             try:
                 vector = self.model[word]
+                vectors.append(vector)
             except:
-                vector = self.model[' ']
-            vectors.append(vector)
+                continue
         vectors = torch.from_numpy(np.array(vectors))
         
         if self.mode in ['train', 'valid']:
