@@ -4,6 +4,8 @@ import jieba
 from gensim.models import Word2Vec
 import torch
 from torch.utils.data import Dataset, DataLoader
+import random
+random.seed(1004)
 
 dict_path = '../../data_hw6/dict.txt.big'
 x_train_path = '../../data_hw6/train_x.csv'
@@ -86,24 +88,27 @@ class WordsData(Dataset):
         sentence = self.x_data[index]
         words_origin = list(jieba.cut(sentence))
         words_origin = get_cleaner_words(words_origin)
-        words_length = len(words_origin)
-        words = []
-        remain = self.seq_len
-        while remain > 0:
-            if remain > words_length:
-                words += words_origin
-                remain -= words_length
-            else: 
-                words += words_origin[:remain]
-                remain = 0
         
-        vectors = []
-        for word in words:
+        vectors_origin = []
+        for word in words_origin:
             try:
                 vector = self.model[word]
-                vectors.append(vector)
+                vectors_origin.append(vector)
             except:
                 continue
+
+        origin_len = len(vectors_origin)
+        vectors = []
+        remain = self.seq_len
+        while remain > 0:
+            if remain > origin_len:
+                vectors += vectors_origin
+                remain -= origin_len
+            else:
+                start = random.randint(0, origin_len - remain) 
+                vectors += vectors_origin[start : start+remain]
+                remain = 0
+
         vectors = torch.from_numpy(np.array(vectors))
         
         if self.mode in ['train', 'valid']:
@@ -122,4 +127,4 @@ def test():
             break
 
 if __name__ == '__main__':
-    save_word2vec()
+    test()
