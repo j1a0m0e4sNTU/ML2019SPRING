@@ -9,16 +9,12 @@ RNN(
   )
 )
 --------------------
-Epoch 0| Train Loss: 0.01738 | Train Acc: 0.71699 | Valid Acc: 0.73542
+Epoch 0| Train Loss: 0.01730 | Train Acc: 0.72098 | Valid Acc: 0.72967
 * BEST SAVED *
-Epoch 1| Train Loss: 0.01618 | Train Acc: 0.74436 | Valid Acc: 0.73796
+Epoch 1| Train Loss: 0.01605 | Train Acc: 0.74773 | Valid Acc: 0.74433
 * BEST SAVED *
-Epoch 2| Train Loss: 0.01557 | Train Acc: 0.75707 | Valid Acc: 0.73975
-* BEST SAVED *
-Epoch 3| Train Loss: 0.01480 | Train Acc: 0.77217 | Valid Acc: 0.74192
-* BEST SAVED *
-Epoch 4| Train Loss: 0.01362 | Train Acc: 0.79431 | Valid Acc: 0.73713
-Epoch 5| Train Loss: 0.01191 | Train Acc: 0.82307 | Valid Acc: 0.73129
-Epoch 6| Train Loss: 0.00993 | Train Acc: 0.85700 | Valid Acc: 0.72167
-Epoch 7| Train Loss: 0.00804 | Train Acc: 0.88786 | Valid Acc: 0.71454
-Epoch 8| Train Loss: 0.00646 | Train Acc: 0.91244 | Valid Acc: 0.71883
+Epoch 2| Train Loss: 0.01516 | Train Acc: 0.76651 | Valid Acc: 0.74287
+Epoch 3| Train Loss: 0.01394 | Train Acc: 0.78906 | Valid Acc: 0.74425
+Epoch 4| Train Loss: 0.01212 | Train Acc: 0.82373 | Valid Acc: 0.73771
+Epoch 5| Train Loss: 0.00970 | Train Acc: 0.86418 | Valid Acc: 0.73029
+Epoch 6| Train Loss: 0.00746 | Train Acc: 0.89946 | Valid Acc: 0.71800

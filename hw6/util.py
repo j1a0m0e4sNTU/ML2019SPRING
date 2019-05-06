@@ -41,7 +41,7 @@ def load_label(path):
 
 def save_word2vec():
     jieba.set_dictionary(dict_path)
-    adjust_jieba()
+    #adjust_jieba()
     train_csv = pd.read_csv(x_train_path)
     test_csv  = pd.read_csv(x_test_path)
     raw_sentences = np.append(np.array(train_csv['comment']), np.array(test_csv['comment'])) 
@@ -77,7 +77,7 @@ class WordsData(Dataset):
     
         self.model = Word2Vec.load(model_path)
         jieba.set_dictionary(dict_path)
-        adjust_jieba()
+        #adjust_jieba()
         self.seq_len = seq_len
 
     def __len__(self):
