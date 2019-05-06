@@ -10,6 +10,28 @@ x_train_path = '../../data_hw6/train_x.csv'
 y_train_path = '../../data_hw6/train_y.csv'
 x_test_path  = '../../data_hw6/test_x.csv'
 word2vec_model_path = '../../data_hw6/word2vec.model'
+words_result_path = 'words.txt'
+
+important_words = ['回應','會爆','秀下限','瞎妹','ㄏㄏ','開口','邊緣人','森77','森七七','森氣氣','黑人問號',
+                    '+1','廚餘','打臉','Hen棒','低能卡','被閃','甲','原po','原PO','啾咪','腦羞','打手槍',
+                    '台男','台女','不意外','不ey','內射','中出','唱衰','噁爛','8+9','酸民','笑死','三小',
+                    '乾你屁事','自以為','被嘴','約炮','傻B','馬的','肥宅','菜逼八','頗呵','台中','渣男',
+                    '樓主','腦粉','氣pupu','八嘎囧','ㄊㄇ','D卡','幹你娘','仇女','有病',]
+
+def adjust_jieba():
+    for word in important_words:
+        jieba.suggest_freq(word, True)
+
+def get_cleaner_words(words):
+    cleaner = []
+    for word in words:
+        if word[0] in ['b', 'B']:
+            cleaner.append('B')
+        elif word == ' ':
+            continue
+        else: 
+            cleaner.append(word)
+    return cleaner
 
 def load_label(path):
     csv = pd.read_csv(path)
@@ -18,17 +40,21 @@ def load_label(path):
 
 def save_word2vec():
     jieba.set_dictionary(dict_path)
+    adjust_jieba()
     train_csv = pd.read_csv(x_train_path)
     test_csv  = pd.read_csv(x_test_path)
     raw_sentences = np.append(np.array(train_csv['comment']), np.array(test_csv['comment'])) 
     cut_all = []
-    
+    file = open(words_result_path, 'w')
     for i, sentence in enumerate(raw_sentences):
         cut_list = list(jieba.cut(sentence))
+        cut_list = get_cleaner_words(cut_list)
         cut_all.append(cut_list)
+        line = '{}\n'.format('/'.join(cut_list))
+        file.write(line)
 
     model = Word2Vec(cut_all, size= 300, window= 5, iter= 10, sg= 0)
-    model.save(word2vec_model_path)    
+    model.save(word2vec_model_path)   
 
 class WordsData(Dataset):
     def __init__(self, mode= 'train', x_path= x_train_path, y_path= y_train_path, model_path= word2vec_model_path, dict_path= dict_path, seq_len= 30):
@@ -50,6 +76,7 @@ class WordsData(Dataset):
     
         self.model = Word2Vec.load(model_path)
         jieba.set_dictionary(dict_path)
+        adjust_jieba()
         self.seq_len = seq_len
 
     def __len__(self):
@@ -58,6 +85,7 @@ class WordsData(Dataset):
     def __getitem__(self, index):
         sentence = self.x_data[index]
         words_origin = list(jieba.cut(sentence))
+        words_origin = get_cleaner_words(words_origin)
         words_length = len(words_origin)
         words = []
         remain = self.seq_len
@@ -85,8 +113,6 @@ class WordsData(Dataset):
         else:
             return vectors
 
-        
-
 def test():
     print('test')
     words = WordsData('train')
@@ -97,4 +123,4 @@ def test():
             break
 
 if __name__ == '__main__':
-    test()
+    save_word2vec()
