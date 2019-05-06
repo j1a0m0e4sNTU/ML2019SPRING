@@ -4,6 +4,7 @@ from torch.utils.data import DataLoader
 from model import get_rnn_model
 from util import *
 from manager import Manager
+torch.manual_seed(1004)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('mode', choices= ['train', 'predict'])

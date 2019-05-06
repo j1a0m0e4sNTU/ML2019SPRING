@@ -1,18 +1,17 @@
+import sys
 import pandas as pd
 import numpy as np
 import jieba
 from gensim.models import Word2Vec
 import torch
 from torch.utils.data import Dataset, DataLoader
-import random
-random.seed(1004)
 
 dict_path = '../../data_hw6/dict.txt.big'
 x_train_path = '../../data_hw6/train_x.csv'
 y_train_path = '../../data_hw6/train_y.csv'
 x_test_path  = '../../data_hw6/test_x.csv'
 word2vec_model_path = '../../data_hw6/word2vec.model'
-words_result_path = 'words.txt'
+words_result_path = '../../data_hw6/words.txt'
 
 important_words = ['回應','會爆','秀下限','瞎妹','ㄏㄏ','開口','邊緣人','森77','森七七','森氣氣','黑人問號',
                     '+1','廚餘','打臉','Hen棒','低能卡','被閃','甲','原po','原PO','啾咪','腦羞','打手槍',
@@ -29,8 +28,6 @@ def get_cleaner_words(words):
     for word in words:
         if word[0] in ['b', 'B']:
             cleaner.append('B')
-        elif word == ' ':
-            continue
         else: 
             cleaner.append(word)
     return cleaner
@@ -42,7 +39,7 @@ def load_label(path):
 
 def save_word2vec():
     jieba.set_dictionary(dict_path)
-    adjust_jieba()
+    #adjust_jieba()
     train_csv = pd.read_csv(x_train_path)
     test_csv  = pd.read_csv(x_test_path)
     raw_sentences = np.append(np.array(train_csv['comment']), np.array(test_csv['comment'])) 
@@ -78,7 +75,7 @@ class WordsData(Dataset):
     
         self.model = Word2Vec.load(model_path)
         jieba.set_dictionary(dict_path)
-        adjust_jieba()
+        #adjust_jieba()
         self.seq_len = seq_len
 
     def __len__(self):
@@ -95,8 +92,8 @@ class WordsData(Dataset):
                 vector = self.model[word]
                 vectors_origin.append(vector)
             except:
-                continue
-
+                vectors_origin.append(self.model[' '])
+        
         origin_len = len(vectors_origin)
         vectors = []
         remain = self.seq_len
@@ -105,8 +102,8 @@ class WordsData(Dataset):
                 vectors += vectors_origin
                 remain -= origin_len
             else:
-                start = random.randint(0, origin_len - remain) 
-                vectors += vectors_origin[start : start+remain]
+                #start = random.randint(0, origin_len - remain) 
+                vectors += vectors_origin[:remain]
                 remain = 0
 
         vectors = torch.from_numpy(np.array(vectors))
@@ -127,4 +124,7 @@ def test():
             break
 
 if __name__ == '__main__':
-    test()
+    if sys.argv[1] == '1':
+        save_word2vec()
+    else:
+        test()
