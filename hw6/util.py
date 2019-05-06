@@ -19,8 +19,10 @@ important_words = ['回應','會爆','秀下限','瞎妹','ㄏㄏ','開口','邊
                     '乾你屁事','自以為','被嘴','約炮','傻B','馬的','肥宅','菜逼八','頗呵','台中','渣男',
                     '樓主','腦粉','氣pupu','八嘎囧','ㄊㄇ','D卡','幹你娘','仇女','有病',]
 
+important_words_2 = ['台男','台女','乾你屁事','幹你娘','仇女','8+9' ]
+
 def adjust_jieba():
-    for word in important_words:
+    for word in important_words_2:
         jieba.suggest_freq(word, True)
 
 def get_cleaner_words(words):
@@ -39,7 +41,7 @@ def load_label(path):
 
 def save_word2vec():
     jieba.set_dictionary(dict_path)
-    #adjust_jieba()
+    adjust_jieba()
     train_csv = pd.read_csv(x_train_path)
     test_csv  = pd.read_csv(x_test_path)
     raw_sentences = np.append(np.array(train_csv['comment']), np.array(test_csv['comment'])) 
@@ -47,7 +49,7 @@ def save_word2vec():
     file = open(words_result_path, 'w')
     for i, sentence in enumerate(raw_sentences):
         cut_list = list(jieba.cut(sentence))
-        cut_list = get_cleaner_words(cut_list)
+        #cut_list = get_cleaner_words(cut_list)
         cut_all.append(cut_list)
         line = '{}\n'.format('/'.join(cut_list))
         file.write(line)
@@ -75,7 +77,7 @@ class WordsData(Dataset):
     
         self.model = Word2Vec.load(model_path)
         jieba.set_dictionary(dict_path)
-        #adjust_jieba()
+        adjust_jieba()
         self.seq_len = seq_len
 
     def __len__(self):
@@ -84,7 +86,7 @@ class WordsData(Dataset):
     def __getitem__(self, index):
         sentence = self.x_data[index]
         words_origin = list(jieba.cut(sentence))
-        words_origin = get_cleaner_words(words_origin)
+        #words_origin = get_cleaner_words(words_origin)
         
         vectors_origin = []
         for word in words_origin:
