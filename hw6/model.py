@@ -7,7 +7,8 @@ configs = {
     'A': {'LSTM': {'input': 300, 'hidden': 1024, 'layers': 1},'FC':[1024, 256, 32, 1], 'bid': False},
     'B': {'LSTM': {'input': 300, 'hidden': 512, 'layers': 1},'FC':[1024, 256, 32, 1], 'bid': True}, #bidirection
     'C': {'LSTM': {'input': 300, 'hidden': 512, 'layers': 2},'FC':[512, 256, 32, 1], 'bid':False},
-    
+    'D': {'LSTM': {'input': 300, 'hidden': 1024, 'layers': 2},'FC':[2048, 256, 32, 1], 'bid':True},
+    'E': {'LSTM': {'input': 300, 'hidden': 1024, 'layers': 2},'FC':[2048, 512, 32, 1], 'bid':True},
 }
 
 class RNN(nn.Module):
@@ -30,8 +31,7 @@ class RNN(nn.Module):
         for i in range(len(config['FC']) - 1):
             fc_layers.append(nn.Linear(config['FC'][i], config['FC'][i + 1]))
             fc_layers.append(nn.ReLU(inplace= True))
-            fc_layers.append(nn.Dropout())
-        fc_layers = fc_layers[:-2]
+        fc_layers = fc_layers[:-1]
         self.classifier = nn.Sequential(*fc_layers)
 
     def forward(self, inputs):
