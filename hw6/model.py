@@ -2,20 +2,26 @@ import torch
 import torch.nn as nn
 
 configs = {
-    'simple': {'LSTM': {'input': 300, 'hidden': 512, 'layers': 1},'FC':[512, 256, 32, 1]}
+    'simple': {'LSTM': {'input': 300, 'hidden': 512, 'layers': 1},'FC':[512, 256, 32, 1], 'bid':False},
+    'A': {'LSTM': {'input': 300, 'hidden': 1024, 'layers': 1},'FC':[1024, 256, 32, 1], 'bid': False},
+    'B': {'LSTM': {'input': 300, 'hidden': 512, 'layers': 1},'FC':[1024, 256, 32, 1], 'bid': True} #bidirection
 }
 
 class RNN(nn.Module):
     def __init__(self, config, batch_size):
         super().__init__()
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        bidirection = config['bid']
         self.lstm = nn.LSTM(
             input_size = config['LSTM']['input'],
             hidden_size = config['LSTM']['hidden'],
             num_layers = config['LSTM']['layers'],
-            batch_first= True
+            batch_first= True,
+            bidirectional = bidirection
         )
-        self.state_shape = (config['LSTM']['layers'], batch_size, config['LSTM']['hidden'])
+
+        hid_layer = config['LSTM']['layers'] * 2 if bidirection else config['LSTM']['layers']
+        self.state_shape = (hid_layer, batch_size, config['LSTM']['hidden'])
 
         fc_layers = []
         for i in range(len(config['FC']) - 1):
@@ -31,7 +37,7 @@ class RNN(nn.Module):
         r_out, new_states = self.lstm(inputs, states)
         last_out = r_out[:, -1, :].squeeze(1)
         out = self.classifier(last_out)
-        return out.view(-1)
+        return  out.view(-1)
 
 def get_rnn_model(name, batch_size):
     model = RNN(configs[name], batch_size)
@@ -51,7 +57,7 @@ def test_lstm():
 def test():
     print('- test -')
     batch_size = 8
-    rnn = get_rnn_model('simple', batch_size)
+    rnn = get_rnn_model('B', batch_size)
     inputs = torch.zeros(batch_size, 30, 300)
     out = rnn(inputs)
     print(out.size())
