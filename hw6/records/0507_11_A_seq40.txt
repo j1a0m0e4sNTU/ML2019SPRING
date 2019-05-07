@@ -1,0 +1,22 @@
+RNN(
+  (lstm): LSTM(300, 1024, batch_first=True)
+  (classifier): Sequential(
+    (0): Linear(in_features=1024, out_features=256, bias=True)
+    (1): ReLU(inplace)
+    (2): Linear(in_features=256, out_features=32, bias=True)
+    (3): ReLU(inplace)
+    (4): Linear(in_features=32, out_features=1, bias=True)
+  )
+)
+--------------------
+Epoch 0| Train Loss: 0.01772 | Train Acc: 0.70490 | Valid Acc: 0.73742
+* BEST SAVED *
+Epoch 1| Train Loss: 0.01619 | Train Acc: 0.74459 | Valid Acc: 0.74008
+* BEST SAVED *
+Epoch 2| Train Loss: 0.01574 | Train Acc: 0.75309 | Valid Acc: 0.74196
+* BEST SAVED *
+Epoch 3| Train Loss: 0.01528 | Train Acc: 0.76215 | Valid Acc: 0.74813
+* BEST SAVED *
+Epoch 4| Train Loss: 0.01466 | Train Acc: 0.77408 | Valid Acc: 0.74733
+Epoch 5| Train Loss: 0.01380 | Train Acc: 0.79169 | Valid Acc: 0.74675
+Epoch 6| Train Loss: 0.01258 | Train Acc: 0.81253 | Valid Acc: 0.74192
