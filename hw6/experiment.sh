@@ -12,6 +12,11 @@
 # python3 main.py train simple -epoch 10 -record records/0507_8_dropout.txt 
 # python3 main.py train D -epoch 10 -record records/0507_9_D.txt -save ../../weights/0507_9.pkl
 # python3 main.py train E -epoch 10 -record records/0507_10_E.txt -save ../../weights/0507_10.pkl
-python3 main.py train A -seq_len 40 -record records/0507_11_A_seq40.txt -save ../../weights/0507_11.pkl
-python3 main.py train B -seq_len 40 -record records/0507_12_B_seq40.txt -save ../../weights/0507_12.pkl
-python3 main.py train C -seq_len 40 -record records/0507_13_C_seq40.txt -save ../../weights/0507_13.pkl
+# python3 main.py train A -seq_len 40 -record records/0507_11_A_seq40.txt -save ../../weights/0507_11.pkl
+# python3 main.py train B -seq_len 40 -record records/0507_12_B_seq40.txt -save ../../weights/0507_12.pkl
+# python3 main.py train C -seq_len 40 -record records/0507_13_C_seq40.txt -save ../../weights/0507_13.pkl
+python3 main.py predict simple -seq_len 20 -load ../../weights/0507_2.pkl -predict predictions/0.csv
+python3 main.py predict simple -seq_len 40 -load ../../weights/0507_2.pkl -predict predictions/1.csv
+python3 main.py predict simple -seq_len 60 -load ../../weights/0507_2.pkl -predict predictions/2.csv
+python3 main.py predict simple -seq_len 80 -load ../../weights/0507_2.pkl -predict predictions/3.csv
+python3 main.py predict simple -seq_len 100 -load ../../weights/0507_2.pkl -predict predictions/4.csv
