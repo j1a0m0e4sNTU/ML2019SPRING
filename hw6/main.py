@@ -10,7 +10,7 @@ torch.manual_seed(1004)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('mode', choices= ['train', 'predict', 'ensemble'])
-parser.add_argument('config', help= 'Symbol of model configuration')
+parser.add_argument('config', help= 'Symbol of model configuration', default= 'simple')
 parser.add_argument('-train_x', help= 'Path to train_x.csv', default= '../../data_hw6/train_x.csv')
 parser.add_argument('-train_y', help= 'Path to train_y.csv', default= '../../data_hw6/train_y.csv')
 parser.add_argument('-test_x', help= 'Path to test_x.csv', default= '../../data_hw6/test_x.csv')
@@ -70,7 +70,7 @@ if __name__ == '__main__':
                 test_words = WordsData(mode= 'test', x_path= args.test_x, y_path= None,
                                 model_path= args.word_model, dict_path= args.dict, seq_len= seq_len)
                 test_data = DataLoader(test_words, batch_size= args.batch_size, shuffle= False)
-                scores += manager.get_all_predictions(test_data)
+                scores += model_manager.get_all_predictions(test_data)
 
         file = open(args.predict, 'w')
         file.write('id,label\n')
