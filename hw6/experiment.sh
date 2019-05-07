@@ -6,6 +6,7 @@
 # python3 main.py train simple -record records/0507_0_baseline.txt 
 # python3 main.py train A -record records/0507_3_A.txt -save ../../weights/0507_3.pkl
 # python3 main.py train B -record records/0507_4_B.txt -save ../../weights/0507_4.pkl
-python3 main.py train simple -seq_len 60 -record records/0507_5_seq_len_60.txt -save ../../weights/0507_5.pkl
-python3 main.py train simple -seq_len 80 -record records/0507_6_seq_len_80.txt -save ../../weights/0507_6.pkl
-python3 main.py train C -record records/0507_7_C.txt -save ../../weights/0507_7.pkl
+# python3 main.py train simple -seq_len 60 -record records/0507_5_seq_len_60.txt -save ../../weights/0507_5.pkl
+# python3 main.py train simple -seq_len 80 -record records/0507_6_seq_len_80.txt -save ../../weights/0507_6.pkl
+# python3 main.py train C -record records/0507_7_C.txt -save ../../weights/0507_7.pkl
+python3 main.py train simple -epoch 10 -record records/0507_8_dropout.txt 
