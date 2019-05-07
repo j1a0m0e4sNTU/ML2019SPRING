@@ -10,5 +10,8 @@
 # python3 main.py train simple -seq_len 80 -record records/0507_6_seq_len_80.txt -save ../../weights/0507_6.pkl
 # python3 main.py train C -record records/0507_7_C.txt -save ../../weights/0507_7.pkl
 # python3 main.py train simple -epoch 10 -record records/0507_8_dropout.txt 
-python3 main.py train D -epoch 10 -record records/0507_9_D.txt -save ../../weights/0507_9.pkl
-python3 main.py train E -epoch 10 -record records/0507_10_E.txt -save ../../weights/0507_10.pkl
+# python3 main.py train D -epoch 10 -record records/0507_9_D.txt -save ../../weights/0507_9.pkl
+# python3 main.py train E -epoch 10 -record records/0507_10_E.txt -save ../../weights/0507_10.pkl
+python3 main.py train A -seq_len 40 -record records/0507_11_A_seq40.txt -save ../../weights/0507_11.pkl
+python3 main.py train B -seq_len 40 -record records/0507_12_B_seq40.txt -save ../../weights/0507_12.pkl
+python3 main.py train C -seq_len 40 -record records/0507_13_C_seq40.txt -save ../../weights/0507_13.pkl
