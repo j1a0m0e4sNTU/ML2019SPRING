@@ -1,10 +1,12 @@
+import sys
 import torch
 import torch.nn as nn
 
 configs = {
     'simple': {'LSTM': {'input': 300, 'hidden': 512, 'layers': 1},'FC':[512, 256, 32, 1], 'bid':False},
     'A': {'LSTM': {'input': 300, 'hidden': 1024, 'layers': 1},'FC':[1024, 256, 32, 1], 'bid': False},
-    'B': {'LSTM': {'input': 300, 'hidden': 512, 'layers': 1},'FC':[1024, 256, 32, 1], 'bid': True} #bidirection
+    'B': {'LSTM': {'input': 300, 'hidden': 512, 'layers': 1},'FC':[1024, 256, 32, 1], 'bid': True}, #bidirection
+    'C': {'LSTM': {'input': 300, 'hidden': 512, 'layers': 2},'FC':[512, 256, 32, 1], 'bid':False},
 }
 
 class RNN(nn.Module):
@@ -37,7 +39,7 @@ class RNN(nn.Module):
         r_out, new_states = self.lstm(inputs, states)
         last_out = r_out[:, -1, :].squeeze(1)
         out = self.classifier(last_out)
-        return  out.view(-1)
+        return out.view(-1)
 
 def get_rnn_model(name, batch_size):
     model = RNN(configs[name], batch_size)
@@ -57,7 +59,7 @@ def test_lstm():
 def test():
     print('- test -')
     batch_size = 8
-    rnn = get_rnn_model('B', batch_size)
+    rnn = get_rnn_model(sys.argv[1], batch_size)
     inputs = torch.zeros(batch_size, 30, 300)
     out = rnn(inputs)
     print(out.size())
