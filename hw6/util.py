@@ -10,7 +10,8 @@ dict_path = '../../data_hw6/dict.txt.big'
 x_train_path = '../../data_hw6/train_x.csv'
 y_train_path = '../../data_hw6/train_y.csv'
 x_test_path  = '../../data_hw6/test_x.csv'
-word2vec_model_path = '../../data_hw6/word2vec.model'
+#word2vec_model_path = '../../data_hw6/word2vec.model'
+word2vec_model_path = '../../data_hw6/word2vec_2.model'
 words_result_path = '../../data_hw6/words.txt'
 
 important_words = ['回應','會爆','秀下限','瞎妹','ㄏㄏ','開口','邊緣人','森77','森七七','森氣氣','黑人問號',
@@ -52,7 +53,8 @@ def save_word2vec():
         line = '{}\n'.format('/'.join(cut_list))
         file.write(line)
 
-    model = Word2Vec(cut_all, size= 300, window= 5, iter= 10, sg= 0)
+    # model = Word2Vec(cut_all, size= 300, window= 5, iter= 10, sg= 0)
+    model = Word2Vec(cut_all, size= 300, window= 5, iter= 15, sg= 0)
     model.save(word2vec_model_path)   
 
 class WordsData(Dataset):

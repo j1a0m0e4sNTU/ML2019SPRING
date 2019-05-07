@@ -21,4 +21,5 @@
 # python3 main.py predict simple -seq_len 60 -load ../../weights/0507_2.pkl -predict predictions/2.csv
 # python3 main.py predict simple -seq_len 80 -load ../../weights/0507_2.pkl -predict predictions/3.csv
 # python3 main.py predict simple -seq_len 100 -load ../../weights/0507_2.pkl -predict predictions/4.csv
-python3 main.py ensemble simple -predict ensemble.csv
+# python3 main.py ensemble simple -predict ensemble.csv
+python3 main.py train simple -word_model ../../data_hw6/word2vec_2.model -record records/0507_14_iter15.txt 
