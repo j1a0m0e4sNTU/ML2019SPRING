@@ -1,4 +1,6 @@
+import os
 import argparse
+import numpy as np
 import torch
 from torch.utils.data import DataLoader
 from model import get_rnn_model
@@ -7,7 +9,7 @@ from manager import Manager
 torch.manual_seed(1004)
 
 parser = argparse.ArgumentParser()
-parser.add_argument('mode', choices= ['train', 'predict'])
+parser.add_argument('mode', choices= ['train', 'predict', 'ensemble'])
 parser.add_argument('config', help= 'Symbol of model configuration')
 parser.add_argument('-train_x', help= 'Path to train_x.csv', default= '../../data_hw6/train_x.csv')
 parser.add_argument('-train_y', help= 'Path to train_y.csv', default= '../../data_hw6/train_y.csv')
@@ -46,3 +48,32 @@ if __name__ == '__main__':
 
         model_manager = Manager(model, args)
         model_manager.predict(test_data, args.predict)
+    
+    elif args.mode == 'ensemble':
+        test_num = 20000
+        seq_len_list = [20, 40, 60, 80, 100]
+        weight_dir = '../../weights/'
+        model_weight_pair = {
+            'simple': '0507_2.pkl',
+            'A': '0507_11.pkl',
+            'B': '0507_12.pkl',
+            'C': '0507_13.pkl'
+        }
+
+        scores = np.zeros((test_num,))
+        threshold = len(seq_len_list) * len(model_weight_pair) / 2
+        for m_name, w_name in model_weight_pair.items():
+            model = get_rnn_model(m_name, args.batch_size)
+            args.load = os.path.join(weight_dir, w_name)
+            model_manager = Manager(model, args)
+            for seq_len in seq_len_list:
+                test_words = WordsData(mode= 'test', x_path= args.test_x, y_path= None,
+                                model_path= args.word_model, dict_path= args.dict, seq_len= seq_len)
+                test_data = DataLoader(test_words, batch_size= args.batch_size, shuffle= False)
+                scores += manager.get_all_predictions(test_data)
+
+        file = open(args.predict, 'w')
+        file.write('id,label\n')
+        for i, score in enumerate(scores):
+            pred = 1 if score > threshold else 0
+            file.write('{},{}\n'.format(i, pred))

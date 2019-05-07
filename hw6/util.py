@@ -123,8 +123,22 @@ def test():
         if i == 10:
             break
 
+def ensemble():
+    test_num = 20000
+    pred_all = np.zeros((test_num,))
+    for i in range(5):
+        file = pd.read_csv('predictions/{}.csv'.format(i))
+        pred_all += file['label']
+    
+    count = 0
+    file = open('predictions/e.csv', 'w')
+    file.write('id,label\n')
+    for i, score in enumerate(pred_all):
+        pred = 1 if score > 2 else 0
+        file.write('{},{}\n'.format(i, pred))
+
 if __name__ == '__main__':
     if sys.argv[1] == '1':
         save_word2vec()
     else:
-        test()
+        ensemble()

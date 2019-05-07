@@ -79,14 +79,17 @@ class Manager():
         pred = (torch.sign(out) == 1)
         return pred
 
-    def predict(self, test_data, predict_path):
+    def get_all_predictions(self, test_data):
         predictions = []
         for i, vectors in enumerate(test_data):
             vectors = vectors.to(self.device)
             out = self.model(vectors)
             pred_list = [i for i in self.get_prediction(out)]
             predictions += pred_list
-        
+        return predictions
+
+    def predict(self, test_data, predict_path):
+        predictions = self.get_all_predictions(test_data)
         file = open(predict_path, 'w')
         file.write('id,label\n')
         for i, pred in enumerate(predictions):
