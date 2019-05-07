@@ -15,7 +15,7 @@ parser.add_argument('-test_x', help= 'Path to test_x.csv', default= '../../data_
 parser.add_argument('-dict', help= 'Path to dictionary', default= '../../data_hw6/dict.txt.big')
 parser.add_argument('-word_model', help= 'Path to Word model', default= '../../data_hw6/word2vec.model')
 parser.add_argument('-lr', help= 'learnig rate', type= float, default= 1e-3)
-parser.add_argument('-epoch', help= 'Epoch number', type= int, default= 10)
+parser.add_argument('-epoch', help= 'Epoch number', type= int, default= 5)
 parser.add_argument('-batch_size', type= int, default= 32)
 parser.add_argument('-seq_len', type= int, help= 'Sequence length for each data', default= 30)
 parser.add_argument('-save', help= 'Path to save model')

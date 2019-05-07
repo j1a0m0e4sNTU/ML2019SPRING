@@ -19,10 +19,8 @@ important_words = ['回應','會爆','秀下限','瞎妹','ㄏㄏ','開口','邊
                     '乾你屁事','自以為','被嘴','約炮','傻B','馬的','肥宅','菜逼八','頗呵','台中','渣男',
                     '樓主','腦粉','氣pupu','八嘎囧','ㄊㄇ','D卡','幹你娘','仇女','有病',]
 
-important_words_2 = ['台男','台女','乾你屁事','幹你娘','仇女','8+9' ]
-
 def adjust_jieba():
-    for word in important_words_2:
+    for word in important_words:
         jieba.suggest_freq(word, True)
 
 def get_cleaner_words(words):
