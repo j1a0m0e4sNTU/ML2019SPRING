@@ -54,7 +54,7 @@ def save_word2vec():
         file.write(line)
 
     # model = Word2Vec(cut_all, size= 300, window= 5, iter= 10, sg= 0)
-    model = Word2Vec(cut_all, size= 300, window= 5, iter= 15, sg= 0)
+    model = Word2Vec(cut_all, size= 300, window= 5, iter= 20, sg= 0)
     model.save(word2vec_model_path)   
 
 class WordsData(Dataset):
