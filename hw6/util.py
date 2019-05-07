@@ -13,6 +13,7 @@ x_test_path  = '../../data_hw6/test_x.csv'
 #word2vec_model_path = '../../data_hw6/word2vec.model'
 word2vec_model_path = '../../data_hw6/word2vec_2.model'
 words_result_path = '../../data_hw6/words.txt'
+bow_dict_path = 'bow.csv'
 
 important_words = ['回應','會爆','秀下限','瞎妹','ㄏㄏ','開口','邊緣人','森77','森七七','森氣氣','黑人問號',
                     '+1','廚餘','打臉','Hen棒','低能卡','被閃','甲','原po','原PO','啾咪','腦羞','打手槍',
@@ -116,6 +117,87 @@ class WordsData(Dataset):
         else:
             return vectors
 
+def save_bow_csv():
+    csv = pd.read_csv(x_train_path)
+    comments = np.array(csv['comment'])
+    jieba.set_dictionary(dict_path)
+    bag_size = 2048
+    word_count = {}
+    for comment in comments:
+        words = list(jieba.cut(comment))
+        for word in words:
+            if word in word_count:
+                word_count[word] += 1
+            else:
+                word_count[word] = 0
+    
+    word_count_pair = []
+    for word, count in word_count.items():
+        word_count_pair.append((word, count))
+
+    for i in range(1, len(word_count_pair)):
+        temp_pair = word_count_pair[i]
+        j = i - 1
+        
+        while True:
+            if word_count_pair[j][1] < temp_pair[1]:
+                word_count_pair[j+1] = word_count_pair[j]
+                if j == 0:
+                    word_count_pair[0] = temp_pair
+                    break
+                else:
+                    j -= 1
+            else:
+                word_count_pair[j+1] = temp_pair
+                break
+
+    bow_file = open(bow_dict_path,'w')
+    bow_file.write('word,count\n')
+    for i in range(bag_size):
+        bow_file.write('{},{}\n'.format(word_count_pair[i][0], word_count_pair[i][1]))
+
+
+class BOW(Dataset):
+    def __init__(self, mode= 'train', x_path= x_train_path, y_path= y_train_path):
+        super().__init__()
+        jieba.set_dictionary(dict_path)
+        self.mode = mode
+        x_csv = pd.read_csv(x_path)
+        self.x_data = np.array(x_csv['comment'])
+        self.y_data = None
+        cut_size = int(len(self.x_data) * 0.8)
+        
+        if mode == 'train':
+            self.x_data = self.x_data[:cut_size]
+            y_csv = pd.read_csv(y_path)
+            self.y_data = np.array(y_csv['label'])[:cut_size]
+        elif mode == 'valid':
+            self.x_data = self.x_data[cut_size:]
+            y_csv = pd.read_csv(y_path)
+            self.y_data = np.array(y_csv['label'])[cut_size:]
+
+        bow_csv = pd.read_csv(bow_dict_path)
+        self.bow_words = [word for word in bow_csv['word']]
+        
+
+    def __len__(self):
+        return len(self.x_data)
+
+    def __getitem__(self, index):
+        vector = torch.zeros(2048)
+        sentence = self.x_data[index]
+        words = list(jieba.cut(sentence))
+        for word in words:
+            if word in self.bow_words:
+                vector[self.bow_words.index(word)] += 1
+
+        if self.mode in ['train', 'valid']:
+            label = torch.Tensor([self.y_data[index]])
+            return vector, label
+        else:
+            return vector
+        
+
 def test():
     print('test')
     words = WordsData('train')
@@ -125,22 +207,16 @@ def test():
         if i == 10:
             break
 
-def ensemble():
-    test_num = 20000
-    pred_all = np.zeros((test_num,))
-    for i in range(5):
-        file = pd.read_csv('predictions/{}.csv'.format(i))
-        pred_all += file['label']
-    
-    count = 0
-    file = open('predictions/e.csv', 'w')
-    file.write('id,label\n')
-    for i, score in enumerate(pred_all):
-        pred = 1 if score > 2 else 0
-        file.write('{},{}\n'.format(i, pred))
+def test2():
+    bow_data = BOW('train')
+    data = DataLoader(bow_data, batch_size= 4)
+    for i, (data, label) in enumerate(data):
+        print(data.size(), label.size())
+        if i == 10:
+            break
 
 if __name__ == '__main__':
     if sys.argv[1] == '1':
         save_word2vec()
     else:
-        ensemble()
+        test2()
