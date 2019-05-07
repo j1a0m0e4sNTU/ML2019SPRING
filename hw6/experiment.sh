@@ -22,4 +22,8 @@
 # python3 main.py predict simple -seq_len 80 -load ../../weights/0507_2.pkl -predict predictions/3.csv
 # python3 main.py predict simple -seq_len 100 -load ../../weights/0507_2.pkl -predict predictions/4.csv
 # python3 main.py ensemble simple -predict ensemble.csv
-python3 main.py train simple -word_model ../../data_hw6/word2vec_2.model -record records/0507_14_iter15.txt 
+# python3 main.py train simple -word_model ../../data_hw6/word2vec_2.model -record records/0507_14_iter20.txt 
+python3 main.py train simple -record records/0508_1.txt -save ../../weights/0508_1.pkl
+python3 main.py train A -record records/0508_2.txt -save ../../weights/0508_2.pkl
+python3 main.py train B -record records/0508_3.txt -save ../../weights/0508_3.pkl
+python3 main.py train C -record records/0508_4.txt -save ../../weights/0508_4.pkl

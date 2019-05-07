@@ -15,11 +15,11 @@ parser.add_argument('-train_x', help= 'Path to train_x.csv', default= '../../dat
 parser.add_argument('-train_y', help= 'Path to train_y.csv', default= '../../data_hw6/train_y.csv')
 parser.add_argument('-test_x', help= 'Path to test_x.csv', default= '../../data_hw6/test_x.csv')
 parser.add_argument('-dict', help= 'Path to dictionary', default= '../../data_hw6/dict.txt.big')
-parser.add_argument('-word_model', help= 'Path to Word model', default= '../../data_hw6/word2vec.model')
+parser.add_argument('-word_model', help= 'Path to Word model', default= '../../data_hw6/word2vec_2.model')
 parser.add_argument('-lr', help= 'learnig rate', type= float, default= 1e-3)
 parser.add_argument('-epoch', help= 'Epoch number', type= int, default= 7)
 parser.add_argument('-batch_size', type= int, default= 32)
-parser.add_argument('-seq_len', type= int, help= 'Sequence length for each data', default= 30)
+parser.add_argument('-seq_len', type= int, help= 'Sequence length for each data', default= 40)
 parser.add_argument('-save', help= 'Path to save model')
 parser.add_argument('-load', help= 'Path to load model')
 parser.add_argument('-record', help= 'Path to file for recording result')
@@ -54,10 +54,10 @@ if __name__ == '__main__':
         seq_len_list = [20, 40, 60, 80, 100]
         weight_dir = '../../weights/'
         model_weight_pair = {
-            'simple': '0507_2.pkl',
-            'A': '0507_11.pkl',
-            'B': '0507_12.pkl',
-            'C': '0507_13.pkl'
+            'simple': '0508_1.pkl',
+            'A': '0508_2.pkl',
+            'B': '0508_3.pkl',
+            'C': '0508_4.pkl'
         }
 
         scores = np.zeros((test_num,))
