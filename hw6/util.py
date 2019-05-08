@@ -11,7 +11,7 @@ x_train_path = '../../data_hw6/train_x.csv'
 y_train_path = '../../data_hw6/train_y.csv'
 x_test_path  = '../../data_hw6/test_x.csv'
 #word2vec_model_path = '../../data_hw6/word2vec.model'
-word2vec_model_path = '../../data_hw6/word2vec_2.model'
+word2vec_model_path = '../../data_hw6/word2vec_3.model'
 words_result_path = '../../data_hw6/words.txt'
 bow_dict_path = 'bow.csv'
 
@@ -48,8 +48,9 @@ def save_word2vec():
     cut_all = []
     file = open(words_result_path, 'w')
     for i, sentence in enumerate(raw_sentences):
-        cut_list = list(jieba.cut(sentence))
+        #cut_list = list(jieba.cut(sentence))
         #cut_list = get_cleaner_words(cut_list)
+        cut_list = [w for w in sentence]
         cut_all.append(cut_list)
         line = '{}\n'.format('/'.join(cut_list))
         file.write(line)

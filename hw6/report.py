@@ -57,10 +57,13 @@ def problem_5_a():
                 remain = 0
 
         inputs[i] = torch.from_numpy(np.array(vectors))
-        model = get_rnn_model('B', 2)
-        model.load_state_dict(torch.load('../../weights/0508_3.pkl'))
-        out = model(inputs)
-        print(out)
+
+    inputs = inputs.cuda()   
+    model = get_rnn_model('B', 2)
+    model.load_state_dict(torch.load('../../weights/0508_3.pkl'))
+    model = model.cuda()
+    out = model(inputs)
+    print(out)
 
 
 
