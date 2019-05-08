@@ -27,4 +27,4 @@
 # python3 main.py train A -record records/0508_2.txt -save ../../weights/0508_2.pkl
 # python3 main.py train B -record records/0508_3.txt -save ../../weights/0508_3.pkl
 # python3 main.py train C -record records/0508_4.txt -save ../../weights/0508_4.pkl
-python3 main.py ensemble B -predict ensemble_2.csv
+python3 main.py ensemble B -predict ensemble_3.csv

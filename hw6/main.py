@@ -51,11 +51,11 @@ if __name__ == '__main__':
     
     elif args.mode == 'ensemble':
         test_num = 20000
-        seq_len_list = [20, 40, 60, 80, 100]
+        seq_len_list = [40, 50, 60, 80, 100]
         weight_dir = '../../weights/'
         model_weight_pair = {
             'simple': '0508_1.pkl',
-            'A': '0508_2.pkl',
+            # 'A': '0508_2.pkl',
             'B': '0508_3.pkl',
             'C': '0508_4.pkl'
         }
