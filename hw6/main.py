@@ -64,7 +64,8 @@ if __name__ == '__main__':
         threshold = len(seq_len_list) * len(model_weight_pair) / 2
         for m_name, w_name in model_weight_pair.items():
             model = get_rnn_model(m_name, args.batch_size)
-            args.load = os.path.join(weight_dir, w_name)
+            #args.load = os.path.join(weight_dir, w_name)
+            args.load = w_name
             model_manager = Manager(model, args)
             for seq_len in seq_len_list:
                 test_words = WordsData(mode= 'test', x_path= args.test_x, y_path= None,
