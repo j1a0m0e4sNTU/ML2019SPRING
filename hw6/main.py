@@ -3,7 +3,7 @@ import argparse
 import numpy as np
 import torch
 from torch.utils.data import DataLoader
-from model import get_rnn_model
+from model import get_rnn_model, DNN
 from util import *
 from manager import Manager
 torch.manual_seed(1004)
