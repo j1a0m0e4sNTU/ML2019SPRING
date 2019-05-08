@@ -1,0 +1,28 @@
+DNN(
+  (net): Sequential(
+    (0): Linear(in_features=2048, out_features=10224, bias=True)
+    (1): ReLU(inplace)
+    (2): Linear(in_features=10224, out_features=512, bias=True)
+    (3): ReLU(inplace)
+    (4): Linear(in_features=512, out_features=256, bias=True)
+    (5): ReLU(inplace)
+    (6): Linear(in_features=256, out_features=128, bias=True)
+    (7): ReLU(inplace)
+    (8): Linear(in_features=128, out_features=64, bias=True)
+    (9): ReLU(inplace)
+    (10): Linear(in_features=64, out_features=32, bias=True)
+    (11): ReLU(inplace)
+    (12): Linear(in_features=32, out_features=1, bias=True)
+  )
+)
+--------------------
+Epoch 0| Train Loss: 0.01755 | Train Acc: 0.71599 | Valid Acc: 0.73225
+* BEST SAVED *
+Epoch 1| Train Loss: 0.01650 | Train Acc: 0.75474 | Valid Acc: 0.73358
+* BEST SAVED *
+Epoch 2| Train Loss: 0.01237 | Train Acc: 0.81954 | Valid Acc: 0.72646
+Epoch 3| Train Loss: 0.00595 | Train Acc: 0.92183 | Valid Acc: 0.72375
+Epoch 4| Train Loss: 0.00324 | Train Acc: 0.95768 | Valid Acc: 0.71267
+Epoch 5| Train Loss: 0.00253 | Train Acc: 0.96636 | Valid Acc: 0.71700
+Epoch 6| Train Loss: 0.00209 | Train Acc: 0.97091 | Valid Acc: 0.71404
+Epoch 7| Train Loss: 0.00195 | Train Acc: 0.97349 | Valid Acc: 0.71500
