@@ -55,7 +55,7 @@ if __name__ == '__main__':
         weight_dir = '../../weights/'
         model_weight_pair = {
             'simple': '0508_1.pkl',
-            # 'A': '0508_2.pkl',
+            'A': '0508_2.pkl',
             'B': '0508_3.pkl',
             'C': '0508_4.pkl'
         }
