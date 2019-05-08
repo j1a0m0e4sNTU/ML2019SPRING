@@ -6,6 +6,7 @@ from gensim.models import Word2Vec
 dict_path = '../../data_hw6/dict.txt.big'
 model_path = '../../data_hw6/word2vec_2.model'
 from model import *
+import pandas as pd
 
 def problem_1():
     epoch = [1, 2, 3, 4, 5, 6, 7]
@@ -65,7 +66,25 @@ def problem_5_a():
     out = model(inputs)
     print(out)
 
+def problem_5_b():
+    jieba.set_dictionary(dict_path)
+    sentence= ['在說別人白痴之前，先想想自己', '在說別人之前先想想自己,白痴']
+    inputs = torch.zeros(2, 2048)
 
+    bow_csv = pd.read_csv('bow.csv')
+    bow_words = [word for word in bow_csv['word']]
+
+    for i in range(2):
+        vec = torch.zeros(2048)
+        words = list(jieba.cut(sentence[i]))
+        for word in words:
+            if word in bow_words:
+                vec[bow_words.index(word)] += 1
+        inputs[i] = vec
+
+    model = DNN()
+    out = model(inputs)
+    print(out)
 
 if __name__ == '__main__':
-    problem_5_a()
+    problem_5_b()
