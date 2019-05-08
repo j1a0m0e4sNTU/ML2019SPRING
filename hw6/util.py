@@ -208,10 +208,11 @@ def test():
             break
 
 def test2():
-    bow_data = BOW('train')
+    bow_data = BOW('test')
     data = DataLoader(bow_data, batch_size= 4)
-    for i, (data, label) in enumerate(data):
-        print(data.size(), label.size())
+    for i, data in enumerate(data):
+        print(data.size(), )
+        print(torch.sum(data))
         if i == 10:
             break
 

@@ -65,6 +65,27 @@ def test():
     inputs = torch.zeros(batch_size, 30, 300)
     out = rnn(inputs)
     print(out.size())
-    
+
+class DNN(nn.Module):
+    def __init__(self):
+        super().__init__()
+        size = [2048, 10224, 512, 256, 128, 64, 32, 1]
+        layer = []
+        for i in range(1, len(size)):
+            layer += [nn.Linear(size[i -1], size[i]), nn.ReLU(inplace= True)]
+        layer = layer[:-1]
+        self.net = nn.Sequential(*layer)
+
+    def forward(self, inputs):
+        out = self.net(inputs)
+        return out.view(-1)
+
+def test2():
+    m = DNN()
+    inputs = torch.zeros(8, 2048)
+    out = m(inputs)
+    print(m)
+    print(out.size())
+
 if __name__ == '__main__':
-    test()
+    test2()

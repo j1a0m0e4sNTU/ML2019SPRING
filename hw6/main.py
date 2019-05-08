@@ -9,7 +9,7 @@ from manager import Manager
 torch.manual_seed(1004)
 
 parser = argparse.ArgumentParser()
-parser.add_argument('mode', choices= ['train', 'predict', 'ensemble'])
+parser.add_argument('mode', choices= ['train', 'predict', 'ensemble', 'bow'])
 parser.add_argument('config', help= 'Symbol of model configuration', default= 'simple')
 parser.add_argument('-train_x', help= 'Path to train_x.csv', default= '../../data_hw6/train_x.csv')
 parser.add_argument('-train_y', help= 'Path to train_y.csv', default= '../../data_hw6/train_y.csv')
@@ -55,7 +55,7 @@ if __name__ == '__main__':
         weight_dir = '../../weights/'
         model_weight_pair = {
             'simple': '0508_1.pkl',
-            'A': '0508_2.pkl',
+            # 'A': '0508_2.pkl',
             'B': '0508_3.pkl',
             'C': '0508_4.pkl'
         }
@@ -77,3 +77,13 @@ if __name__ == '__main__':
         for i, score in enumerate(scores):
             pred = 1 if score > threshold else 0
             file.write('{},{}\n'.format(i, pred))
+    
+    elif args.mode == 'bow':
+        model = DNN()
+        train_words = BOW(mode= 'train', x_path= args.train_x, y_path= args.train_y)
+        valid_words = BOW(mode= 'valid', x_path= args.train_x, y_path= args.train_y)
+        train_data = DataLoader(train_words, batch_size= args.batch_size, shuffle= True)
+        valid_data = DataLoader(valid_words, batch_size= args.batch_size, shuffle= False)
+
+        manager = Manager(model, args)
+        manager.train(train_data, valid_data)
