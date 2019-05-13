@@ -4,8 +4,10 @@ from PIL import Image
 import os
 import torch
 from torch.utils.data import Dataset, DataLoader
-from torchvision.transforms import transforms
-from matplotlib import pyplot as plt 
+from torchvision.transforms import transforms 
+import matplotlib
+matplotlib.use('Agg')
+from matplotlib import pyplot as plt
 
 unlabeled_dir_path = '../../data_hw7'
 
@@ -49,7 +51,7 @@ def plot_images(images, name):
     for i in range(4):
         for j in range(8):
             index = i * 8 + j
-            img = toPIL(images[index])
+            img = toPIL(images[index].cpu().detach())
             img = np.array(img)
             plt.subplot(4, 8, index + 1)
             plt.imshow(img)
