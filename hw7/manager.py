@@ -18,37 +18,41 @@ class Manager():
         self.save = args.save
         self.csv = args.csv
         self.record_file = open(args.record, 'w')
-        self.best = {'epoch':0, 'acc':0}
+        self.best = {'epoch':0, 'loss': 999}
 
     def record(self, info):
         self.record_file.write(info + '\n')
         print(info)
 
     def train(self, data_train, data_valid):
-        print(' ------------ Start Training ------------')
         for epoch in range(self.epoch_num):
             train_loss = 0
             self.model.train()
             for i, images in enumerate(data_train):
-                images.to(self.device)
+                images = images.to(self.device)
                 images_out = self.model(images)
                 self.optimizer.zero_grad()
                 loss = self.metric(images_out, images)
                 loss.backward()
                 self.optimizer.step()
                 train_loss += loss.item()
-
+                
             train_loss = train_loss / (i+1)
             valid_loss = self.get_valid_loss(data_valid)
-
-            info = 'Epoch {:2d} | training loss: {:.5f} | validation loss: {:.5f}'.format(epoch+1, train_loss, valid_loss)
+            best_info = ""
+            if (valid_loss < self.best['loss']):
+                self.best['epoch'] = epoch
+                self.best['loss'] = valid_loss
+                torch.save(self.model.state_dict(), self.save)
+                best_info = '* Best *'
+            info = 'Epoch {:2d} | training loss: {:.5f} | validation loss: {:.5f} {}'.format(epoch+1, train_loss, valid_loss, best_info)
             self.record(info)
 
     def get_valid_loss(self, data_valid):
         self.model.eval()
         valid_loss = 0
         for i, images in enumerate(data_valid):
-            images.to(self.device)
+            images = images.to(self.device)
             images_out = self.model(images)
             loss = self.metric(images_out, images)
             valid_loss += loss.item()
