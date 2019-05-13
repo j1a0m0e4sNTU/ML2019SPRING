@@ -7,7 +7,8 @@ from model import AutoEncoder
 torch.manual_seed(1004)
 
 parser = argparse.ArgumentParser()
-parser.add_argument('mode', choices=['train', 'predict'])
+parser.add_argument('mode', choices=['train', 'predict', 'test'])
+parser.add_argument('-id', help= 'Experiment ID')
 parser.add_argument('-E', help= 'Encoder symbol', default= 'base')
 parser.add_argument('-D', help= 'Decoder symbol', default= 'base')
 parser.add_argument('-dataset', help= 'Path to dataset', default= '../../data_hw7')
@@ -17,7 +18,6 @@ parser.add_argument('-epoch', help= 'Epoch number', type= int, default= 30)
 parser.add_argument('-save', help= 'Path to save model')
 parser.add_argument('-load', help= 'Path to load model')
 parser.add_argument('-csv', help= 'Path to prediction')
-parser.add_argument('-record', help= 'Path to record file', default='records/test.txt')
 args = parser.parse_args()
 
 if __name__ == '__main__':
@@ -30,3 +30,7 @@ if __name__ == '__main__':
 
     elif args.mode == 'predict':
         pass
+    
+    elif args.mode == 'test':
+        manager = Manager(args)
+        manager.plot()

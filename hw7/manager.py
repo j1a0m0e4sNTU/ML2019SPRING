@@ -3,10 +3,12 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from model import AutoEncoder
+from dataset import *
 
 class Manager():
     def __init__(self, args):
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        self.id = args.id
         model = AutoEncoder(args.E, args.D)
         if args.load:
             model.load_state_dict(torch.load(args.load))
@@ -17,14 +19,16 @@ class Manager():
         self.batch_size = args.bs
         self.save = args.save
         self.csv = args.csv
-        self.record_file = open(args.record, 'w')
+        self.record_file = None
         self.best = {'epoch':0, 'loss': 999}
+        self.test_images = get_test_image(args.dataset)
 
     def record(self, info):
         self.record_file.write(info + '\n')
         print(info)
 
     def train(self, data_train, data_valid):
+        self.record_file = open('records/' + self.id + '.txt', 'w')
         for epoch in range(self.epoch_num):
             train_loss = 0
             self.model.train()
@@ -67,3 +71,8 @@ class Manager():
         for i, pred in enumerate(predictions):
             file.write('{},{}\n'.format(i,pred))
         print('Finish submission: {}'.format(self.csv))
+
+    def plot(self):
+        images = self.test_images.to(self.device)
+        images_out = self.model(images)
+        plot_images(images_out, 'records/' + self.id + '.jpg')

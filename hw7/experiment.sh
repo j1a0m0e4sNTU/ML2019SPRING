@@ -1,1 +1,1 @@
-python3 main.py train -record records/test.txt -save ../../weights/test.pkl
+python3 main.py train -id test -save ../../weights/test.pkl
