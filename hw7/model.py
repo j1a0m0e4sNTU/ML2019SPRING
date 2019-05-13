@@ -9,10 +9,20 @@ decoder_config = {
     'base':[512, 'up', 256,  'up', 128, 'up', 64, 'up', 32, 'up', 3]
 }
 
-def get_encoder_decoder(symbol_E, symbol_D):
-    encoder = Encoder(encoder_config[symbol_E])
-    decoder = Decoder(decoder_config[symbol_D])
-    return encoder, decoder
+class AutoEncoder(nn.Module):
+    def __init__(self, E_symbol, D_symbol):
+        super().__init__()
+        self.encoder = Encoder(encoder_config[E_symbol])
+        self.decoder = Decoder(decoder_config[D_symbol])
+
+    def forward(self, inputs):
+        vectors = self.encoder(inputs)
+        images  = self.decoder(vectors)
+        return images
+
+    def encode(self, inputs):
+        vectors = self.encoder(inputs)
+        return vectors
 
 class Encoder(nn.Module):
     def __init__(self, config):
@@ -63,11 +73,8 @@ class Decoder(nn.Module):
 def test():
     batch_size = 8
     imgs = torch.zeros(batch_size, 3, 32, 32)
-    encoder, decoder = get_encoder_decoder('base', 'base')
-    vector = encoder(imgs)
-    img_out = decoder(vector)
-    print(decoder)
-    print(img_out)
+    model = AutoEncoder('base', 'base')
+    img_out = model(imgs)
     print(img_out.size())
 
 def test2():
