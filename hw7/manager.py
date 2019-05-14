@@ -77,3 +77,33 @@ class Manager():
         images = self.test_images.to(self.device)
         images_out = self.model(images)
         plot_images(images_out, 'records/' + self.id + '.jpg')
+
+    def cluster(self, data):
+        from sklearn.cluster import KMeans
+        import numpy as np
+
+        vector_all = None
+        for i, images in enumerate(data):
+            images = images.to(self.device)
+            vector = self.model.encode(images)
+            vector = vector.cpu().detach()
+            if i == 0:
+                vector_all = vector
+            else:
+                vector_all = torch.cat([vector_all, vector], 0)
+        
+        vector_all = vector_all[:1000] # for test
+        vector_all = vector_all.numpy()
+        
+
+def test():
+    import numpy as np
+    from sklearn.manifold import TSNE
+    x = np.array([[0, 0, 0], [0, 1, 1], [1, 0, 1], [1, 1, 1]])
+    model = TSNE(n_components= 2)
+    x_embedded = model.fit_transform(x)
+    print(x_embedded)
+     
+
+if __name__ == '__main__':
+    test()
