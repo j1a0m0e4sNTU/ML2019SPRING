@@ -31,6 +31,11 @@ class Unlabeled(Dataset):
     def __len__(self):
         return len(self.image_name)
 
+    def __getitem__(self, index):
+        image = Image.open(self.image_name[index])
+        image = self.toTensor(image)
+        return image
+
 def get_test_image(path):
     images_dir = os.path.join(path, 'images')
     image_name = [os.path.join(images_dir, name) for name in os.listdir(images_dir)]
@@ -97,4 +102,4 @@ def test3():
 
 if __name__ == '__main__':
     #test_unlabeled()
-    test3()
+    test_unlabeled()
