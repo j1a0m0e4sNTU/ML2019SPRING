@@ -95,7 +95,7 @@ class Manager():
         vector_all = vector_all[:1000] # for test
         vector_all = vector_all.numpy()
         print('shape:', vector_all.shape)
-        kmeans = KMeans(n_clusters= 2, random_state= 0).fix(vector_all)
+        kmeans = KMeans(n_clusters= 2, random_state= 0).fit(vector_all)
         print(kmeans.labels_[: 20])
 
 
