@@ -11,15 +11,17 @@ args = parser.parse_args()
 def get_images():
     image_name = [os.path.join(args.path, name) for name in os.listdir(args.path)]
     image_name.sort()
-    images = [np.array(io.imread(name)) for name in image_name]
-    images = np.array(images).astype(np.float)
+    images = np.zeros((len(image_name), 600, 600, 3))
+    for i, name in enumerate(image_name):
+        images[i] = np.array(io.imread(name))
     return images
 
 def main():
     pass
 
 def test():
-    pass
-
+    images = get_images()
+    
+    
 if __name__ == '__main__':
     test()

@@ -5,11 +5,17 @@ import torch.nn as nn
 encoder_config = {
     'base': [3, 'down', 32, 'down', 64, 'down', 128, 'down', 256, 'down', 512],
     'A':    [3, 'down', 32, 'down', 64, 'down', 128, 'down', 128, 'down', 128],
+    'B':    [3, 'down', 32, 'down', 64, 'down', 64, 'down', 64, 'down', 64],
+    'C':    [3, 'down', 32, 'down', 32, 'down', 32, 'down', 32, 'down', 32],
+    'D':    [3, 'down', 512, 'down', 256, 'down', 128, 'down', 64, 'down', 32],
 }
 
 decoder_config = {
     'base':[512, 'up', 256,  'up', 128, 'up', 64, 'up', 32, 'up', 3],
     'A':   [128, 'up', 128,  'up', 128, 'up', 64, 'up', 32, 'up', 3],
+    'B':   [64, 'up', 64,  'up', 64, 'up', 64, 'up', 32, 'up', 3],
+    'C':   [32, 'up', 32,  'up', 32, 'up', 32, 'up', 32, 'up', 3],
+    'D':   [32, 'up', 64,  'up', 128, 'up', 256, 'up', 512, 'up', 3],
 }
 
 class AutoEncoder(nn.Module):
