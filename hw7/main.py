@@ -36,4 +36,5 @@ if __name__ == '__main__':
         manager.cluster(data_all)
     
     elif args.mode == 'test':
-        manager.plot()
+        print('======= Test ========')
+        manager.test()

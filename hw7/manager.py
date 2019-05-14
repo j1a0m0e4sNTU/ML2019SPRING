@@ -77,10 +77,7 @@ class Manager():
         images_out = self.model(images)
         plot_images(images_out, 'records/' + self.id + '.jpg')
 
-    def cluster(self, data):
-        from sklearn.cluster import KMeans
-        import numpy as np
-
+    def get_vectors(self, data):
         vector_all = None
         for i, images in enumerate(data):
             images = images.to(self.device)
@@ -92,25 +89,41 @@ class Manager():
                 vector_all = torch.cat([vector_all, vector], 0)
         
         vector_all = vector_all.numpy()
-        np.save('../../vectors.npy', vector_all)
-        kmeans = KMeans(n_clusters= self.cluster_num, random_state= 0).fit(vector_all)
-        cluster_ids = kmeans.labels_
-        celebA = isCelebA()
-        cluster_id_consider = cluster_ids[:len(celebA)]
-        cluster_celebA_ids = np.unique(cluster_id_consider[celebA == 1])
+        return vector_all
 
-        test_case = get_test_case(self.dataset_path)
-        count = test_case.shape[0]
-        same_dataset = []
-        for i in range(count):
-            cluster_id1 = cluster_ids[test_case[i, 0]]
-            cluster_id2 = cluster_ids[test_case[i, 1]]
-            if (cluster_id1 in cluster_celebA_ids) + (cluster_id2 in cluster_celebA_ids) == 1:
-                same_dataset.append(0)
-            else:
-                same_dataset.append(1)
-        self.write_submission(same_dataset)
+    def cluster(self, data):
+        from sklearn.cluster import KMeans
+        import numpy as np
 
+        # vector_all = self.get_vectors(data)
+        vector_all = np.load('../../data_hw7/vectors.npy')
+        print(vector_all.shape)
+        # kmeans = KMeans(n_clusters= self.cluster_num, random_state= 0).fit(vector_all)
+        # cluster_ids = kmeans.labels_
+        # celebA = isCelebA()
+        # cluster_id_consider = cluster_ids[:len(celebA)]
+        # cluster_celebA_ids = np.unique(cluster_id_consider[celebA == 1])
+
+        # test_case = get_test_case(self.dataset_path)
+        # count = test_case.shape[0]
+        # same_dataset = []
+        # for i in range(count):
+        #     cluster_id1 = cluster_ids[test_case[i, 0]]
+        #     cluster_id2 = cluster_ids[test_case[i, 1]]
+        #     if (cluster_id1 in cluster_celebA_ids) + (cluster_id2 in cluster_celebA_ids) == 1:
+        #         same_dataset.append(0)
+        #     else:
+        #         same_dataset.append(1)
+        #self.write_submission(same_dataset)
+
+    def test(self):
+        import numpy as np
+        vectors = np.load('../../vectors.npy')
+        vectors = torch.from_numpy(vectors)
+        vectors = vectors[-32:].to(self.device)
+        img = self.model.decode(vectors)
+        plot_images(img, 'check.jpg')
+        
 def test():
     import numpy as np
     from sklearn.manifold import TSNE

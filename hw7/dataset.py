@@ -103,4 +103,4 @@ def test3():
 
 if __name__ == '__main__':
     #test_unlabeled()
-    test_unlabeled()
+    test3()

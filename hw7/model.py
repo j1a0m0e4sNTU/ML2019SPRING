@@ -33,6 +33,10 @@ class AutoEncoder(nn.Module):
         vectors = self.encoder(inputs)
         return vectors
 
+    def decode(self, inputs):
+        images = self.decoder(inputs)
+        return images
+
 class Encoder(nn.Module):
     def __init__(self, config):
         super().__init__()
