@@ -92,6 +92,7 @@ class Manager():
                 vector_all = torch.cat([vector_all, vector], 0)
         
         vector_all = vector_all.numpy()
+        np.save('../../vectors.npy', vector_all)
         kmeans = KMeans(n_clusters= self.cluster_num, random_state= 0).fit(vector_all)
         cluster_ids = kmeans.labels_
         celebA = isCelebA()
