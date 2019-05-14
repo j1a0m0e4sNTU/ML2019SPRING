@@ -1,12 +1,15 @@
+import sys
 import torch
 import torch.nn as nn
 
 encoder_config = {
-    'base':[3, 'down', 32, 'down', 64, 'down', 128, 'down', 256, 'down', 512]
+    'base': [3, 'down', 32, 'down', 64, 'down', 128, 'down', 256, 'down', 512],
+    'A':    [3, 'down', 32, 'down', 64, 'down', 128, 'down', 128, 'down', 128],
 }
 
 decoder_config = {
-    'base':[512, 'up', 256,  'up', 128, 'up', 64, 'up', 32, 'up', 3]
+    'base':[512, 'up', 256,  'up', 128, 'up', 64, 'up', 32, 'up', 3],
+    'A':   [128, 'up', 128,  'up', 128, 'up', 64, 'up', 32, 'up', 3],
 }
 
 class AutoEncoder(nn.Module):
@@ -73,7 +76,7 @@ class Decoder(nn.Module):
 def test():
     batch_size = 8
     imgs = torch.zeros(batch_size, 3, 32, 32)
-    model = AutoEncoder('base', 'base')
+    model = AutoEncoder(sys.argv[1], sys.argv[2])
     img_out = model(imgs)
     print(img_out.size())
 

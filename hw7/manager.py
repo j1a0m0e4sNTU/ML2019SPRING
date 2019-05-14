@@ -51,6 +51,7 @@ class Manager():
                 best_info = '* Best *'
             info = 'Epoch {:2d} | training loss: {:.5f} | validation loss: {:.5f} {}'.format(epoch+1, train_loss, valid_loss, best_info)
             self.record(info)
+            self.plot()
 
     def get_valid_loss(self, data_valid):
         self.model.eval()
