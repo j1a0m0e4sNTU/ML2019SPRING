@@ -1,0 +1,30 @@
+Epoch  1 | training loss: 0.03183 | validation loss: 0.02071 * Best *
+Epoch  2 | training loss: 0.01956 | validation loss: 0.01684 * Best *
+Epoch  3 | training loss: 0.01675 | validation loss: 0.01445 * Best *
+Epoch  4 | training loss: 0.01499 | validation loss: 0.01322 * Best *
+Epoch  5 | training loss: 0.01386 | validation loss: 0.01229 * Best *
+Epoch  6 | training loss: 0.01291 | validation loss: 0.01178 * Best *
+Epoch  7 | training loss: 0.01227 | validation loss: 0.01100 * Best *
+Epoch  8 | training loss: 0.01172 | validation loss: 0.01075 * Best *
+Epoch  9 | training loss: 0.01126 | validation loss: 0.01024 * Best *
+Epoch 10 | training loss: 0.01087 | validation loss: 0.00993 * Best *
+Epoch 11 | training loss: 0.01050 | validation loss: 0.00960 * Best *
+Epoch 12 | training loss: 0.01023 | validation loss: 0.00934 * Best *
+Epoch 13 | training loss: 0.00997 | validation loss: 0.00924 * Best *
+Epoch 14 | training loss: 0.00975 | validation loss: 0.00929 
+Epoch 15 | training loss: 0.00947 | validation loss: 0.00877 * Best *
+Epoch 16 | training loss: 0.00928 | validation loss: 0.00852 * Best *
+Epoch 17 | training loss: 0.00910 | validation loss: 0.00827 * Best *
+Epoch 18 | training loss: 0.00893 | validation loss: 0.00849 
+Epoch 19 | training loss: 0.00881 | validation loss: 0.00849 
+Epoch 20 | training loss: 0.00868 | validation loss: 0.00808 * Best *
+Epoch 21 | training loss: 0.00857 | validation loss: 0.00785 * Best *
+Epoch 22 | training loss: 0.00841 | validation loss: 0.00785 * Best *
+Epoch 23 | training loss: 0.00831 | validation loss: 0.00752 * Best *
+Epoch 24 | training loss: 0.00821 | validation loss: 0.00732 * Best *
+Epoch 25 | training loss: 0.00811 | validation loss: 0.00755 
+Epoch 26 | training loss: 0.00801 | validation loss: 0.00761 
+Epoch 27 | training loss: 0.00796 | validation loss: 0.00733 
+Epoch 28 | training loss: 0.00786 | validation loss: 0.00712 * Best *
+Epoch 29 | training loss: 0.00780 | validation loss: 0.00705 * Best *
+Epoch 30 | training loss: 0.00769 | validation loss: 0.00708 
