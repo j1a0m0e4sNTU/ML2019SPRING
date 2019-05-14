@@ -68,6 +68,7 @@ def get_test_case(dir_path):
     test_case = np.zeros((len(test_case_csv), 2)).astype(np.int)
     test_case[:, 0] = test_case_csv['image1_name']
     test_case[:, 1] = test_case_csv['image2_name']
+    test_case -= 1
     return test_case
 
 def isCelebA():
