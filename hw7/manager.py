@@ -9,6 +9,7 @@ class Manager():
     def __init__(self, args):
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.id = args.id
+        self.dataset_path = args.dataset
         model = AutoEncoder(args.E, args.D)
         if args.load:
             model.load_state_dict(torch.load(args.load))
@@ -17,6 +18,7 @@ class Manager():
         self.metric = nn.MSELoss()
         self.epoch_num = args.epoch
         self.batch_size = args.bs
+        self.cluster_num = args.cluster_num
         self.save = args.save
         self.csv = args.csv
         self.record_file = None
@@ -92,12 +94,15 @@ class Manager():
             else:
                 vector_all = torch.cat([vector_all, vector], 0)
         
-        vector_all = vector_all[:1000] # for test
+        #vector_all = vector_all[:1000]  #for test
         vector_all = vector_all.numpy()
         print('shape:', vector_all.shape)
-        kmeans = KMeans(n_clusters= 2, random_state= 0).fit(vector_all)
-        print(kmeans.labels_[: 20])
-
+        kmeans = KMeans(n_clusters= self.cluster_num, random_state= 0).fit(vector_all)
+        cluster_ids = kmeans.labels_
+        celebA = isCelebA()
+        cluster_consider = cluster_ids[:len(celebA)]
+        cluster_celebA = cluster_consider[celebA == 1]
+        print('Cluster CelebA',cluster_celebA)
 
 def test():
     import numpy as np

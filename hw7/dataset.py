@@ -27,25 +27,9 @@ class Unlabeled(Dataset):
         elif mode == 'valid':
             image_name = image_name[cut_size:]
         self.image_name = image_name
-        test_case_csv = pd.read_csv(os.path.join(path, 'test_case.csv'))
-        test_case = np.zeros((len(test_case_csv), 2)).astype(np.int)
-        image1_name = [os.path.join(images_dir, '{:0>6d}.jpg'.format(index)) for index in test_case_csv['image1_name']]
-        image2_name = [os.path.join(images_dir, '{:0>6d}.jpg'.format(index)) for index in test_case_csv['image2_name']]
-        self.test_case = np.array([image1_name, image2_name])
 
     def __len__(self):
         return len(self.image_name)
-
-    def __getitem__(self, index):
-        image = Image.open(self.image_name[index])
-        image = self.toTensor(image)
-        return image
-
-    def get_test_case(self, index):
-        img1 = Image.open(self.test_case[0, index])
-        img2 = Image.open(self.test_case[1, index])
-        img1, img2 = self.toTensor(img1), self.toTensor(img2)
-        return img1, img2
 
 def get_test_image(path):
     images_dir = os.path.join(path, 'images')
@@ -73,7 +57,22 @@ def plot_images(images, name):
             
     plt.savefig(name)
     plt.close()
-            
+
+def get_test_case(dir_path):
+    test_case_csv = pd.read_csv(os.path.join(dir_path, 'test_case.csv'))
+    test_case = np.zeros((len(test_case_csv), 2)).astype(np.int)
+    test_case[:, 0] = test_case_csv['image1_name']
+    test_case[:, 1] = test_case_csv['image2_name']
+    return test_case
+
+def isCelebA():
+    is_face = np.array([0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 
+                        1, 1, 0, 1, 1, 1, 1, 0, 0, 1,
+                        1, 1, 0, 1, 0, 0, 1, 0, 1, 0,
+                        1, 0, 0, 0, 0, 0, 0, 0, 1, 1,
+                        0, 1, 0, 1, 0, 0, 1, 1, 0, 1]).astype(np.int)
+    return is_face
+
 def test_unlabeled():
     data = Unlabeled(unlabeled_dir_path)
     dataloader = DataLoader(data, batch_size=8)
@@ -90,10 +89,12 @@ def test():
 
 def test2():
     train_data = Unlabeled(unlabeled_dir_path, 'train')
-    img1, img2 = train_data.get_test_case(0)
-    print(img1)
-    print(img1.size())
+    print(train_data.image_name[:20])
+
+def test3():
+    test_case = get_test_case(unlabeled_dir_path)
+    print(test_case[:20])
 
 if __name__ == '__main__':
     #test_unlabeled()
-    test2()
+    test3()
