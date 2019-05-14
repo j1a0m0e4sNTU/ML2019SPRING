@@ -97,32 +97,36 @@ class Manager():
 
         # vector_all = self.get_vectors(data)
         vector_all = np.load('../../data_hw7/vectors.npy')
-        print(vector_all.shape)
-        # kmeans = KMeans(n_clusters= self.cluster_num, random_state= 0).fit(vector_all)
-        # cluster_ids = kmeans.labels_
-        # celebA = isCelebA()
-        # cluster_id_consider = cluster_ids[:len(celebA)]
+        kmeans = KMeans(n_clusters= self.cluster_num, random_state= 0).fit(vector_all)
+        cluster_ids = kmeans.labels_
+        celebA = isCelebA()
+        cluster_id_consider = cluster_ids[:len(celebA)]
+        # print(np.unique(cluster_id_consider))
+        # print(cluster_id_consider[celebA == 1])
         # cluster_celebA_ids = np.unique(cluster_id_consider[celebA == 1])
-
-        # test_case = get_test_case(self.dataset_path)
-        # count = test_case.shape[0]
-        # same_dataset = []
-        # for i in range(count):
-        #     cluster_id1 = cluster_ids[test_case[i, 0]]
-        #     cluster_id2 = cluster_ids[test_case[i, 1]]
-        #     if (cluster_id1 in cluster_celebA_ids) + (cluster_id2 in cluster_celebA_ids) == 1:
-        #         same_dataset.append(0)
-        #     else:
-        #         same_dataset.append(1)
-        #self.write_submission(same_dataset)
+        # print(cluster_celebA_ids)
+        cluster_celebA_ids = np.argmax(np.bincount(cluster_id_consider[celebA == 1]))
+        print(cluster_id_consider[celebA == 0])
+        print(cluster_id_consider[celebA == 1])
+        celebA_id = [0, 2]
+        test_case = get_test_case(self.dataset_path)
+        count = test_case.shape[0]
+        same_dataset = []
+        for i in range(count):
+            cluster_id1 = cluster_ids[test_case[i, 0]]
+            cluster_id2 = cluster_ids[test_case[i, 1]]
+            id1_celebA = (cluster_id1 in celebA_id)
+            id2_celebA = (cluster_id2 in celebA_id)
+            if (id1_celebA and  id2_celebA) or ((not id1_celebA) and (not id2_celebA)):
+                same_dataset.append(1)
+            else:
+                same_dataset.append(0)
+        self.write_submission(same_dataset)
 
     def test(self):
+        from sklearn.cluster import KMeans
         import numpy as np
-        vectors = np.load('../../vectors.npy')
-        vectors = torch.from_numpy(vectors)
-        vectors = vectors[-32:].to(self.device)
-        img = self.model.decode(vectors)
-        plot_images(img, 'check.jpg')
+        
         
 def test():
     import numpy as np
