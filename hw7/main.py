@@ -7,7 +7,7 @@ from model import AutoEncoder
 torch.manual_seed(1004)
 
 parser = argparse.ArgumentParser()
-parser.add_argument('mode', choices=['train', 'predict', 'cluster', 'test'])
+parser.add_argument('mode', choices=['train', 'cluster', 'test'])
 parser.add_argument('-id', help= 'Experiment ID')
 parser.add_argument('-E', help= 'Encoder symbol', default= 'base')
 parser.add_argument('-D', help= 'Decoder symbol', default= 'base')
@@ -34,9 +34,6 @@ if __name__ == '__main__':
         print('====== Clustering =======')
         data_all = DataLoader(Unlabeled(args.dataset, 'all'), batch_size= args.bs, shuffle= False)
         manager.cluster(data_all)
-
-    elif args.mode == 'predict':
-        pass
     
     elif args.mode == 'test':
         manager.plot()

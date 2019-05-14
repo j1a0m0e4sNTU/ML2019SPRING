@@ -65,9 +65,6 @@ class Manager():
             valid_loss += loss.item()
         return valid_loss / (i+1)
 
-    def predict(self):
-        pass
-
     def write_submission(self, predictions):
         file = open(self.csv, 'w')
         file.write('id,label\n')
@@ -94,16 +91,24 @@ class Manager():
             else:
                 vector_all = torch.cat([vector_all, vector], 0)
         
-        #vector_all = vector_all[:1000]  #for test
         vector_all = vector_all.numpy()
-        np.save('cluster.npy', vector_all)
-        print('shape:', vector_all.shape)
         kmeans = KMeans(n_clusters= self.cluster_num, random_state= 0).fit(vector_all)
         cluster_ids = kmeans.labels_
         celebA = isCelebA()
-        cluster_consider = cluster_ids[:len(celebA)]
-        cluster_celebA = cluster_consider[celebA == 1]
-        print('Cluster CelebA',cluster_celebA)
+        cluster_id_consider = cluster_ids[:len(celebA)]
+        cluster_celebA_ids = np.unique(cluster_id_consider[celebA == 1])
+
+        test_case = get_test_case(self.dataset_path)
+        count = test_case.shape[0]
+        same_dataset = []
+        for i in range(count):
+            cluster_id1 = cluster_ids[test_case[i, 0]]
+            cluster_id2 = cluster_ids[test_case[i, 1]]
+            if (cluster_id1 in cluster_celebA_ids) + (cluster_id2 in cluster_celebA_ids) == 1:
+                same_dataset.append(0)
+            else:
+                same_dataset.append(1)
+        self.write_submission(same_dataset)
 
 def test():
     import numpy as np
