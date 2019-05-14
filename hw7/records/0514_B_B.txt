@@ -1,0 +1,30 @@
+Epoch  1 | training loss: 0.03743 | validation loss: 0.02651 * Best *
+Epoch  2 | training loss: 0.02477 | validation loss: 0.02186 * Best *
+Epoch  3 | training loss: 0.02167 | validation loss: 0.01988 * Best *
+Epoch  4 | training loss: 0.01964 | validation loss: 0.01796 * Best *
+Epoch  5 | training loss: 0.01809 | validation loss: 0.01673 * Best *
+Epoch  6 | training loss: 0.01683 | validation loss: 0.01548 * Best *
+Epoch  7 | training loss: 0.01581 | validation loss: 0.01457 * Best *
+Epoch  8 | training loss: 0.01510 | validation loss: 0.01391 * Best *
+Epoch  9 | training loss: 0.01440 | validation loss: 0.01362 * Best *
+Epoch 10 | training loss: 0.01389 | validation loss: 0.01296 * Best *
+Epoch 11 | training loss: 0.01343 | validation loss: 0.01228 * Best *
+Epoch 12 | training loss: 0.01301 | validation loss: 0.01219 * Best *
+Epoch 13 | training loss: 0.01268 | validation loss: 0.01166 * Best *
+Epoch 14 | training loss: 0.01241 | validation loss: 0.01153 * Best *
+Epoch 15 | training loss: 0.01213 | validation loss: 0.01120 * Best *
+Epoch 16 | training loss: 0.01194 | validation loss: 0.01118 * Best *
+Epoch 17 | training loss: 0.01177 | validation loss: 0.01068 * Best *
+Epoch 18 | training loss: 0.01163 | validation loss: 0.01138 
+Epoch 19 | training loss: 0.01142 | validation loss: 0.01055 * Best *
+Epoch 20 | training loss: 0.01134 | validation loss: 0.01036 * Best *
+Epoch 21 | training loss: 0.01115 | validation loss: 0.01033 * Best *
+Epoch 22 | training loss: 0.01102 | validation loss: 0.01005 * Best *
+Epoch 23 | training loss: 0.01093 | validation loss: 0.00994 * Best *
+Epoch 24 | training loss: 0.01079 | validation loss: 0.00997 
+Epoch 25 | training loss: 0.01070 | validation loss: 0.01001 
+Epoch 26 | training loss: 0.01061 | validation loss: 0.00992 * Best *
+Epoch 27 | training loss: 0.01058 | validation loss: 0.00977 * Best *
+Epoch 28 | training loss: 0.01050 | validation loss: 0.00964 * Best *
+Epoch 29 | training loss: 0.01046 | validation loss: 0.00951 * Best *
+Epoch 30 | training loss: 0.01038 | validation loss: 0.00997 
