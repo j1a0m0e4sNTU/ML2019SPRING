@@ -95,8 +95,9 @@ class Manager():
         from sklearn.cluster import KMeans
         import numpy as np
 
-        # vector_all = self.get_vectors(data)
-        vector_all = np.load('../../data_hw7/vectors.npy')
+        vector_all = self.get_vectors(data)
+        np.save('../../vector_all_2.npy', vector_all)
+        # vector_all = np.load('../../data_hw7/vectors.npy')
         kmeans = KMeans(n_clusters= self.cluster_num, random_state= 0).fit(vector_all)
         cluster_ids = kmeans.labels_
         celebA = isCelebA()
