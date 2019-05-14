@@ -22,7 +22,7 @@ args = parser.parse_args()
 
 if __name__ == '__main__':
     manager = Manager(args)
-    
+
     if args.mode == 'train':
         print('======= Training ========')
         data_train = DataLoader(Unlabeled(args.dataset, 'train'), batch_size= args.bs, shuffle= True)
@@ -30,6 +30,7 @@ if __name__ == '__main__':
         manager.train(data_train, data_valid)    
 
     elif args.mode == 'cluster':
+        print('====== Clustering =======')
         data_all = DataLoader(Unlabeled(args.dataset, 'all'), batch_size= args.bs, shuffle= False)
         manager.cluster(data_all)
 
