@@ -6,4 +6,6 @@
 # python3 main.py cluster -E D -D D -load ../../weights/0514_D_D.pkl -csv test.csv
 # python3 main.py cluster -cluster_num 4 -csv test4.csv
 # python3 main.py train -id simple_all -save ../../weights/simple_all.pkl
-python3 main.py cluster -load ../../weights/simple_all.pkl 
+# python3 main.py cluster -load ../../weights/simple_all.pkl 
+python3 main.py train -E D -D D -id DD_all -save ../../weights/DD_all.pkl
+python3 main.py cluster -E D -D D -load ../../weights/DD_all.pkl 

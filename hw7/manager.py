@@ -96,8 +96,8 @@ class Manager():
         import numpy as np
 
         vector_all = self.get_vectors(data)
-        np.save('../../simple_all.npy', vector_all)
-        # vector_all = np.load('../../data_hw7/vector_all_2.npy')
+        np.save('../../DD_all.npy', vector_all)
+        # vector_all = np.load('../../data_hw7/simple_all.npy')
         # kmeans = KMeans(n_clusters= self.cluster_num, random_state= 0).fit(vector_all)
         # cluster_ids = kmeans.labels_
         # celebA = isCelebA()
@@ -106,7 +106,7 @@ class Manager():
         # cluster_celebA_ids = np.argmax(np.bincount(cluster_id_consider[celebA == 1]))
         # print(np.bincount(cluster_id_consider[celebA == 0]))
         # print(np.bincount(cluster_id_consider[celebA == 1]))
-        # celebA_id = [0, 2, 3, 6]
+        # celebA_id = [0, 2]
         # test_case = get_test_case(self.dataset_path)
         # count = test_case.shape[0]
         # same_dataset = []
