@@ -22,7 +22,7 @@ def eigen(vectors):
     return eigen_values, eigen_vectors
     
 def show_image(vector):
-    image = vector.reshape((600, 600, 3))
+    image = vector.reshape((600, 600, 3)).copy()
     image -= np.min(image)
     image /= np.max(image)
     image = (image * 255).astype(np.uint8)
@@ -37,11 +37,23 @@ def main():
         vectors[:, i] -= mean[i] 
     eigen_values, eigen_vectors = eigen(vectors)
 
-    for i in range(10, 15):
-        print('Eigen Value: {}'.format(eigen_values[i]))
-        eig_v = eigen_vectors[:, i]
+    param = []
+    faces  = []
+    target = vectors[400]
+    for i in range(20):
+        eig_v = eigen_vectors[:, i].copy()
         eig_face = (vectors.T) @ eig_v 
-        show_image(eig_face)
+        eig_face /= np.sqrt(np.sum(eig_face @ eig_face))
+        param.append(target @ eig_face)
+        faces.append(eig_face)
+    
+    show_image(mean + target)
+    show_image(mean)
+  
+    recons = mean
+    for i in range(len(param)):
+        recons += param[i] * faces[i]
+    show_image(recons)
     
 def test():
     images = get_images()
