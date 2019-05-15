@@ -3,4 +3,7 @@
 # python3 main.py train -E B -D B -id 0514_B_B -save ../../weights/0514_B_B.pkl
 # python3 main.py train -E C -D C -id 0514_C_C -save ../../weights/0514_C_C.pkl
 # python3 main.py train -E D -D D -id 0514_D_D -save ../../weights/0514_D_D.pkl
-python3 main.py cluster -E D -D D -load ../../weights/0514_D_D.pkl -csv test.csv
+# python3 main.py cluster -E D -D D -load ../../weights/0514_D_D.pkl -csv test.csv
+# python3 main.py cluster -cluster_num 4 -csv test4.csv
+python3 main.py train -id simple_all -save ../../weights/simple_all.pkl
+python3 main.py cluster -load ../../weights/ismple_all.pkl 

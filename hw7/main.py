@@ -26,7 +26,7 @@ if __name__ == '__main__':
 
     if args.mode == 'train':
         print('======= Training ========')
-        data_train = DataLoader(Unlabeled(args.dataset, 'train'), batch_size= args.bs, shuffle= True)
+        data_train = DataLoader(Unlabeled(args.dataset, 'all'), batch_size= args.bs, shuffle= True)
         data_valid = DataLoader(Unlabeled(args.dataset, 'valid'), batch_size= args.bs, shuffle= False)
         manager.train(data_train, data_valid)    
 
