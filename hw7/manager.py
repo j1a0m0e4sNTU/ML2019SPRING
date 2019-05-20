@@ -4,6 +4,7 @@ import torch.nn as nn
 import torch.optim as optim
 from model import AutoEncoder
 from dataset import *
+from pca import *
 
 class Manager():
     def __init__(self, args):
@@ -93,33 +94,38 @@ class Manager():
 
     def cluster(self, data):
         from sklearn.cluster import KMeans
+        from sklearn.decomposition import PCA
         import numpy as np
 
-        vector_all = self.get_vectors(data)
-        np.save('../../DD_all.npy', vector_all)
-        # vector_all = np.load('../../data_hw7/simple_all.npy')
-        # kmeans = KMeans(n_clusters= self.cluster_num, random_state= 0).fit(vector_all)
-        # cluster_ids = kmeans.labels_
-        # celebA = isCelebA()
-        # cluster_id_consider = cluster_ids[:len(celebA)]
+        # vector_all = self.get_vectors(data)
+        # np.save('../../DD_all.npy', vector_all)
+        vector_all = np.load('../../data_hw7/simple_all.npy')
+        pca = PCA(n_components= 128, whiten= True)
+        vector_all = pca.fit_transform(vector_all)
+        print('Shape: ', vector_all.shape)
         
-        # cluster_celebA_ids = np.argmax(np.bincount(cluster_id_consider[celebA == 1]))
-        # print(np.bincount(cluster_id_consider[celebA == 0]))
-        # print(np.bincount(cluster_id_consider[celebA == 1]))
-        # celebA_id = [0, 2]
-        # test_case = get_test_case(self.dataset_path)
-        # count = test_case.shape[0]
-        # same_dataset = []
-        # for i in range(count):
-        #     cluster_id1 = cluster_ids[test_case[i, 0]]
-        #     cluster_id2 = cluster_ids[test_case[i, 1]]
-        #     id1_celebA = (cluster_id1 in celebA_id)
-        #     id2_celebA = (cluster_id2 in celebA_id)
-        #     if (id1_celebA and  id2_celebA) or ((not id1_celebA) and (not id2_celebA)):
-        #         same_dataset.append(1)
-        #     else:
-        #         same_dataset.append(0)
-        # self.write_submission(same_dataset)
+        clusterer = KMeans(n_clusters= self.cluster_num, random_state= 0).fit(vector_all)
+        
+        cluster_ids = clusterer.labels_
+        celebA = isCelebA()
+        cluster_id_consider = cluster_ids[:len(celebA)]
+        
+        print(np.bincount(cluster_id_consider[celebA == 0]))
+        print(np.bincount(cluster_id_consider[celebA == 1]))
+        celebA_id = [0]
+        test_case = get_test_case(self.dataset_path)
+        count = test_case.shape[0]
+        same_dataset = []
+        for i in range(count):
+            cluster_id1 = cluster_ids[test_case[i, 0]]
+            cluster_id2 = cluster_ids[test_case[i, 1]]
+            id1_celebA = (cluster_id1 in celebA_id)
+            id2_celebA = (cluster_id2 in celebA_id)
+            if (id1_celebA and  id2_celebA) or ((not id1_celebA) and (not id2_celebA)):
+                same_dataset.append(1)
+            else:
+                same_dataset.append(0)
+        self.write_submission(same_dataset)
 
     def test(self):
         from sklearn.cluster import KMeans
