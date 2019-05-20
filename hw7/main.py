@@ -37,4 +37,5 @@ if __name__ == '__main__':
     
     elif args.mode == 'test':
         print('======= Test ========')
-        manager.test()
+        data_all = DataLoader(Unlabeled(args.dataset, 'all'), batch_size= args.bs, shuffle= False)
+        manager.test(data_all)

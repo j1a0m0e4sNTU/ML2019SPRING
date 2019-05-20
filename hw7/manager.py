@@ -127,9 +127,9 @@ class Manager():
                 same_dataset.append(0)
         self.write_submission(same_dataset)
 
-    def test(self):
-        from sklearn.cluster import KMeans
-        import numpy as np
+    def test(self, data_all):
+        vectors = self.get_vectors(data_all)
+        np.save('../../AA.npy', vectors)
         
         
 def test():
