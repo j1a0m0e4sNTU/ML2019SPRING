@@ -85,6 +85,18 @@ def reconstruct_faces():
         reconstruct = reconstruct_face(target_face, mean, eigenfaces)
         io.imsave('images/{}_reconstruct.png'.format(i+1), reconstruct)
 
+def test():
+    images = get_images()
+    vectors = images.reshape((images.shape[0], -1))# (415, 1080000)
+    mean = np.mean(vectors, 0)
+    for i in range(len(mean)):
+        vectors[:, i] -= mean[i] 
+    eigen_values, eigen_vectors = eigen(vectors)
+    print(eigen_values[:10])
+    eigen_values = np.sqrt(np.abs(eigen_values))
+    eigen_values /= np.sum(eigen_values)
+    print(eigen_values[: 5])
+
 def main():
     images = get_images()
     vectors = images.reshape((images.shape[0], -1))# (415, 1080000)
@@ -105,4 +117,5 @@ def main():
     io.imsave(args.output, recons_img)
     
 if __name__ == '__main__':
-    main()
+    # main()
+    test()
