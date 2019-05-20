@@ -15,7 +15,6 @@ test_case_path = '../../data_hw7/test_case.csv'
 class Unlabeled(Dataset):
     def __init__(self, images_dir, mode= 'train'):
         super().__init__()
-        self.path = path
         self.toTensor = transforms.ToTensor()
         image_name = [os.path.join(images_dir, name) for name in os.listdir(images_dir)]
         image_name.sort()

@@ -101,7 +101,7 @@ class Manager():
         # vector_all = np.load('../../data_hw7/simple_all.npy')
         pca = PCA(n_components= 128, whiten= True, random_state= 1)
         vector_all = pca.fit_transform(vector_all)
-        print('Shape: ', vector_all.shape)
+        # print('Shape: ', vector_all.shape)
         
         clusterer = KMeans(n_clusters= self.cluster_num, random_state= 0).fit(vector_all)
         
@@ -109,8 +109,8 @@ class Manager():
         celebA = isCelebA()
         cluster_id_consider = cluster_ids[:len(celebA)]
         
-        print(np.bincount(cluster_id_consider[celebA == 0]))
-        print(np.bincount(cluster_id_consider[celebA == 1]))
+        # print(np.bincount(cluster_id_consider[celebA == 0]))
+        # print(np.bincount(cluster_id_consider[celebA == 1]))
         celebA_id = [1]
         test_case = get_test_case(self.testcase)
         count = test_case.shape[0]
