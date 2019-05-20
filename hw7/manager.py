@@ -97,10 +97,9 @@ class Manager():
         from sklearn.decomposition import PCA
         import numpy as np
 
-        # vector_all = self.get_vectors(data)
-        # np.save('../../DD_all.npy', vector_all)
-        vector_all = np.load('../../data_hw7/simple_all.npy')
-        pca = PCA(n_components= 128, whiten= True)
+        vector_all = self.get_vectors(data)
+        # vector_all = np.load('../../data_hw7/simple_all.npy')
+        pca = PCA(n_components= 128, whiten= True, random_state= 1)
         vector_all = pca.fit_transform(vector_all)
         print('Shape: ', vector_all.shape)
         
@@ -112,7 +111,7 @@ class Manager():
         
         print(np.bincount(cluster_id_consider[celebA == 0]))
         print(np.bincount(cluster_id_consider[celebA == 1]))
-        celebA_id = [0]
+        celebA_id = [1]
         test_case = get_test_case(self.dataset_path)
         count = test_case.shape[0]
         same_dataset = []
@@ -139,7 +138,6 @@ def test():
     model = TSNE(n_components= 2)
     x_embedded = model.fit_transform(x)
     print(x_embedded)
-     
-
+    
 if __name__ == '__main__':
     test()

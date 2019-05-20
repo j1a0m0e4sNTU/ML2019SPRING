@@ -9,4 +9,5 @@
 # python3 main.py cluster -load ../../weights/simple_all.pkl 
 # python3 main.py train -E D -D D -id DD_all -save ../../weights/DD_all.pkl
 # python3 main.py cluster -E D -D D -load ../../weights/DD_all.pkl 
-python3 main.py test -E A -D A -load ../../weights/0514_A_A.pkl
+# python3 main.py test -E A -D A -load ../../weights/0514_A_A.pkl
+python3 main.py cluster -load ../../weights/simple_all.pkl -csv check.csv
