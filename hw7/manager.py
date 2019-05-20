@@ -20,6 +20,7 @@ class Manager():
         self.batch_size = args.bs
         self.cluster_num = args.cluster_num
         self.save = args.save
+        self.testcase = args.testcase
         self.csv = args.csv
         self.record_file = None
         self.best = {'epoch':0, 'loss': 999}
@@ -111,7 +112,7 @@ class Manager():
         print(np.bincount(cluster_id_consider[celebA == 0]))
         print(np.bincount(cluster_id_consider[celebA == 1]))
         celebA_id = [1]
-        test_case = get_test_case(self.dataset_path)
+        test_case = get_test_case(self.testcase)
         count = test_case.shape[0]
         same_dataset = []
         for i in range(count):

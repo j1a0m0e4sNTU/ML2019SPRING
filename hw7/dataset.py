@@ -13,12 +13,11 @@ unlabeled_dir_path = '../../data_hw7'
 test_case_path = '../../data_hw7/test_case.csv'
 
 class Unlabeled(Dataset):
-    def __init__(self, path, mode= 'train'):
+    def __init__(self, images_dir, mode= 'train'):
         super().__init__()
         self.path = path
         self.toTensor = transforms.ToTensor()
         self.test_case = pd.read_csv(os.path.join(path, 'test_case.csv'))
-        images_dir = os.path.join(path, 'images')
         image_name = [os.path.join(images_dir, name) for name in os.listdir(images_dir)]
         image_name.sort()
         cut_size = int(len(image_name) * 0.8)
@@ -63,8 +62,8 @@ def plot_images(images, name):
     plt.savefig(name)
     plt.close()
 
-def get_test_case(dir_path):
-    test_case_csv = pd.read_csv(os.path.join(dir_path, 'test_case.csv'))
+def get_test_case(path):
+    test_case_csv = pd.read_csv(path)
     test_case = np.zeros((len(test_case_csv), 2)).astype(np.int)
     test_case[:, 0] = test_case_csv['image1_name']
     test_case[:, 1] = test_case_csv['image2_name']
