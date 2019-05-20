@@ -92,7 +92,7 @@ def test():
     for i in range(len(mean)):
         vectors[:, i] -= mean[i] 
     eigen_values, eigen_vectors = eigen(vectors)
-    print(eigen_values[:10])
+    print(eigen_values[-5:])
     eigen_values = np.sqrt(np.abs(eigen_values))
     eigen_values /= np.sum(eigen_values)
     print(eigen_values[: 5])
@@ -117,5 +117,4 @@ def main():
     io.imsave(args.output, recons_img)
     
 if __name__ == '__main__':
-    # main()
-    test()
+    main()
