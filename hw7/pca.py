@@ -46,7 +46,19 @@ def plot_eigenfaces():
         image = vector2image(eig_face)
         io.imsave('images/eigen_{}.png'.format(i+1), image)
 
-def reconstruct():
+def reconstruct_face(face, meanface, eigenfaces):
+    #　eigenfaces are normalized
+    weights= []
+    for eigenface in eigenfaces:
+        weights.append(eigenface @ face)
+    
+    recons = meanface
+    for i in range(len(eigenfaces)):
+        recons += weights[i] * eigenfaces[i]
+    image = vector2image(recons)
+    return image   
+
+def reconstruct_faces():
     images = get_images()
     vectors = images.reshape((images.shape[0], -1))# (415, 1080000)
     mean = np.mean(vectors, 0)
@@ -54,27 +66,24 @@ def reconstruct():
         vectors[:, i] -= mean[i] 
     eigen_values, eigen_vectors = eigen(vectors)
 
-    param = []
-    faces  = []
-    target = vectors[400]
-    for i in range(20):
+    eigenfaces  = []
+    for i in range(5):
         eig_v = eigen_vectors[:, i].copy()
         eig_face = (vectors.T) @ eig_v 
-        eig_face /= np.sqrt(np.sum(eig_face @ eig_face))
-        param.append(target @ eig_face)
-        faces.append(eig_face)
+        eig_face /= np.sqrt(np.sum(eig_face ** 2))
+        eigenfaces.append(eig_face)
     
-    show_image(mean + target)
-    show_image(mean)
-  
-    recons = mean
-    for i in range(len(param)):
-        recons += param[i] * faces[i]
-    show_image(recons)
-    
+    targets = [0, 119, 200, 300, 400]
+    for i, target_id in enumerate(targets):
+        target_face = vectors[target_id]
+        io.imsave('images/{}_original.png'.format(i+1), vector2image(mean + target_face))
+        reconstruct = reconstruct_face(target_face, mean, eigenfaces)
+        io.imsave('images/{}_reconstruct.png'.format(i+1), reconstruct)
+
+
 def test():
     images = get_images()
     
     
 if __name__ == '__main__':
-    plot_eigenfaces()
+    reconstruct_faces()
