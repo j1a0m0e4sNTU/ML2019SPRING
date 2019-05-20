@@ -17,7 +17,6 @@ class Unlabeled(Dataset):
         super().__init__()
         self.path = path
         self.toTensor = transforms.ToTensor()
-        self.test_case = pd.read_csv(os.path.join(path, 'test_case.csv'))
         image_name = [os.path.join(images_dir, name) for name in os.listdir(images_dir)]
         image_name.sort()
         cut_size = int(len(image_name) * 0.8)
@@ -35,8 +34,7 @@ class Unlabeled(Dataset):
         image = self.toTensor(image)
         return image
 
-def get_test_image(path):
-    images_dir = os.path.join(path, 'images')
+def get_test_image(images_dir):
     image_name = [os.path.join(images_dir, name) for name in os.listdir(images_dir)]
     image_name.sort()
     image_name = image_name[-32:]
