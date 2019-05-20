@@ -1,0 +1,1 @@
+python3 pca.py -dataset $1 -origin $2 -output $3 

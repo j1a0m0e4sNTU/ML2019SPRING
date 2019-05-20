@@ -3,7 +3,12 @@ import argparse
 import numpy as np
 from skimage import io
 
-dataset_path = '../../data_pca'
+parser = argparse.ArgumentParser()
+parser.add_argument('-dataset', default= '../../data_pca')
+parser.add_argument('-original', default= None)
+parser.add_argument('-output', default= None)
+args = parser.parse_args() 
+dataset_path = args.dataset
 
 def get_images():
     image_name = [os.path.join(dataset_path, name) for name in os.listdir(dataset_path)]
@@ -80,10 +85,24 @@ def reconstruct_faces():
         reconstruct = reconstruct_face(target_face, mean, eigenfaces)
         io.imsave('images/{}_reconstruct.png'.format(i+1), reconstruct)
 
-
-def test():
+def main():
     images = get_images()
-    
+    vectors = images.reshape((images.shape[0], -1))# (415, 1080000)
+    mean = np.mean(vectors, 0)
+    for i in range(len(mean)):
+        vectors[:, i] -= mean[i] 
+    eigen_values, eigen_vectors = eigen(vectors)
+
+    eigenfaces  = []
+    for i in range(5):
+        eig_v = eigen_vectors[:, i].copy()
+        eig_face = (vectors.T) @ eig_v 
+        eig_face /= np.sqrt(np.sum(eig_face ** 2))
+        eigenfaces.append(eig_face)
+
+    origin_img = np.array(io.imread(args.original)).reshape((-1))
+    recons_img = reconstruct_face(origin_img - mean, mean, eigenfaces)
+    io.imsave(args.output, recons_img)
     
 if __name__ == '__main__':
-    reconstruct_faces()
+    main()
