@@ -17,16 +17,36 @@ def eigen(vectors):
     conv_matrix = (vectors) @ vectors.T
     eigen_values, eigen_vectors = np.linalg.eig(conv_matrix)
     return eigen_values, eigen_vectors
-    
-def show_image(vector):
+
+def vector2image(vector):
     image = vector.reshape((600, 600, 3)).copy()
     image -= np.min(image)
     image /= np.max(image)
     image = (image * 255).astype(np.uint8)
+    return image
+
+def show_image(vector):
+    image = vector2image(vector)
     io.imshow(image)
     io.show()
 
-def main():
+def plot_eigenfaces():
+    images = get_images()
+    vectors = images.reshape((images.shape[0], -1))# (415, 1080000)
+    mean = np.mean(vectors, 0)
+    mean_face = vector2image(mean)
+    io.imsave('images/mean.png', mean_face)
+    for i in range(len(mean)):
+        vectors[:, i] -= mean[i] 
+    eigen_values, eigen_vectors = eigen(vectors)
+    
+    for i in range(10):
+        eig_vector = eigen_vectors[:, i]
+        eig_face = (vectors.T) @ eig_vector 
+        image = vector2image(eig_face)
+        io.imsave('images/eigen_{}.png'.format(i+1), image)
+
+def reconstruct():
     images = get_images()
     vectors = images.reshape((images.shape[0], -1))# (415, 1080000)
     mean = np.mean(vectors, 0)
@@ -57,4 +77,4 @@ def test():
     
     
 if __name__ == '__main__':
-    main()
+    plot_eigenfaces()

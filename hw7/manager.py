@@ -4,7 +4,6 @@ import torch.nn as nn
 import torch.optim as optim
 from model import AutoEncoder
 from dataset import *
-from pca import *
 
 class Manager():
     def __init__(self, args):
