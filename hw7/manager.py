@@ -127,11 +127,42 @@ class Manager():
         self.write_submission(same_dataset)
 
     def test(self, data):
+        from sklearn.cluster import KMeans
+        from sklearn.decomposition import PCA
         import numpy as np
-        vectors = self.get_vectors(data)
-        np.save('../../data_hw7/vector_vis.npy')
-        
-        
+        from matplotlib import pyplot as plt
+
+        vector_origin = np.load('../../data_hw7/simple_all.npy')
+        vector_test = np.load('../../data_hw7/vector_vis.npy')
+        vector_all = np.vstack([vector_origin, vector_test])
+        pca = PCA(n_components= 128, whiten= True, random_state= 1)
+        vector_all = pca.fit_transform(vector_all)
+
+        clusterer = KMeans(n_clusters= 2, random_state= 0).fit(vector_all)
+        cluster_ids = clusterer.labels_
+
+        # celebA = isCelebA()
+        # cluster_id_consider = cluster_ids[:len(celebA)]
+        # print(np.bincount(cluster_id_consider[celebA == 0]))
+        # print(np.bincount(cluster_id_consider[celebA == 1]))
+        celebA_id = 1
+        vector_test = vector_test[-5000:]
+        label_test  = cluster_ids[-5000:]
+        pca = PCA(n_components= 2, whiten= False, random_state= 1)
+        vector_test = pca.fit_transform(vector_test)
+
+        plt.title('Prediction')
+        plt.scatter(vector_test[label_test != celebA_id][:,0], vector_test[label_test != celebA_id][:, 1], c= 'r')
+        plt.scatter(vector_test[label_test == celebA_id][:,0], vector_test[label_test == celebA_id][:, 1], c= 'b')
+        plt.savefig('images/visualization_pred.png')
+        plt.close()
+
+        plt.title('Ground Truth')
+        plt.scatter(vector_test[2500:][:,0], vector_test[2500:][:, 1], c= 'r')
+        plt.scatter(vector_test[:2500][:,0], vector_test[:2500][:, 1], c= 'b')
+        plt.savefig('images/visualization_gt.png')
+        plt.close()
+
 def test():
     import numpy as np
     from sklearn.manifold import TSNE
