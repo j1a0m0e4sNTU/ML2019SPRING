@@ -38,5 +38,5 @@ if __name__ == '__main__':
     
     elif args.mode == 'test':
         print('======= Test ========')
-        data_all = DataLoader(Unlabeled(args.dataset, 'all'), batch_size= args.bs, shuffle= False)
+        data_all = DataLoader(Visualization('../../data_hw7/visualization.npy'), batch_size= args.bs, shuffle= False)
         manager.test(data_all)

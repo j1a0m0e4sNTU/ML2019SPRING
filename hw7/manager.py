@@ -126,9 +126,10 @@ class Manager():
                 same_dataset.append(0)
         self.write_submission(same_dataset)
 
-    def test(self, data_all):
-        vectors = self.get_vectors(data_all)
-        np.save('../../AA.npy', vectors)
+    def test(self, data):
+        import numpy as np
+        vectors = self.get_vectors(data)
+        np.save('../../data_hw7/vector_vis.npy')
         
         
 def test():

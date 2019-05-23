@@ -33,6 +33,20 @@ class Unlabeled(Dataset):
         image = self.toTensor(image)
         return image
 
+class Visualization(Dataset):
+    def __init__(self, path):
+        super().__init__()
+        self.images_all = np.load(path)
+        self.toTensor = transforms.ToTensor()
+
+    def __len__(self):
+        return self.images_all.shape[0]
+
+    def __getitem__(self, index):
+        image = self.images_all[index]
+        image = self.toTensor(image)
+        return image
+
 def get_test_image(images_dir):
     image_name = [os.path.join(images_dir, name) for name in os.listdir(images_dir)]
     image_name.sort()
@@ -99,8 +113,8 @@ def test2():
     print(train_data.image_name[:20])
 
 def test3():
-    test_case = get_test_case(unlabeled_dir_path)
-    print(test_case[:20])
+    dataset = Visualization('../../data_hw7/visualization.npy')
+    print(dataset[0].size())
 
 if __name__ == '__main__':
     #test_unlabeled()
