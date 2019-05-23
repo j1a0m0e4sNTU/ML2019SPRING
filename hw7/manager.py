@@ -128,6 +128,7 @@ class Manager():
 
     def test(self, data):
         from sklearn.cluster import KMeans
+        from sklearn.manifold import TSNE
         from sklearn.decomposition import PCA
         import numpy as np
         from matplotlib import pyplot as plt
@@ -148,8 +149,9 @@ class Manager():
         celebA_id = 1
         vector_test = vector_test[-5000:]
         label_test  = cluster_ids[-5000:]
-        pca = PCA(n_components= 2, whiten= False, random_state= 1)
-        vector_test = pca.fit_transform(vector_test)
+        #cluster = PCA(n_components= 2, whiten= True, random_state= 1)
+        cluster = TSNE(n_components= 2)
+        vector_test = cluster.fit_transform(vector_test)
 
         plt.title('Prediction')
         plt.scatter(vector_test[label_test != celebA_id][:,0], vector_test[label_test != celebA_id][:, 1], c= 'r')
