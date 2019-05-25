@@ -104,8 +104,10 @@ def test2():
     dataset_path = '../../DehazeDataset'
     dataset = DehazeTest(dataset_path)
     for i in range(len(dataset)):
+        if i == 2:
+            break
         img = dataset[i]
-        print(img.size())
+        print(img.max())
 
 if __name__ == '__main__':
     test2()
