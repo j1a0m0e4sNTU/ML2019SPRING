@@ -50,7 +50,7 @@ class Manager():
                 batch_num = i + 1
                 train_loss, train_psnr, train_ssim = train_loss/batch_num, train_psnr/batch_num, train_ssim/batch_num
                 valid_loss, valid_psnr, valid_ssim = self.validate(valid_data)
-                info = 'Epoch {} | train loss: {} train PSNR: {} train SSIM: {} | valid loss: {} valid PSNR: {} valid SSIM: {}'.format(
+                info = 'Epoch {} | train loss: {:.5f} train PSNR: {:.5f} train SSIM: {:.5f} | valid loss: {:.5f} valid PSNR: {:.5f} valid SSIM: {:.5f}'.format(
                     epoch + 1, train_loss, train_psnr, train_ssim, valid_loss, valid_psnr, valid_ssim
                 )
                 self.record_info(info)
