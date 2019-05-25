@@ -21,7 +21,7 @@ class Manager():
         if args.record:
             self.record_file = open(args.record, 'w')
             self.record_file.write(args.info + '\n')
-            self.record_file.write(' =======================')
+            self.record_file.write(' =======================\n')
 
     def record_info(self, info):
         self.record_file.write(info + '\n')

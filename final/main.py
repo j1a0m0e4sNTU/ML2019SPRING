@@ -5,15 +5,16 @@ import torch
 from torch.utils.data import DataLoader
 from dataset import *
 from manager import Manager
-from basic import Basic
+from basic import Basic, Unet
 
-model = Basic()
+model = Unet()
 
 parser = argparse.ArgumentParser()
 parser.add_argument('mode', help= 'Task: train/predict', choices=['train', 'predict'])
 parser.add_argument('-dataset', help= 'Path to dataset', default= '../../DehazeDataset')
 parser.add_argument('-bs', help= 'batch size', type= int, default= 8)
 parser.add_argument('-lr', help= 'learnig rate', type= float, default= 1e-4)
+parser.add_argument('-resize', help= 'Image shape when training', type= int, default= 512)
 parser.add_argument('-epoch', help= 'Epoch number', type= int, default= 10000)
 parser.add_argument('-check', help= 'Epoch interval for checking performance', type= int, default= 50)
 parser.add_argument('-save', help= 'Path to save model')
@@ -27,8 +28,8 @@ def main():
     if args.mode == 'train':
         print('Training ...')
     
-        train_set = DehazeTrain(args.dataset, 'train', 'all', resize= (512, 512))
-        valid_set = DehazeTrain(args.dataset, 'valid', 'all', resize= (512, 512))
+        train_set = DehazeTrain(args.dataset, 'train', 'all', resize= args.resize)
+        valid_set = DehazeTrain(args.dataset, 'valid', 'all', resize= args.resize)
         train_data = DataLoader(dataset= train_set, batch_size= args.bs, shuffle= True)
         valid_data = DataLoader(dataset= valid_set, batch_size= args.bs)
 

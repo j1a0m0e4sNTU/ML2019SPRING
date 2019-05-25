@@ -6,7 +6,7 @@ from torch.utils.data import Dataset, DataLoader
 import torchvision.transforms as transforms
 
 class DehazeTrain(Dataset):
-    def __init__(self, path, mode= 'train', scene= 'indoor', resize= (512, 512)):
+    def __init__(self, path, mode= 'train', scene= 'indoor', resize= 512):
         super().__init__()
         gt_dir   = os.path.join(path, 'Training_GT')
         hazy_dir = os.path.join(path, 'Training_Hazy')
@@ -57,11 +57,10 @@ class DehazeTrain(Dataset):
         hazy_img, gt_img = self.toTensor(hazy_img), self.toTensor(gt_img)
         
         w_origin, h_origin = gt_img.size(1), gt_img.size(2)
-        w, h = self.resize
-        w_start = random.randint(0, w_origin - w)
-        h_start = random.randint(0, h_origin - h)
-        hazy_img = hazy_img[:, w_start : w_start + w, h_start : h_start + h]
-        gt_img   = gt_img[:, w_start : w_start + w, h_start : h_start + h]
+        w_start = random.randint(0, w_origin - self.resize)
+        h_start = random.randint(0, h_origin - self.resize)
+        hazy_img = hazy_img[:, w_start : w_start + self.resize, h_start : h_start + self.resize]
+        gt_img   = gt_img[:, w_start : w_start + self.resize, h_start : h_start + self.resize]
         return hazy_img, gt_img
 
 class DehazeTest(Dataset):

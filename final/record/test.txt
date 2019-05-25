@@ -1,5 +1,6 @@
 First try -- model: Basic loss: MSE
- =======================Epoch 1 | train loss: 0.06497 train PSNR: 12.83207 train SSIM: 0.08047 | valid loss: 0.07199 valid PSNR: 12.27967 valid SSIM: 0.04502
+ =======================
+Epoch 1 | train loss: 0.06497 train PSNR: 12.83207 train SSIM: 0.08047 | valid loss: 0.07199 valid PSNR: 12.27967 valid SSIM: 0.04502
 Epoch 2 | train loss: 0.04988 train PSNR: 13.85373 train SSIM: 0.16849 | valid loss: 0.05951 valid PSNR: 13.55058 valid SSIM: 0.07891
 Epoch 3 | train loss: 0.05225 train PSNR: 13.96998 train SSIM: 0.18286 | valid loss: 0.06342 valid PSNR: 13.36651 valid SSIM: 0.07493
 Epoch 4 | train loss: 0.04900 train PSNR: 14.43599 train SSIM: 0.21227 | valid loss: 0.04642 valid PSNR: 13.95389 valid SSIM: 0.03507
