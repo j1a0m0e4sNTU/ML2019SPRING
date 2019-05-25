@@ -22,11 +22,34 @@ def SSIM(img1, img2):
     ssim = l12 * c12 * s12
     return ssim
 
+def average_PSNR(batch1, batch2):
+    total = 0
+    batch_size = batch1.size(0)
+    for i in range(batch_size):
+        total += PSNR(batch1[i], batch2[i])
+    return total / batch_size
+
+def average_SSIM(batch1, batch2):
+    total = 0
+    batch_size = batch1.size(0)
+    for i in range(batch_size):
+        total += SSIM(batch1[i], batch2[i])
+    return total / batch_size
+
+def L1_norm_loss(batch1, batch2):
+    loss = 0
+    batch_size = batch1.size(0)
+    for i in range(batch_size):
+        abs_diff = torch.abs(batch1[i] - batch2[i])
+        loss += torch.mean(abs_diff)
+    return loss / batch_size
+
 def test():
-    img1 = torch.ones(3, 100, 100)
-    img2 = torch.ones(3, 100, 100) * 0.9
-    print('PSNR : {}'.format(PSNR(img1, img2)))
-    print('SSIM : {}'.format(SSIM(img1, img2))) 
+    img1 = torch.randn(5, 3, 100, 100)
+    img2 = torch.randn(5, 3, 100, 100) 
+    print('PSNR : {}'.format(average_PSNR(img1, img2)))
+    print('SSIM : {}'.format(average_SSIM(img1, img2))) 
+    print('L1 distance: {}'.format(L1_norm_loss(img1, img2)))
 
 if __name__ == '__main__':
     test()
