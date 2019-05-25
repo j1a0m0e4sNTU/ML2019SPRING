@@ -7,7 +7,7 @@ from dataset import *
 from manager import Manager
 from basic import Basic, Unet
 
-model = Unet()
+model = Basic()
 
 parser = argparse.ArgumentParser()
 parser.add_argument('mode', help= 'Task: train/predict', choices=['train', 'predict'])

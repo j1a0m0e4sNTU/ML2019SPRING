@@ -1,0 +1,22 @@
+model: Basic loss:L1 
+ =======================
+Epoch 1 | train loss: 0.22465 train PSNR: 12.16360 train SSIM: 0.03538 | valid loss: 0.21267 valid PSNR: 12.74679 valid SSIM: 0.03145
+Epoch 2 | train loss: 0.21795 train PSNR: 12.42324 train SSIM: 0.08281 | valid loss: 0.18234 valid PSNR: 14.43882 valid SSIM: 0.11748
+Epoch 3 | train loss: 0.19812 train PSNR: 13.22378 train SSIM: 0.12849 | valid loss: 0.20224 valid PSNR: 13.58974 valid SSIM: 0.04424
+Epoch 4 | train loss: 0.19299 train PSNR: 13.57787 train SSIM: 0.17881 | valid loss: 0.16981 valid PSNR: 15.24142 valid SSIM: 0.07781
+Epoch 5 | train loss: 0.18854 train PSNR: 13.56730 train SSIM: 0.16656 | valid loss: 0.22400 valid PSNR: 11.96290 valid SSIM: 0.03441
+Epoch 6 | train loss: 0.18290 train PSNR: 13.84887 train SSIM: 0.20910 | valid loss: 0.18390 valid PSNR: 14.13231 valid SSIM: 0.13230
+Epoch 7 | train loss: 0.19049 train PSNR: 13.78949 train SSIM: 0.22618 | valid loss: 0.18216 valid PSNR: 14.30864 valid SSIM: 0.13124
+Epoch 8 | train loss: 0.19743 train PSNR: 13.17418 train SSIM: 0.24308 | valid loss: 0.17302 valid PSNR: 14.49043 valid SSIM: 0.19672
+Epoch 9 | train loss: 0.17399 train PSNR: 14.69292 train SSIM: 0.22429 | valid loss: 0.17399 valid PSNR: 14.29838 valid SSIM: 0.20562
+Epoch 10 | train loss: 0.18597 train PSNR: 13.90706 train SSIM: 0.24676 | valid loss: 0.14959 valid PSNR: 15.39334 valid SSIM: 0.40350
+Epoch 11 | train loss: 0.19823 train PSNR: 13.28848 train SSIM: 0.27309 | valid loss: 0.18095 valid PSNR: 14.40862 valid SSIM: 0.31868
+Epoch 12 | train loss: 0.17940 train PSNR: 14.06116 train SSIM: 0.24931 | valid loss: 0.15828 valid PSNR: 15.47296 valid SSIM: 0.34581
+Epoch 13 | train loss: 0.17216 train PSNR: 14.33743 train SSIM: 0.27174 | valid loss: 0.14508 valid PSNR: 15.70790 valid SSIM: 0.31072
+Epoch 14 | train loss: 0.16527 train PSNR: 14.61019 train SSIM: 0.27967 | valid loss: 0.15773 valid PSNR: 14.62727 valid SSIM: 0.25969
+Epoch 15 | train loss: 0.18057 train PSNR: 14.08391 train SSIM: 0.29870 | valid loss: 0.15489 valid PSNR: 15.10173 valid SSIM: 0.33641
+Epoch 16 | train loss: 0.16742 train PSNR: 14.62414 train SSIM: 0.33307 | valid loss: 0.15161 valid PSNR: 15.25123 valid SSIM: 0.36218
+Epoch 17 | train loss: 0.19978 train PSNR: 13.30172 train SSIM: 0.34474 | valid loss: 0.17664 valid PSNR: 14.20251 valid SSIM: 0.31838
+Epoch 18 | train loss: 0.17872 train PSNR: 13.97620 train SSIM: 0.24871 | valid loss: 0.18952 valid PSNR: 13.94501 valid SSIM: 0.23676
+Epoch 19 | train loss: 0.17086 train PSNR: 14.35246 train SSIM: 0.29152 | valid loss: 0.19486 valid PSNR: 13.74917 valid SSIM: 0.21127
+Epoch 20 | train loss: 0.17117 train PSNR: 14.65232 train SSIM: 0.30835 | valid loss: 0.16487 valid PSNR: 14.83475 valid SSIM: 0.31208

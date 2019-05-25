@@ -11,7 +11,7 @@ class Manager():
             model.load_state_dict(torch.load(args.load))
         self.model = model.to(self.device)
         self.optimizer = optim.Adam(self.model.parameters(), lr= args.lr)
-        self.metric = nn.MSELoss()
+        self.metric = L1_norm_loss
         self.epoch_num = args.epoch
         self.check_epoch = args.check
         self.save = args.save
