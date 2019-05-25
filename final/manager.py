@@ -28,7 +28,6 @@ class Manager():
         print(info)
 
     def train(self, train_data, valid_data):
-        record_file = open(self.record_name, 'w')
         for epoch in range(self.epoch_num):
             self.model.train()
             train_loss = 0
