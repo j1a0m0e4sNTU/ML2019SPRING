@@ -46,13 +46,15 @@ class Manager():
             t_acc = train_acc['total'][0] / train_acc['total'][1]
             v_acc = valid_acc['total'][0] / valid_acc['total'][1]
             
+            best_str = ''
             if v_acc > self.best['acc']:
+                best_str = '* best *'
                 self.best['acc'] = v_acc
                 self.best['epoch'] = epoch
                 if self.save:
                     torch.save(self.model.state_dict(), self.save)
             
-            self.record.write('{},{:.5f},{:.5f}\n'.format(epoch, t_acc, v_acc))
+            self.record.write('{},{:.5f},{:.5f} {}\n'.format(epoch, t_acc, v_acc, best_str))
             print('\033[1;33m Best result is at {} epoch with validation Acc: {}\033[0;37m'.format(self.best['epoch'], self.best['acc']))
     
     def validate(self, valid_data):
