@@ -1,0 +1,1 @@
+python3 main.py train -save ../../weights/0529_test.pkl -record records/0529_test.txt
