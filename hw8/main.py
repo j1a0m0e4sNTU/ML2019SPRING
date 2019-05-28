@@ -13,7 +13,7 @@ parser.add_argument('-fc', help= 'Symbol for fc layer configuration', default= '
 parser.add_argument('-dataset', help= 'Path to dataset', default= '../../data_hw8/train.csv')
 parser.add_argument('-bs', help= 'batch size', type= int, default= 64)
 parser.add_argument('-lr', help= 'learnig rate', type= float, default= 1e-4)
-parser.add_argument('-epoch', help= 'Epoch number', type= int, default= 30)
+parser.add_argument('-epoch', help= 'Epoch number', type= int, default= 80)
 parser.add_argument('-save', help= 'Path to save model')
 parser.add_argument('-load', help= 'Path to load model')
 parser.add_argument('-csv', help= 'Path to prediction file')

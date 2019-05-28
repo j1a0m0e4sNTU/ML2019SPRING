@@ -1,3 +1,4 @@
+import sys
 import torch
 import torch.nn as nn
 
@@ -6,10 +7,12 @@ import torch.nn as nn
 
 conv_config = {
     'base': [16, 64, 'D', 128, 'D', 256, 'D', 512, 'D'],
+    'A': [8, 16, 'D', 16, 16, 16, 'D', 32, 32, 'D', 32, 32, 'D', 64, 64]
 }
 
 fc_config = {
     'base': [512*2*2, 128, 7],
+    'A': [64*2*2, 64, 7]
 }
 
 def conv_layers(config):
@@ -74,7 +77,7 @@ class MobileNet(nn.Module):
 def test():
     batch_size = 8
     images = torch.zeros(batch_size, 1, 44, 44)
-    model = MobileNet('base', 'base')
+    model = MobileNet(sys.argv[1], sys.argv[2])
     output = model(images)
 
     print(model)
