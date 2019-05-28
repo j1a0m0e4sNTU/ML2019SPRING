@@ -31,7 +31,6 @@ def conv_layers(config):
 def fc_layers(config):
     layers = []
     for i in range(1, len(config)):
-        print(config[i - 1], config[i])
         layers += [
             nn.Linear(config[i - 1], config[i]), 
             nn.ReLU(inplace= True),

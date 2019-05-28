@@ -102,4 +102,4 @@ def test_DNN():
     print('parameter number:', parameter_number(model))
 
 if __name__ == '__main__':
-    test_DNN()
+    test()
