@@ -18,7 +18,7 @@ parser.add_argument('-save', help= 'Path to save model')
 parser.add_argument('-load', help= 'Path to load model')
 parser.add_argument('-csv', help= 'Path to prediction file')
 parser.add_argument('-record', help= 'Path to record file')
-parser.add_argument('-tencrop', help= 'Apply TenCrop to testdata', type= int, default= 0)
+parser.add_argument('-tencrop', help= 'Apply TenCrop to testdata', type= int, default= 1)
 args = parser.parse_args()
 
 def main():
