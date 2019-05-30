@@ -18,6 +18,7 @@ parser.add_argument('-save', help= 'Path to save model')
 parser.add_argument('-load', help= 'Path to load model')
 parser.add_argument('-csv', help= 'Path to prediction file')
 parser.add_argument('-record', help= 'Path to record file')
+parser.add_argument('-info',help= 'Info about experiment', default= '')
 parser.add_argument('-tencrop', help= 'Apply TenCrop to testdata', type= int, default= 1)
 args = parser.parse_args()
 
@@ -30,7 +31,7 @@ def main():
             transforms.ToPILImage(),
             transforms.RandomCrop(44),
             transforms.RandomHorizontalFlip(),
-            transforms.RandomAffine(degrees= 10, scale= (0.9, 1.1)),
+            # transforms.RandomAffine(degrees= 10, scale= (0.9, 1.1)),
             transforms.ToTensor()
         ])
         valid_transform = transforms.Compose([
