@@ -31,7 +31,7 @@ def main():
             transforms.ToPILImage(),
             transforms.RandomCrop(44),
             transforms.RandomHorizontalFlip(),
-            # transforms.RandomAffine(degrees= 10, scale= (0.9, 1.1)),
+            transforms.RandomAffine(degrees= 10, scale= (0.9, 1.1)),
             transforms.ToTensor()
         ])
         valid_transform = transforms.Compose([

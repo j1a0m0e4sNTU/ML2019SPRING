@@ -8,13 +8,15 @@ import torch.nn as nn
 conv_config = {
     'base': [16, 64, 'D', 128, 'D', 256, 'D', 512, 'D'],
     'A': [8, 16, 'D', 16, 16, 16, 'D', 32, 32, 'D', 32, 32, 'D', 64, 64],
-    'B': [16, 16, 16, 'D', 16, 16, 16, 16, 'D', 32, 32, 32, 32, 'D', 64, 64, 64, 64, 'D']
+    'B': [16, 16, 16, 'D', 16, 16, 16, 16, 'D', 32, 32, 32, 32, 'D', 64, 64, 64, 64, 'D'],
+    'C': [16, 16, 16, 'D', 16, 16, 16, 'D', 32, 32, 32, 'D', 64, 64, 64, 'D', 128, 128]
 }
 
 fc_config = {
     'base': [512*2*2, 128, 7],
     'A': [64*2*2, 64, 7], 
-    'B': [64*2*2, 128, 7]
+    'B': [64*2*2, 128, 7], 
+    'C': [128*2*2, 7]
 }
 
 def conv_layers(config):
@@ -82,7 +84,6 @@ def test():
     model = MobileNet(sys.argv[1], sys.argv[2])
     output = model(images)
 
-    print(model)
     print('Model parameter number: {}'.format(parameter_number(model)))
     print('Input size:  {}'.format(images.size()))
     print('Output size: {}'.format(output.size()))
