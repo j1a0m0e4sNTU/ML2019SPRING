@@ -22,14 +22,21 @@ fc_config = {
 def conv_layers(config):
     layers = []
     in_planes = 1
-    for x in config:
+    for i, x in enumerate(config) :
         if x == 'D':
             layers.append(nn.MaxPool2d(kernel_size= 2, stride= 2))
         else:
-            layers += [
-                MobileConv2d(in_planes, x, 3, 1, 1), 
-                nn.ReLU(inplace= True)
-            ]
+            if i == 0:
+                layers += [
+                    nn.Conv2d(in_planes, x, 3, 1, 1),
+                    nn.BatchNorm2d(x), 
+                    nn.ReLU(inplace= True)
+                ]
+            else:
+                layers += [
+                    MobileConv2d(in_planes, x, 3, 1, 1), 
+                    nn.ReLU(inplace= True)
+                ]
             in_planes = x
 
     layers = nn.Sequential(* layers)
