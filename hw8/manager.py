@@ -20,7 +20,7 @@ class Manager():
        
         if args.record:
             self.record = open(args.record, 'w')
-            self.record.write(args.info, '\n=================\n')
+            self.record.write(args.info + '\n=================\n')
             self.record.write('epoch,train_acc,valid_acc\n')
 
     def train(self, train_data, valid_data):
