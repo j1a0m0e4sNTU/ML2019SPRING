@@ -5,6 +5,7 @@ import torchvision.transforms as transforms
 from dataset import *
 from manager import Manager
 from model import MobileNet
+from model_test import CNN
 
 parser = argparse.ArgumentParser()
 parser.add_argument('mode', help= 'Task: train/predict', choices=['train', 'predict'])
@@ -23,7 +24,8 @@ parser.add_argument('-tencrop', help= 'Apply TenCrop to testdata', type= int, de
 args = parser.parse_args()
 
 def main():
-    model = MobileNet(args.conv, args.fc)
+    # model = MobileNet(args.conv, args.fc)
+    model = CNN(args.conv, args.fc)
 
     if args.mode == 'train':
         print('Training ...')

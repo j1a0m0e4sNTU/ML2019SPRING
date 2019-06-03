@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
+from model import parameter_number
 
 class Manager():
     def __init__(self, model, args):
@@ -20,7 +21,8 @@ class Manager():
        
         if args.record:
             self.record = open(args.record, 'w')
-            self.record.write(args.info + '\n=================\n')
+            self.record.write('Info: {}\n'.format(args.info))
+            self.record.write('Parameter number: {}'.format(parameter_number(self.model)) + '\n=================\n')
             self.record.write('epoch,train_acc,valid_acc\n')
 
     def train(self, train_data, valid_data):
