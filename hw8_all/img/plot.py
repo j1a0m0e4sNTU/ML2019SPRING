@@ -10,8 +10,12 @@ def problem2():
     plt.savefig('problem2.png')
 
 def problem3():
-    parameter_num = [21116615, ]
-    acc = [0.69, ]
+    parameter_num = ['40791', '92663', '245319', '353559', '21116615']
+    acc = [0.621, 0.644, 0.648, 0.636, 0.69]
+    plt.xlabel('Parameter number')
+    plt.ylabel('Accuracy')
+    plt.scatter(parameter_num, acc)
+    plt.savefig('problem3.png')
 
 if __name__ == '__main__':
-    problem2()
+    problem3()
