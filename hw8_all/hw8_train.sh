@@ -1,0 +1,1 @@
+python3 main.py train -conv E -fc C -lr 1e-3 -save 0603_E_C.pkl -dataset $1
